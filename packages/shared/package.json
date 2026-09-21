@@ -1,0 +1,29 @@
+{
+  "name": "@futcheck/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Enums, types, Zod schemas, permission matrix and date utils shared by api and web",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch --preserveWatchOutput",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.23",
+    "zod": "^3.25.76"
+  }
+}
