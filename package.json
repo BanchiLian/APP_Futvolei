@@ -1,0 +1,64 @@
+{
+  "name": "futcheck",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Check-in system for a footvolley arena",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run build -w @futcheck/shared && concurrently -n shared,api,web -c magenta,blue,green \"npm:dev:shared\" \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:shared": "npm run dev -w @futcheck/shared",
+    "dev:api": "npm run dev -w @futcheck/api",
+    "dev:web": "npm run dev -w @futcheck/web",
+    "build": "npm run build -w @futcheck/shared && npm run build -w @futcheck/api && npm run build -w @futcheck/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:watch": "npm run test:watch --workspaces --if-present",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:reset": "npm run db:reset -w @futcheck/api",
+    "db:migrate": "npm run db:migrate -w @futcheck/api",
+    "db:deploy": "npm run db:deploy -w @futcheck/api",
+    "db:generate": "npm run db:generate -w @futcheck/api",
+    "db:seed": "npm run db:seed -w @futcheck/api",
+    "db:studio": "npm run db:studio -w @futcheck/api",
+    "superadmin:create": "npm run superadmin:create -w @futcheck/api",
+    "superadmin:reset-password": "npm run superadmin:reset-password -w @futcheck/api",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
+    "@commitlint/types": "^21.2.3",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.2",
+    "concurrently": "^10.0.5",
+    "eslint": "^10.11.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "^10.11.0",
+    "globals": "^17.12.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.5.1",
+    "prettier": "^3.9.8",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.70.1",
+    "vitest": "^5.0.1",
+    "vue-eslint-parser": "^10.4.1"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "prisma@7.10.0": true,
+    "@prisma/engines@7.10.0": true
+  }
+}

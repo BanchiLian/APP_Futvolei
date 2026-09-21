@@ -1,0 +1,39 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+build/
+*.tsbuildinfo
+
+# generated prisma client
+**/generated/prisma/
+
+# environment — never commit real secrets
+.env
+.env.*
+!.env.example
+
+# local uploads (storage driver = local)
+storage/
+uploads/
+
+# test / coverage
+coverage/
+.vitest/
+
+# tooling caches
+.vite/
+.eslintcache
+.npm/
+
+# logs
+*.log
+npm-debug.log*
+
+# editors / os
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
