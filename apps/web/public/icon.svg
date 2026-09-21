@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="FutCheck">
+  <rect width="512" height="512" rx="112" fill="#0b1120" />
+  <circle cx="256" cy="248" r="132" fill="none" stroke="#fbbf24" stroke-width="20" />
+  <path
+    d="M256 116v264M124 248h264M168 156c40 52 40 132 0 184M344 156c-40 52-40 132 0 184"
+    fill="none"
+    stroke="#fbbf24"
+    stroke-width="14"
+    stroke-linecap="round"
+    opacity="0.55"
+  />
+  <path
+    d="M186 250l46 46 96-96"
+    fill="none"
+    stroke="#34d399"
+    stroke-width="34"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>

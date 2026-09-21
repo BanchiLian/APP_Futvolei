@@ -1,0 +1,38 @@
+{
+  "name": "@futcheck/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "FutCheck PWA — user app and admin panel",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@futcheck/shared": "^0.1.0",
+    "@vee-validate/zod": "^4.15.1",
+    "axios": "^1.20.0",
+    "dayjs": "^1.11.23",
+    "pinia": "^4.0.3",
+    "vee-validate": "^4.15.1",
+    "vue": "^3.5.43",
+    "vue-router": "^5.3.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-vue": "^6.0.9",
+    "@vue/test-utils": "^2.5.1",
+    "jsdom": "^30.1.0",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.0",
+    "vite-plugin-pwa": "^1.3.0",
+    "vue-tsc": "^3.3.11",
+    "workbox-build": "^7.4.1",
+    "workbox-window": "^7.4.1"
+  }
+}

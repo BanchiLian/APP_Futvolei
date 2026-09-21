@@ -1,0 +1,75 @@
+@import 'tailwindcss';
+
+/**
+ * Design tokens (Tailwind 4 is configured in CSS, not in a JS file).
+ *
+ * Aula and dayuse get deliberately different colour families: section 5 requires
+ * the two kinds of day to be distinguishable at a glance, not just by a label.
+ */
+@theme {
+  --font-sans:
+    'Inter var', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+
+  /* Brand — deep court navy */
+  --color-brand-50: #f1f5f9;
+  --color-brand-100: #e2e8f0;
+  --color-brand-200: #cbd5e1;
+  --color-brand-300: #94a3b8;
+  --color-brand-400: #64748b;
+  --color-brand-500: #475569;
+  --color-brand-600: #334155;
+  --color-brand-700: #1e293b;
+  --color-brand-800: #111c2e;
+  --color-brand-900: #0b1120;
+
+  /* Aula — indigo, "class with a teacher" */
+  --color-aula-50: #eef2ff;
+  --color-aula-100: #e0e7ff;
+  --color-aula-300: #a5b4fc;
+  --color-aula-500: #6366f1;
+  --color-aula-600: #4f46e5;
+  --color-aula-700: #4338ca;
+
+  /* Dayuse — amber, "free play under the sun" */
+  --color-dayuse-50: #fffbeb;
+  --color-dayuse-100: #fef3c7;
+  --color-dayuse-300: #fcd34d;
+  --color-dayuse-500: #f59e0b;
+  --color-dayuse-600: #d97706;
+  --color-dayuse-700: #b45309;
+
+  /* Status */
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-brand-50 text-brand-900 antialiased;
+    font-family: var(--font-sans);
+    /* Respect the notch on installed PWAs. */
+    padding-top: env(safe-area-inset-top);
+  }
+
+  /* Accessibility (section 11): a visible focus ring everywhere. */
+  :focus-visible {
+    @apply outline-aula-600 outline-2 outline-offset-2;
+  }
+}
+
+@layer components {
+  /**
+   * Minimum touch target of 44px (section 11). Applied to every interactive
+   * element that a user taps on the court, phone in hand.
+   */
+  .tap-target {
+    @apply inline-flex min-h-11 min-w-11 items-center justify-center;
+  }
+}
