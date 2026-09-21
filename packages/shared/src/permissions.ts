@@ -109,13 +109,19 @@ const PROFESSOR_PERMISSIONS: readonly Permission[] = [
 ];
 
 /**
- * Admin: runs the arena. Answers RSVPs on behalf of anyone (including themselves)
- * rather than holding a personal booking permission — see docs/permissoes.md.
+ * Admin: runs the arena and also plays in it.
+ *
+ * Holds the personal RSVP permissions like any player, *plus* the ability to
+ * answer on behalf of anyone else. The two are distinct on purpose: revoking the
+ * personal ones later would turn an admin back into pure staff without touching
+ * their management powers.
  */
 const ADMIN_PERMISSIONS: readonly Permission[] = [
   PERMISSIONS.PROFILE_MANAGE_OWN,
   PERMISSIONS.SESSION_VIEW_AULA,
   PERMISSIONS.SESSION_VIEW_DAYUSE,
+  PERMISSIONS.SESSION_RSVP_AULA,
+  PERMISSIONS.SESSION_RSVP_DAYUSE,
   PERMISSIONS.SESSION_RSVP_ON_BEHALF,
   PERMISSIONS.SESSION_ATTENDEES_VIEW_AULA,
   PERMISSIONS.SESSION_ATTENDEES_VIEW_DAYUSE,

@@ -150,6 +150,8 @@ responde 503 quando ele está fora.
 
 ## ADR-11 — ADMIN responde RSVP apenas "em nome de"
 
+> **Substituída por [ADR-18](#adr-18--admin-tambem-joga-como-usuario-normal).**
+
 **Contexto.** A matriz da seção 4.3 diz, para ADMIN e SUPER_ADMIN, "em nome de qualquer um" — e não
 "sim" — nas linhas de Vou/Não vou.
 
@@ -249,3 +251,25 @@ O `dotenv` virou dependência de runtime (e não de desenvolvimento), já que `d
 passa por esse caminho. Arquivo ausente é no-op, que é o comportamento correto em produção, onde o
 ambiente é injetado. E como o `dotenv` nunca sobrescreve variável já existente, os valores do
 Vitest e de CI continuam prevalecendo.
+
+---
+
+## ADR-18 — Admin também joga como usuário normal
+
+**Substitui a [ADR-11](#adr-11--admin-responde-rsvp-apenas-em-nome-de).**
+
+**Contexto.** A ADR-11 seguia a matriz da seção 4.3 ao pé da letra: como ela dizia "em nome de
+qualquer um" para ADMIN, e não "sim", o admin só tinha `session:rsvp:on-behalf`. Na prática, isso
+obrigava o dono da arena a responder por si mesmo passando o próprio id num endpoint de
+administração — e ele é, antes de tudo, alguém que também joga.
+
+**Decisão.** ADMIN e SUPER_ADMIN passam a ter `session:rsvp:aula` e `session:rsvp:dayuse`, além de
+`session:rsvp:on-behalf`.
+
+**Consequência.** O admin usa `PUT /sessions/:id/rsvp` como qualquer jogador e aparece na agenda
+normalmente, ocupando vaga e entrando em lista de espera pelas mesmas regras. Continua podendo
+responder por terceiros pelo endpoint separado.
+
+As permissões pessoais e a de "em nome de" permanecem distintas de propósito: se um dia a arena
+quiser um admin que só administre, basta remover as duas pessoais da lista em
+`packages/shared/src/permissions.ts`, sem tocar em nada dos poderes de gestão.

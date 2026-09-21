@@ -56,8 +56,8 @@ em `ROLE_PERMISSIONS`. Nada além disso muda.
 | `profile:manage:own`            |     ✅      |  ✅   |    ✅     |  ✅   |   ✅   |
 | `session:view:aula`             |     ✅      |  ✅   |    ✅     |  ✅   |   ❌   |
 | `session:view:dayuse`           |     ✅      |  ✅   |    ✅     |  ✅   |   ✅   |
-| `session:rsvp:aula`             |     ❌¹     |  ❌¹  |    ❌     |  ✅   |   ❌   |
-| `session:rsvp:dayuse`           |     ❌¹     |  ❌¹  |    ✅     |  ✅   |   ✅   |
+| `session:rsvp:aula`             |     ✅      |  ✅   |    ❌     |  ✅   |   ❌   |
+| `session:rsvp:dayuse`           |     ✅      |  ✅   |    ✅     |  ✅   |   ✅   |
 | `session:rsvp:on-behalf`        |     ✅      |  ✅   |    ❌     |  ❌   |   ❌   |
 | `session:attendees:view:aula`   |     ✅      |  ✅   |    ✅     |  ✅   |   ❌   |
 | `session:attendees:view:dayuse` |     ✅      |  ✅   |    ✅     |  ✅   |   ✅   |
@@ -76,9 +76,10 @@ em `ROLE_PERMISSIONS`. Nada além disso muda.
 | `settings:manage`               |     ✅      |  ✅   |    ❌     |  ❌   |   ❌   |
 | `audit:view`                    |     ✅      |  ❌   |    ❌     |  ❌   |   ❌   |
 
-¹ A matriz da especificação diz "em nome de qualquer um" para admins, não "sim". Eles usam
-`session:rsvp:on-behalf` com o próprio id quando quiserem responder por si. Ver
-[ADR-11](decisions.md#adr-11--admin-responde-rsvp-apenas-em-nome-de).
+¹ O admin **joga como usuário normal**: responde Vou/Não vou por si mesmo nas duas agendas, e além
+disso responde em nome de qualquer outra pessoa (`session:rsvp:on-behalf`). As duas coisas são
+permissões separadas de propósito — tirar as pessoais transforma o admin em staff puro sem mexer
+nos poderes de gestão. Ver [ADR-18](decisions.md#adr-18--admin-tambem-joga-como-usuario-normal).
 
 ² `attendance:manage:any` é um superconjunto de `attendance:manage:own`: o admin edita qualquer
 lista, sem prazo. Conceder as duas seria redundante.

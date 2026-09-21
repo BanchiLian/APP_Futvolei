@@ -118,6 +118,23 @@ describe('agenda visibility (section 4.3)', () => {
     expect(roleHasPermission(ROLES.SUPER_ADMIN, PERMISSIONS.SESSION_RSVP_ON_BEHALF)).toBe(true);
     expect(roleHasPermission(ROLES.PROFESSOR, PERMISSIONS.SESSION_RSVP_ON_BEHALF)).toBe(false);
   });
+
+  it('lets admins play as ordinary users too', () => {
+    // An admin runs the arena and also plays in it: personal RSVP on both
+    // agendas, on top of answering for other people.
+    for (const role of [ROLES.ADMIN, ROLES.SUPER_ADMIN]) {
+      expect(roleHasPermission(role, PERMISSIONS.SESSION_RSVP_AULA)).toBe(true);
+      expect(roleHasPermission(role, PERMISSIONS.SESSION_RSVP_DAYUSE)).toBe(true);
+      expect(roleHasPermission(role, PERMISSIONS.SESSION_RSVP_ON_BEHALF)).toBe(true);
+    }
+  });
+
+  it('keeps personal RSVP separate from answering on behalf of others', () => {
+    // A player can answer for themselves but never for anyone else.
+    expect(roleHasPermission(ROLES.ALUNO, PERMISSIONS.SESSION_RSVP_AULA)).toBe(true);
+    expect(roleHasPermission(ROLES.ALUNO, PERMISSIONS.SESSION_RSVP_ON_BEHALF)).toBe(false);
+    expect(roleHasPermission(ROLES.DAYUSE, PERMISSIONS.SESSION_RSVP_ON_BEHALF)).toBe(false);
+  });
 });
 
 describe('attendance and management boundaries', () => {
