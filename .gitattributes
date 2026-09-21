@@ -1,0 +1,19 @@
+# Normalise line endings to LF in the repository, whatever the developer's OS.
+# Without this, Windows checkouts produce CRLF diffs on every file they touch.
+* text=auto eol=lf
+
+# Keep shell-executed files LF, since Git Bash runs the Husky hooks.
+*.sh text eol=lf
+
+# Binary assets must never be converted.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
+
+# Generated file: collapse it in diffs and reviews.
+package-lock.json linguist-generated=true -diff
