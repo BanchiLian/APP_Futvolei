@@ -47,6 +47,11 @@ monorepo via `dotenv` e declara `schema`, `migrations.path` e `migrations.seed`.
 **Consequência.** Existe um único `.env`, na raiz, lido pela API, pelo Prisma CLI, pelo Vite e pelo
 Docker Compose. Não criar `.env` dentro de `apps/`.
 
+A URL é lida com `process.env['DATABASE_URL']`, e não pelo helper `env()` do Prisma: o `env()`
+resolve de forma ansiosa e faz `prisma generate` falhar quando ainda não existe `.env`. Gerar o
+client precisa funcionar num clone novo e em CI antes de os segredos serem injetados — os comandos
+que de fato precisam de conexão (`migrate`, `studio`) falham sozinhos se a URL estiver faltando.
+
 ---
 
 ## ADR-04 — Zod 3.25 em todo o monorepo, e não Zod 4

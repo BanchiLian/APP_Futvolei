@@ -25,14 +25,17 @@ npm install
 # 2. Ambiente — edite os segredos antes de seguir
 cp .env.example .env
 
-# 3. Banco
+# 3. Client do Prisma (necessário para typecheck e testes)
+npm run db:generate
+
+# 4. Banco
 npm run db:up
 
-# 4. Migrations + dados de desenvolvimento
+# 5. Migrations + dados de desenvolvimento
 npm run db:migrate
 npm run db:seed
 
-# 5. Subir tudo
+# 6. Subir tudo
 npm run dev
 ```
 
