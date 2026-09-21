@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist",
+    "types": ["node"],
+
+    // The Prisma 7 client is generated as TypeScript and imports its own modules
+    // with explicit `.ts` extensions. `rewriteRelativeImportExtensions` turns them
+    // into `.js` on emit, which is what makes `tsc` able to build it.
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "scripts/**/*.ts",
+    "prisma/**/*.ts",
+    "prisma.config.ts",
+    "vitest.config.ts"
+  ]
+}

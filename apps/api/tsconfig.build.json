@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Only `src` ships. `scripts/` and `prisma/seed.ts` are operational tooling
+    // run through tsx, so `dist/server.js` stays the entry point.
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.spec.ts", "src/test/**"]
+}
