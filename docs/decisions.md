@@ -223,3 +223,29 @@ deprecou; desde o TS 5, `paths` resolve relativo ao próprio arquivo.
 
 **Consequência.** `strict` completo, mais `noUncheckedIndexedAccess`, `noUnusedLocals`,
 `noUnusedParameters` e `verbatimModuleSyntax`. ESLint em flat config (`eslint.config.js`).
+
+---
+
+## ADR-17 — `.env` carregado pela própria aplicação, e `node --watch` no lugar de `tsx watch`
+
+**Contexto.** O `npm run dev` da raiz subia o web, mas a API ficava em silêncio e nunca escutava a
+porta — sem erro nenhum no log. Isoladamente, o mesmo comando funcionava em 6 segundos. A cadeia
+tinha quatro processos aninhados: `concurrently` → `npm run dev -w` → `dotenv-cli` → `tsx watch`. O
+watcher do `tsx` roda a aplicação num processo filho e, nesse aninhamento sem TTY no Windows, o
+filho nunca subia e a falha era engolida.
+
+**Decisão.** Duas mudanças:
+
+1. O `.env` da raiz é carregado **dentro** de `src/config/env.ts`, com `dotenv`, e não mais por um
+   wrapper `dotenv-cli` em cada script npm. A dependência `dotenv-cli` foi removida.
+2. O script de desenvolvimento da API usa `node --watch --import tsx`, o watcher nativo do Node, em
+   vez de `tsx watch`.
+
+**Consequência.** `npm run dev` sobe API e web em cerca de 5 segundos. A API passa a se comportar da
+mesma forma em qualquer forma de execução — `tsx`, `node dist`, seed, scripts ou runner de testes —
+porque o carregamento do ambiente deixou de depender de como o processo foi iniciado.
+
+O `dotenv` virou dependência de runtime (e não de desenvolvimento), já que `dist/server.js` também
+passa por esse caminho. Arquivo ausente é no-op, que é o comportamento correto em produção, onde o
+ambiente é injetado. E como o `dotenv` nunca sobrescreve variável já existente, os valores do
+Vitest e de CI continuam prevalecendo.

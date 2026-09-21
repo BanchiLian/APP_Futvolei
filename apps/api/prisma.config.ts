@@ -13,7 +13,7 @@ export default defineConfig({
   schema: 'prisma/schema.prisma',
   migrations: {
     path: 'prisma/migrations',
-    seed: 'dotenv -e ../../.env -- tsx prisma/seed.ts',
+    seed: 'tsx prisma/seed.ts',
   },
   datasource: {
     // Read directly rather than through Prisma's `env()` helper, which resolves

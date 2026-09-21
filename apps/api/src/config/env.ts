@@ -7,7 +7,26 @@
  * `process.env` directly.
  */
 
+import { fileURLToPath } from 'node:url';
+
+import { config as loadDotenv } from 'dotenv';
 import { z } from 'zod';
+
+/**
+ * Load the single .env at the repository root.
+ *
+ * Doing it here, rather than through a `dotenv-cli` wrapper in every npm script,
+ * means the API behaves the same however it is started — `tsx`, `node dist`, a
+ * seed script or a test runner — and removes a process layer that broke
+ * `tsx watch` when nested under `concurrently` on Windows.
+ *
+ * The path is resolved relative to this file. `src/config` and `dist/config` sit
+ * at the same depth under `apps/api`, so one expression covers both. A missing
+ * file is a no-op, which is exactly right in production, where the environment is
+ * injected. dotenv never overrides an existing variable, so values set by CI or
+ * by Vitest always win.
+ */
+loadDotenv({ path: fileURLToPath(new URL('../../../../.env', import.meta.url)) });
 
 /** `"true"`/`"1"` → true, `"false"`/`"0"` → false. Avoids `z.coerce.boolean()`, which treats `"false"` as true. */
 const booleanFromString = (defaultValue: boolean) =>
