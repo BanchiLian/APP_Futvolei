@@ -353,3 +353,38 @@ validação.
 
 Os detalhes devolvidos contêm apenas `field` e `message`, nunca o valor rejeitado — caso contrário
 a resposta ecoaria de volta a senha enviada. Há teste para isso também.
+
+---
+
+## ADR-23 — Super admin entra como `admin`, com `admin/admin` permitido só localmente
+
+**Contexto.** O dono do produto pediu para entrar com usuário `admin` e senha `admin`. Essa é a
+primeira combinação que qualquer robô de força bruta testa, e a seção 4.1 exige 12+ caracteres para
+o super admin.
+
+**Decisão.** Decisão do dono do produto, entre as opções apresentadas: `admin/admin` vale **apenas
+em desenvolvimento**.
+
+- O login aceita e-mail **ou** nome de usuário no mesmo campo. Nova coluna `users.username`,
+  única, sempre minúscula (CHECK constraint), hoje usada só pelo super admin.
+- Fora de produção, `SUPER_ADMIN_PASSWORD` aceita qualquer valor não vazio.
+- Em produção, o script exige 12+ caracteres e recusa uma lista de senhas conhecidas. E a API
+  **se recusa a subir** se o hash guardado do super admin bater com uma delas — o que cobre também
+  um banco copiado da máquina de um desenvolvedor.
+
+**Consequência.** Conveniência total no seu PC, sem risco de a senha óbvia ir ao ar por engano. A
+redefinição de senha pelo fluxo "esqueci minha senha" continua exigindo 12+ caracteres para o
+super admin em qualquer ambiente.
+
+---
+
+## ADR-24 — O super admin é a única conta administrativa, por enquanto
+
+**Contexto.** O dono do produto quer ser o único com acesso administrativo.
+
+**Decisão.** O seed não cria mais um ADMIN. A capacidade de o super admin promover alguém a ADMIN
+**continua existindo** (opção "só eu por enquanto"), para uso futuro pelo painel.
+
+**Consequência.** Hoje há exatamente uma conta com poderes administrativos. Se o desejo passar a
+ser "ninguém nunca vira admin", basta remover `ROLES.ADMIN` de `SUPER_ADMIN_ASSIGNABLE_ROLES` em
+`packages/shared/src/enums.ts`.

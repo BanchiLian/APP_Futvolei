@@ -45,10 +45,10 @@ npm run dev
 
 ### O que editar no `.env` antes de rodar
 
-| Variável                                     | Por quê                                                   |
-| -------------------------------------------- | --------------------------------------------------------- |
-| `JWT_ACCESS_SECRET` e `JWT_REFRESH_SECRET`   | Precisam ter 32+ caracteres e ser **diferentes entre si** |
-| `SUPER_ADMIN_EMAIL` e `SUPER_ADMIN_PASSWORD` | Credenciais do dono do sistema. Senha com 12+ caracteres  |
+| Variável                                                             | Por quê                                                                                                                      |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `JWT_ACCESS_SECRET` e `JWT_REFRESH_SECRET`                           | Precisam ter 32+ caracteres e ser **diferentes entre si**                                                                    |
+| `SUPER_ADMIN_USERNAME`, `SUPER_ADMIN_EMAIL` e `SUPER_ADMIN_PASSWORD` | Credenciais do dono do sistema. Local aceita admin/admin; produção exige 12+ caracteres e a API não sobe com senha conhecida |
 
 Gere segredos com:
 
@@ -80,13 +80,12 @@ O `npm run db:seed` chama o mesmo script. Detalhes em [`docs/permissoes.md`](doc
 Todos usam a senha de `SEED_DEFAULT_PASSWORD` (padrão: `Futcheck@2026`). O super admin usa a senha
 de `SUPER_ADMIN_PASSWORD`.
 
-| Perfil      | E-mail                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------- |
-| SUPER_ADMIN | o definido em `SUPER_ADMIN_EMAIL`                                                           |
-| ADMIN       | `admin@futcheck.local`                                                                      |
-| PROFESSOR   | `carlos.professor@futcheck.local`, `juliana.professor@futcheck.local`                       |
-| ALUNO       | `ana.aluna@`, `bruno.aluno@`, `camila.aluna@`, `diego.aluno@`, `elisa.aluna@futcheck.local` |
-| DAYUSE      | `felipe.dayuse@`, `gabriela.dayuse@`, `henrique.dayuse@futcheck.local`                      |
+| Perfil      | E-mail                                                                                                   |
+| ----------- | -------------------------------------------------------------------------------------------------------- |
+| SUPER_ADMIN | usuário `admin` (ou o e-mail de `SUPER_ADMIN_EMAIL`), senha local `admin` — a única conta administrativa |
+| PROFESSOR   | `carlos.professor@futcheck.local`, `juliana.professor@futcheck.local`                                    |
+| ALUNO       | `ana.aluna@`, `bruno.aluno@`, `camila.aluna@`, `diego.aluno@`, `elisa.aluna@futcheck.local`              |
+| DAYUSE      | `felipe.dayuse@`, `gabriela.dayuse@`, `henrique.dayuse@futcheck.local`                                   |
 
 O seed também cria a grade padrão — aula de segunda a quinta, dayuse de sexta a domingo — e as
 configurações padrão do sistema.

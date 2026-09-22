@@ -43,7 +43,7 @@ const onSubmit = handleSubmit(async (values) => {
 <template>
   <form class="flex flex-col gap-5" novalidate @submit="onSubmit">
     <header class="flex flex-col gap-1">
-      <h1 class="text-brand-900 text-lg font-semibold">Entrar</h1>
+      <h1 class="text-brand-900 text-xl font-semibold sm:text-2xl">Entrar</h1>
       <p class="text-brand-500 text-sm">Use seu e-mail ou usuário e a sua senha.</p>
     </header>
 
@@ -63,7 +63,10 @@ const onSubmit = handleSubmit(async (values) => {
 
       <p class="text-brand-500">
         Ainda não tem conta?
-        <RouterLink :to="{ name: 'register' }" class="text-aula-700 font-semibold">
+        <RouterLink
+          :to="{ name: 'register' }"
+          class="text-aula-700 inline-flex min-h-11 items-center px-1 font-semibold"
+        >
           Criar conta
         </RouterLink>
       </p>

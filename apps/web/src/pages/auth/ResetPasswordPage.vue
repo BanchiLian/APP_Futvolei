@@ -57,7 +57,7 @@ const onSubmit = handleSubmit(async (values) => {
 
 <template>
   <div v-if="!token" class="flex flex-col gap-4">
-    <h1 class="text-brand-900 text-lg font-semibold">Link inválido</h1>
+    <h1 class="text-brand-900 text-xl font-semibold sm:text-2xl">Link inválido</h1>
     <p class="text-brand-600 text-sm">
       Este link de redefinição está incompleto. Peça um novo para continuar.
     </p>
@@ -72,7 +72,7 @@ const onSubmit = handleSubmit(async (values) => {
 
   <form v-else class="flex flex-col gap-5" novalidate @submit="onSubmit">
     <header class="flex flex-col gap-1">
-      <h1 class="text-brand-900 text-lg font-semibold">Criar nova senha</h1>
+      <h1 class="text-brand-900 text-xl font-semibold sm:text-2xl">Criar nova senha</h1>
       <p class="text-brand-500 text-sm">
         Ao concluir, todas as suas sessões ativas serão encerradas.
       </p>

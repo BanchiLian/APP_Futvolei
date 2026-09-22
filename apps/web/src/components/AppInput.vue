@@ -52,12 +52,12 @@ const describedBy = computed(() => {
         :placeholder="placeholder"
         :aria-invalid="errorMessage ? 'true' : undefined"
         :aria-describedby="describedBy"
-        class="text-brand-900 placeholder:text-brand-300 min-h-11 w-full rounded-lg border bg-white px-3 py-2 text-base outline-none"
+        class="text-brand-900 placeholder:text-brand-400 min-h-11 w-full rounded-lg border bg-white px-3 py-2 text-base outline-none"
         :class="[
           errorMessage
             ? 'border-danger-500 focus:border-danger-600'
             : 'border-brand-200 focus:border-aula-600',
-          isPassword ? 'pr-12' : '',
+          isPassword ? 'pr-20' : '',
         ]"
         @blur="handleBlur"
       />
@@ -65,7 +65,7 @@ const describedBy = computed(() => {
       <button
         v-if="isPassword"
         type="button"
-        class="tap-target text-brand-500 absolute top-0 right-0 text-xs font-semibold"
+        class="text-brand-500 hover:text-aula-700 absolute inset-y-0 right-0 inline-flex min-w-11 items-center justify-center rounded-r-lg px-3 text-xs font-semibold"
         :aria-label="revealed ? 'Ocultar senha' : 'Mostrar senha'"
         :aria-pressed="revealed"
         @click="revealed = !revealed"

@@ -28,7 +28,9 @@ const { handleSubmit, isSubmitting } = useForm({
 // The terms checkbox needs its own field: the schema demands literal `true`.
 const { value: acceptedTerms, errorMessage: termsError } = useField<boolean>('acceptedTerms');
 
-const termsId = `${useId()}-terms`;
+const uid = useId();
+const termsId = `${uid}-terms`;
+const termsErrorId = `${uid}-terms-error`;
 const formError = ref('');
 
 const onSubmit = handleSubmit(async (values) => {
@@ -46,7 +48,7 @@ const onSubmit = handleSubmit(async (values) => {
 <template>
   <form class="flex flex-col gap-5" novalidate @submit="onSubmit">
     <header class="flex flex-col gap-1">
-      <h1 class="text-brand-900 text-lg font-semibold">Criar conta</h1>
+      <h1 class="text-brand-900 text-xl font-semibold sm:text-2xl">Criar conta</h1>
       <p class="text-brand-500 text-sm">Leva menos de um minuto.</p>
     </header>
 
@@ -68,20 +70,27 @@ const onSubmit = handleSubmit(async (values) => {
     />
 
     <div class="flex flex-col gap-1.5">
-      <div class="flex items-start gap-3">
+      <!-- The whole row is the label, so the tap target is the text too, not a 20px box. -->
+      <label :for="termsId" class="flex min-h-11 cursor-pointer items-start gap-3 py-1">
         <input
           :id="termsId"
           v-model="acceptedTerms"
           type="checkbox"
-          class="border-brand-300 mt-1 size-5 rounded"
+          class="accent-aula-600 mt-0.5 size-5 shrink-0 cursor-pointer"
           :aria-invalid="termsError ? 'true' : undefined"
+          :aria-describedby="termsError ? termsErrorId : undefined"
         />
-        <label :for="termsId" class="text-brand-600 text-sm">
+        <span class="text-brand-600 text-sm">
           Li e aceito os termos de uso e a política de privacidade.
-        </label>
-      </div>
+        </span>
+      </label>
 
-      <p v-if="termsError" role="alert" class="text-danger-600 text-xs font-medium">
+      <p
+        v-if="termsError"
+        :id="termsErrorId"
+        role="alert"
+        class="text-danger-600 text-xs font-medium"
+      >
         {{ termsError }}
       </p>
     </div>
@@ -94,7 +103,12 @@ const onSubmit = handleSubmit(async (values) => {
 
     <p class="text-brand-500 text-center text-sm">
       Já tem conta?
-      <RouterLink :to="{ name: 'login' }" class="text-aula-700 font-semibold">Entrar</RouterLink>
+      <RouterLink
+        :to="{ name: 'login' }"
+        class="text-aula-700 inline-flex min-h-11 items-center px-1 font-semibold"
+      >
+        Entrar
+      </RouterLink>
     </p>
   </form>
 </template>

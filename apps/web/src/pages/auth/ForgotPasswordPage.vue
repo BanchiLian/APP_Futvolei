@@ -38,7 +38,7 @@ const onSubmit = handleSubmit(async (values) => {
 
 <template>
   <div v-if="sentMessage" class="flex flex-col gap-4">
-    <h1 class="text-brand-900 text-lg font-semibold">Verifique seu e-mail</h1>
+    <h1 class="text-brand-900 text-xl font-semibold sm:text-2xl">Verifique seu e-mail</h1>
     <p role="status" class="text-brand-600 text-sm">{{ sentMessage }}</p>
 
     <RouterLink :to="{ name: 'login' }" class="tap-target text-aula-700 text-sm font-semibold">
@@ -48,7 +48,7 @@ const onSubmit = handleSubmit(async (values) => {
 
   <form v-else class="flex flex-col gap-5" novalidate @submit="onSubmit">
     <header class="flex flex-col gap-1">
-      <h1 class="text-brand-900 text-lg font-semibold">Esqueci minha senha</h1>
+      <h1 class="text-brand-900 text-xl font-semibold sm:text-2xl">Esqueci minha senha</h1>
       <p class="text-brand-500 text-sm">
         Informe seu e-mail e enviaremos um link para criar uma nova senha.
       </p>
