@@ -20,6 +20,16 @@ describe('parseEnv', () => {
     expect(env.STORAGE_DRIVER).toBe('local');
   });
 
+  it('gives login a generous per-address budget and a tight per-account one', () => {
+    // A whole arena shares one Wi-Fi address, so the per-IP allowance has to be
+    // loose; the per-account one is what stops password guessing.
+    const env = parseEnv({ ...validEnv });
+
+    expect(env.LOGIN_RATE_LIMIT_MAX_PER_IP).toBe(30);
+    expect(env.LOGIN_RATE_LIMIT_MAX_PER_ACCOUNT).toBe(8);
+    expect(env.LOGIN_RATE_LIMIT_MAX_PER_IP).toBeGreaterThan(env.LOGIN_RATE_LIMIT_MAX_PER_ACCOUNT);
+  });
+
   it('coerces numeric variables from strings', () => {
     const env = parseEnv({ ...validEnv, PORT: '8080', RATE_LIMIT_MAX: '50' });
 

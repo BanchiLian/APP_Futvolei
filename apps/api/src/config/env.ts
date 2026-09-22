@@ -83,6 +83,11 @@ const envSchema = z
     RATE_LIMIT_MAX: z.coerce.number().int().min(1).default(300),
     AUTH_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().min(1_000).default(900_000),
     AUTH_RATE_LIMIT_MAX: z.coerce.number().int().min(1).default(10),
+    // Login is limited twice: generously per address, because a whole arena
+    // shares one Wi-Fi, and tightly per account, which is what actually stops
+    // password guessing from a rotating set of addresses.
+    LOGIN_RATE_LIMIT_MAX_PER_IP: z.coerce.number().int().min(1).default(30),
+    LOGIN_RATE_LIMIT_MAX_PER_ACCOUNT: z.coerce.number().int().min(1).default(8),
     TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(10).default(0),
 
     // --- storage ---
