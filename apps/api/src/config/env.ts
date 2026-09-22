@@ -64,7 +64,12 @@ const envSchema = z
     // --- auth ---
     JWT_ACCESS_SECRET: z.string().min(32, 'JWT_ACCESS_SECRET must have at least 32 characters'),
     JWT_REFRESH_SECRET: z.string().min(32, 'JWT_REFRESH_SECRET must have at least 32 characters'),
-    JWT_ACCESS_TTL: z.string().default('15m'),
+    // A duration such as 15m, 900s, 2h or 1d. Rejected early so a typo cannot
+    // silently produce a token that never expires.
+    JWT_ACCESS_TTL: z
+      .string()
+      .regex(/^\d+[smhd]$/, 'JWT_ACCESS_TTL must look like 15m, 900s, 2h or 1d')
+      .default('15m'),
     REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().min(1).max(365).default(30),
     REFRESH_TOKEN_COOKIE_NAME: z.string().min(1).default('futcheck_rt'),
     COOKIE_SECURE: booleanFromString(false),
