@@ -1,5 +1,4 @@
 import type { ErrorRequestHandler, RequestHandler } from 'express';
-import { ZodError } from 'zod';
 
 import { ERROR_CODES, type ApiErrorBody, type ErrorCode, errorMessageFor } from '@futcheck/shared';
 
@@ -18,9 +17,42 @@ function body(code: ErrorCode, message?: string, details?: unknown): ApiErrorBod
   };
 }
 
-/** Turns a ZodError into field-level details the form can render. */
-function zodDetails(error: ZodError): Array<{ field: string; message: string }> {
-  return error.issues.map((issue) => ({
+interface ZodIssueLike {
+  path: Array<string | number>;
+  message: string;
+}
+
+/**
+ * Detects a Zod error **structurally**, not with `instanceof`.
+ *
+ * Inside the monorepo, `packages/shared` and each app resolve their own copy of
+ * zod, so an error raised by a shared schema is not an instance of the class this
+ * module would have imported. `instanceof` failed silently and turned every
+ * validation failure into a 500 — a validation bug that looked like a server bug.
+ * Matching on the shape is correct regardless of how the dependency tree is laid
+ * out, now or after a future install.
+ */
+function asZodError(error: unknown): { issues: ZodIssueLike[] } | null {
+  if (
+    typeof error === 'object' &&
+    error !== null &&
+    (error as { name?: unknown }).name === 'ZodError' &&
+    Array.isArray((error as { issues?: unknown }).issues)
+  ) {
+    return error as { issues: ZodIssueLike[] };
+  }
+
+  return null;
+}
+
+/**
+ * Field-level details the form can render.
+ *
+ * Only the path and the message are forwarded — never the rejected value, which
+ * would echo a submitted password straight back in the response body.
+ */
+function zodDetails(issues: ZodIssueLike[]): Array<{ field: string; message: string }> {
+  return issues.map((issue) => ({
     field: issue.path.join('.'),
     message: issue.message,
   }));
@@ -66,9 +98,12 @@ export const errorHandler: ErrorRequestHandler = (error, req, res, _next) => {
     return;
   }
 
-  if (error instanceof ZodError) {
-    logger.warn({ requestId, issues: error.issues.length }, 'request validation failed');
-    res.status(422).json(body(ERROR_CODES.VALIDATION_ERROR, undefined, zodDetails(error)));
+  const zodError = asZodError(error);
+  if (zodError) {
+    logger.warn({ requestId, issues: zodError.issues.length }, 'request validation failed');
+    res
+      .status(422)
+      .json(body(ERROR_CODES.VALIDATION_ERROR, undefined, zodDetails(zodError.issues)));
     return;
   }
 
