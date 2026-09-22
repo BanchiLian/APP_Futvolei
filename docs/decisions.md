@@ -388,3 +388,42 @@ super admin em qualquer ambiente.
 **Consequência.** Hoje há exatamente uma conta com poderes administrativos. Se o desejo passar a
 ser "ninguém nunca vira admin", basta remover `ROLES.ADMIN` de `SUPER_ADMIN_ASSIGNABLE_ROLES` em
 `packages/shared/src/enums.ts`.
+
+---
+
+## ADR-25 — De uma arena para uma rede de CTs
+
+**Contexto.** O `prompt.md` inteiro assume **uma** arena. O dono do produto pediu que o app
+mostrasse quais CTs estão por perto, quais têm dayuse e quem vai em cada um.
+
+**Decisão.** Existe a tabela `venues`. Cada grade de horários e cada sessão pertence a um CT. O
+app lista os CTs por distância em linha reta (Haversine) a partir das coordenadas que o celular
+enviar.
+
+**Consequência.**
+
+- A migration não pôde simplesmente criar `venue_id NOT NULL`: as grades e sessões que já existiam
+  quebrariam. A coluna nasce nula, as linhas antigas são ligadas a um CT "Arena principal" e só
+  então a restrição é apertada.
+- **Se um CT oferece dayuse é derivado** das grades ativas dele, nunca guardado — um selo guardado
+  poderia divergir da agenda real.
+- As coordenadas do usuário são usadas para ordenar e descartadas: não são gravadas nem logadas.
+  Localização é dado pessoal sensível na LGPD.
+- O que ficou para depois: um CT ainda não tem dono próprio. Hoje só o super admin administra
+  tudo. Quando cada CT tiver seu administrador, isso vira uma permissão por CT, não global.
+
+---
+
+## ADR-26 — Diretório da comunidade com dados mínimos e controle do titular
+
+**Contexto.** O dono pediu uma aba para ver quem mais está cadastrado. A matriz da seção 4.3 não
+permitia que aluno e dayuse vissem outros usuários, e a LGPD exige cuidado com exposição de dados.
+
+**Decisão.** Nova permissão `community:view`, concedida a todos os perfis. O diretório mostra
+**apenas nome, foto e nível de jogo**. Nunca e-mail, telefone ou perfil de acesso. Cada pessoa
+controla se aparece, pelo interruptor "Aparecer na comunidade" no próprio perfil, que vem ligado.
+
+**Consequência.** Atende a minimização de dados e dá controle ao titular. O super admin continua
+fora da listagem para todos os outros (seção 4.1). A lista de quem vai numa sessão é coisa
+separada: quem confirma presença aparece para os demais participantes daquela sessão,
+independentemente do interruptor — é o propósito do produto.

@@ -142,7 +142,7 @@ nunca fica no controller nem em componente Vue.
 
 ## Estado
 
-**Fase 2 — Autenticação e RBAC: concluída.**
+**Fases 1 e 2 concluídas. Em andamento: CTs, sessões, respostas e o app mobile.**
 
 - [x] 1. Fundação
 - [x] 2. Autenticação e RBAC

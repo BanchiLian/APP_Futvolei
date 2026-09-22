@@ -35,11 +35,7 @@ const user = computed(() => auth.user);
 // Personal data
 // -----------------------------------------------------------------------------
 
-/**
- * The form starts from the session the guard already loaded, rather than being
- * filled after mount — that depended on when each input registered itself, and
- * left the fields blank.
- */
+/** The values currently stored for this member, as the form shows them. */
 function profileValues() {
   return {
     name: user.value?.name ?? '',
@@ -53,13 +49,7 @@ const { handleSubmit, isSubmitting, setFieldValue } = useForm({
   validationSchema: toTypedSchema(updateProfileSchema),
 });
 
-/**
- * Fields are filled one by one rather than through `initialValues`.
- *
- * The schema carries transforms (the phone is reduced to digits), and
- * VeeValidate runs initial values through it — which dropped them before they
- * ever reached the inputs. Setting each field explicitly is unambiguous.
- */
+/** Fills the form from the session, and again if the account changes. */
 function fillForm(): void {
   const current = profileValues();
   setFieldValue('name', current.name);
