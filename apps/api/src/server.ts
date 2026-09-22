@@ -3,6 +3,7 @@ import { env, isProduction } from './config/env.js';
 import { logger } from './lib/logger.js';
 import { disconnectPrisma } from './lib/prisma.js';
 import { assertSuperAdminPasswordIsNotWeak } from './lib/startupChecks.js';
+import { startSessionGenerationJob } from './jobs/generateSessions.job.js';
 
 if (isProduction) {
   try {
@@ -16,6 +17,7 @@ if (isProduction) {
 const app = createApp();
 
 const server = app.listen(env.PORT, () => {
+  startSessionGenerationJob();
   logger.info(
     { port: env.PORT, environment: env.NODE_ENV, timezone: env.BUSINESS_TIMEZONE },
     `FutCheck API listening on ${env.API_PUBLIC_URL}`,

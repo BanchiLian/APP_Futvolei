@@ -47,7 +47,7 @@ function getDecoyHash(): Promise<string> {
   return decoyHash;
 }
 
-async function issueSession(user: SafeUser, ctx: RequestContext): Promise<IssuedSession> {
+export async function issueSession(user: SafeUser, ctx: RequestContext): Promise<IssuedSession> {
   const refreshToken = generateOpaqueToken();
 
   await repo.createRefreshToken({

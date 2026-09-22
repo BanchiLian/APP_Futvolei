@@ -25,6 +25,7 @@ export const USER_SAFE_SELECT = {
   birthDate: true,
   skillLevel: true,
   isActive: true,
+  showInCommunity: true,
   termsAcceptedAt: true,
   lastLoginAt: true,
   createdAt: true,
@@ -41,6 +42,7 @@ export interface SafeUser {
   birthDate: Date | null;
   skillLevel: SkillLevel | null;
   isActive: boolean;
+  showInCommunity: boolean;
   termsAcceptedAt: Date | null;
   lastLoginAt: Date | null;
   createdAt: Date;
@@ -68,6 +70,7 @@ export function toMeResponse(user: SafeUser): MeResponse {
     birthDate: user.birthDate ? user.birthDate.toISOString().slice(0, 10) : null,
     skillLevel: user.skillLevel,
     isActive: user.isActive,
+    showInCommunity: user.showInCommunity,
     termsAcceptedAt: user.termsAcceptedAt?.toISOString() ?? null,
     lastLoginAt: user.lastLoginAt?.toISOString() ?? null,
     createdAt: user.createdAt.toISOString(),

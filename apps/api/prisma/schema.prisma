@@ -92,6 +92,10 @@ model User {
 
   isActive Boolean @default(true) @map("is_active")
 
+  /// The member's own switch for the community directory (LGPD: the data subject
+  /// controls it). Only name, photo and skill level are ever shown there.
+  showInCommunity Boolean @default(true) @map("show_in_community")
+
   /// LGPD: when the user accepted the terms of use.
   termsAcceptedAt DateTime? @map("terms_accepted_at") @db.Timestamptz(3)
   lastLoginAt     DateTime? @map("last_login_at") @db.Timestamptz(3)
@@ -167,6 +171,9 @@ model PasswordResetToken {
 model ScheduleTemplate {
   id String @id @default(uuid(7)) @db.Uuid
 
+  /// Every grid belongs to one training centre.
+  venueId String @map("venue_id") @db.Uuid
+
   type SessionType
 
   /// 0 = Sunday … 6 = Saturday, in the business timezone.
@@ -189,12 +196,52 @@ model ScheduleTemplate {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
 
+  venue       Venue     @relation(fields: [venueId], references: [id], onDelete: Restrict)
   responsible User?     @relation("TemplateResponsible", fields: [responsibleId], references: [id], onDelete: SetNull)
   sessions    Session[]
 
+  @@index([venueId, type, isActive])
   @@index([type, weekday, isActive])
   @@index([responsibleId])
   @@map("schedule_templates")
+}
+
+// -----------------------------------------------------------------------------
+// Training centres (CTs)
+// -----------------------------------------------------------------------------
+
+/// A footvolley training centre. Each one runs its own grid of aulas and dayuses.
+/// Whether it "offers dayuse" is derived from its active templates, never stored,
+/// so the badge cannot drift from the real agenda.
+model Venue {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  name        String  @db.VarChar(120)
+  description String? @db.VarChar(1000)
+
+  address String @db.VarChar(255)
+  city    String @db.VarChar(80)
+  /// Two-letter UF, e.g. SP.
+  state   String @db.Char(2)
+
+  /// WGS84 coordinates. Range-checked in the migration. Distance is computed in
+  /// the service; with a handful of CTs a geo index would be premature.
+  latitude  Decimal @db.Decimal(9, 6)
+  longitude Decimal @db.Decimal(9, 6)
+
+  phone     String? @db.VarChar(11)
+  instagram String? @db.VarChar(60)
+
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  templates ScheduleTemplate[]
+  sessions  Session[]
+
+  @@index([isActive])
+  @@map("venues")
 }
 
 // -----------------------------------------------------------------------------
@@ -206,6 +253,9 @@ model Session {
 
   /// Null for ad-hoc sessions created by an admin (a holiday "aulão", say).
   templateId String? @map("template_id") @db.Uuid
+
+  /// Copied from the template at generation time; required for ad-hoc sessions too.
+  venueId String @map("venue_id") @db.Uuid
 
   type     SessionType
   startsAt DateTime    @map("starts_at") @db.Timestamptz(3)
@@ -224,6 +274,7 @@ model Session {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
 
+  venue       Venue             @relation(fields: [venueId], references: [id], onDelete: Restrict)
   template    ScheduleTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
   responsible User?             @relation("SessionResponsible", fields: [responsibleId], references: [id], onDelete: SetNull)
   createdBy   User?             @relation("SessionCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
@@ -232,6 +283,7 @@ model Session {
   /// Makes generation idempotent: the same template slot can only exist once.
   /// Postgres treats NULLs as distinct, so ad-hoc sessions are unaffected.
   @@unique([templateId, startsAt], map: "sessions_template_slot_key")
+  @@index([venueId, startsAt])
   @@index([startsAt, type])
   @@index([status, startsAt])
   @@index([responsibleId, startsAt])

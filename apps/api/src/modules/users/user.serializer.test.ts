@@ -16,6 +16,7 @@ function userWith(role: Role) {
     birthDate: new Date('1995-03-14T00:00:00.000Z'),
     skillLevel: null,
     isActive: true,
+    showInCommunity: true,
     termsAcceptedAt: new Date('2026-09-01T12:00:00.000Z'),
     lastLoginAt: null,
     createdAt: new Date('2026-09-01T12:00:00.000Z'),

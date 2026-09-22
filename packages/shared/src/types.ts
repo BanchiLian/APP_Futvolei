@@ -3,6 +3,7 @@
  * Dates travel as ISO 8601 strings.
  */
 
+import type { ErrorCode } from './errors.js';
 import type { Permission } from './permissions.js';
 import type {
   BookingStatus,
@@ -43,6 +44,8 @@ export interface MeResponse {
   termsAcceptedAt: string | null;
   lastLoginAt: string | null;
   createdAt: string;
+  /** Whether the member appears in the community directory (they control it). */
+  showInCommunity: boolean;
   permissions: Permission[];
   role?: Role;
 }
@@ -83,6 +86,7 @@ export interface SessionSummaryDto {
   confirmedCount: number;
   waitlistCount: number;
   availableSeats: number;
+  venue: VenueRefDto;
   responsible: PublicUserSummary | null;
   cancelReason: string | null;
   /** The requesting user's own answer, when there is one. */
@@ -91,8 +95,63 @@ export interface SessionSummaryDto {
 }
 
 export interface SessionDetailDto extends SessionSummaryDto {
-  /** Name and photo of who is going. Gated by `session:attendees:view:*`. */
+  /**
+   * Name and photo of who is going, confirmed first. Empty when the caller lacks
+   * `session:attendees:view:<type>` — the list is withheld, not faked.
+   */
   attendees: PublicUserSummary[];
+  /** Whether the caller may answer for themselves right now, and if not, why. */
+  rsvp: RsvpAvailabilityDto;
+}
+
+export interface RsvpAvailabilityDto {
+  canAnswer: boolean;
+  /** Error code explaining the block, so the UI can say "prazo encerrado" etc. */
+  blockedReason: ErrorCode | null;
+  /** When answers open (ISO), for "abre em ..." hints. */
+  opensAt: string;
+  /** Last instant a "Vou" can still become "Não vou" without an admin. */
+  changeDeadline: string;
+}
+
+// -----------------------------------------------------------------------------
+// Training centres (CTs)
+// -----------------------------------------------------------------------------
+
+export interface VenueRefDto {
+  id: string;
+  name: string;
+}
+
+export interface VenueSummaryDto extends VenueRefDto {
+  address: string;
+  city: string;
+  state: string;
+  latitude: number;
+  longitude: number;
+  /** Straight-line distance from the coordinates sent, or null when none were. */
+  distanceKm: number | null;
+  offersDayuse: boolean;
+  offersAula: boolean;
+  /** The next open dayuse at this CT, if any. */
+  nextDayuse: SessionSummaryDto | null;
+}
+
+export interface VenueDetailDto extends VenueSummaryDto {
+  description: string | null;
+  phone: string | null;
+  instagram: string | null;
+  /** Upcoming open sessions the caller is allowed to see. */
+  upcomingSessions: SessionSummaryDto[];
+}
+
+// -----------------------------------------------------------------------------
+// Community
+// -----------------------------------------------------------------------------
+
+/** A directory entry. Deliberately minimal: never e-mail, phone or role. */
+export interface CommunityMemberDto extends PublicUserSummary {
+  skillLevel: SkillLevel | null;
 }
 
 export interface BookingDto {

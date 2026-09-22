@@ -28,7 +28,7 @@ function refreshCookieOptions(): CookieOptions {
   };
 }
 
-function setRefreshCookie(res: Response, token: string): void {
+export function setRefreshCookie(res: Response, token: string): void {
   res.cookie(env.REFRESH_TOKEN_COOKIE_NAME, token, {
     ...refreshCookieOptions(),
     maxAge: env.REFRESH_TOKEN_TTL_DAYS * 86_400_000,

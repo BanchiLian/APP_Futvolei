@@ -66,6 +66,17 @@ export const PERMISSIONS = {
 
   /** Read the full audit log. Super admin only. */
   AUDIT_VIEW: 'audit:view',
+
+  /** Browse the training centres (CTs) and their agendas. Everyone has it. */
+  VENUE_VIEW: 'venue:view',
+  /** Create and edit training centres. */
+  VENUE_MANAGE: 'venue:manage',
+
+  /**
+   * Browse the community directory: name, photo and skill level of members who
+   * chose to appear. Never e-mail, phone or access role (LGPD, ADR-26).
+   */
+  COMMUNITY_VIEW: 'community:view',
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
@@ -76,9 +87,19 @@ export const PERMISSION_VALUES = Object.values(PERMISSIONS) as readonly Permissi
 // Role → permissions
 // -----------------------------------------------------------------------------
 
+/**
+ * What every signed-in member can do regardless of role: manage their own
+ * profile, find training centres and browse the community.
+ */
+const MEMBER_PERMISSIONS: readonly Permission[] = [
+  PERMISSIONS.PROFILE_MANAGE_OWN,
+  PERMISSIONS.VENUE_VIEW,
+  PERMISSIONS.COMMUNITY_VIEW,
+];
+
 /** Lowest tier: dayuse-only player. Never sees the aula agenda. */
 const DAYUSE_PERMISSIONS: readonly Permission[] = [
-  PERMISSIONS.PROFILE_MANAGE_OWN,
+  ...MEMBER_PERMISSIONS,
   PERMISSIONS.SESSION_VIEW_DAYUSE,
   PERMISSIONS.SESSION_RSVP_DAYUSE,
   PERMISSIONS.SESSION_ATTENDEES_VIEW_DAYUSE,
@@ -97,7 +118,7 @@ const ALUNO_PERMISSIONS: readonly Permission[] = [
  * attendee). Plays dayuse like anyone else.
  */
 const PROFESSOR_PERMISSIONS: readonly Permission[] = [
-  PERMISSIONS.PROFILE_MANAGE_OWN,
+  ...MEMBER_PERMISSIONS,
   PERMISSIONS.SESSION_VIEW_AULA,
   PERMISSIONS.SESSION_VIEW_DAYUSE,
   PERMISSIONS.SESSION_RSVP_DAYUSE,
@@ -117,7 +138,7 @@ const PROFESSOR_PERMISSIONS: readonly Permission[] = [
  * their management powers.
  */
 const ADMIN_PERMISSIONS: readonly Permission[] = [
-  PERMISSIONS.PROFILE_MANAGE_OWN,
+  ...MEMBER_PERMISSIONS,
   PERMISSIONS.SESSION_VIEW_AULA,
   PERMISSIONS.SESSION_VIEW_DAYUSE,
   PERMISSIONS.SESSION_RSVP_AULA,
@@ -134,6 +155,7 @@ const ADMIN_PERMISSIONS: readonly Permission[] = [
   PERMISSIONS.USER_ROLE_LABEL_VIEW,
   PERMISSIONS.REPORT_VIEW_ANY,
   PERMISSIONS.SETTINGS_MANAGE,
+  PERMISSIONS.VENUE_MANAGE,
 ];
 
 /** Super admin: every admin permission, plus admin management and the audit log. */

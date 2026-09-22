@@ -117,14 +117,72 @@ export const changePasswordSchema = z.object({
  * What a user may change about themselves. `role`, `isActive` and `email` are
  * absent on purpose: they are administrative concerns.
  */
-export const updateProfileSchema = z.object({
-  name: nameSchema.optional(),
-  phone: phoneSchema.optional(),
-  birthDate: z.coerce.date().max(new Date(), 'Data de nascimento inválida').optional().nullable(),
-  skillLevel: skillLevelSchema.optional().nullable(),
-});
+export const updateProfileSchema = z
+  .object({
+    name: nameSchema.optional(),
+    phone: phoneSchema.optional(),
+    /** `YYYY-MM-DD`. Compared against "now" at validation time, not at boot. */
+    birthDate: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, 'Data de nascimento inválida')
+      .refine((value) => {
+        const date = new Date(`${value}T00:00:00Z`);
+        return !Number.isNaN(date.getTime()) && date < new Date() && date.getUTCFullYear() >= 1900;
+      }, 'Data de nascimento inválida')
+      .nullable()
+      .optional(),
+    skillLevel: skillLevelSchema.nullable().optional(),
+    /** The member's own switch for appearing in the community directory. */
+    showInCommunity: z.boolean().optional(),
+  })
+  .refine((value) => Object.keys(value).length > 0, 'Nada para atualizar');
 
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
+
+// -----------------------------------------------------------------------------
+// Sessions, RSVP, venues, community
+// -----------------------------------------------------------------------------
+
+export const rsvpSchema = z.object({
+  response: z.enum(['VOU', 'NAO_VOU']),
+});
+
+export type RsvpInput = z.infer<typeof rsvpSchema>;
+
+const latitudeSchema = z.coerce.number().min(-90).max(90);
+const longitudeSchema = z.coerce.number().min(-180).max(180);
+
+/** Coordinates are optional: without them CTs come back alphabetically. */
+export const venuesQuerySchema = z
+  .object({
+    lat: latitudeSchema.optional(),
+    lng: longitudeSchema.optional(),
+    /** Only CTs that currently have an active dayuse grid. */
+    dayuse: z.enum(['true', 'false']).optional(),
+  })
+  .refine((value) => (value.lat === undefined) === (value.lng === undefined), {
+    message: 'Envie latitude e longitude juntas',
+    path: ['lat'],
+  });
+
+export type VenuesQuery = z.infer<typeof venuesQuerySchema>;
+
+export const sessionsQuerySchema = z.object({
+  from: z.coerce.date().optional(),
+  to: z.coerce.date().optional(),
+  type: z.enum(['AULA', 'DAYUSE']).optional(),
+  venueId: z.string().uuid('CT inválido').optional(),
+});
+
+export type SessionsQuery = z.infer<typeof sessionsQuerySchema>;
+
+export const communityQuerySchema = z.object({
+  q: z.string().trim().max(80).optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(50).default(30),
+});
+
+export type CommunityQuery = z.infer<typeof communityQuerySchema>;
 
 // -----------------------------------------------------------------------------
 // Pagination
