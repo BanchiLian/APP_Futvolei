@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser';
 import cors, { type CorsOptions } from 'cors';
 import express, { type Express } from 'express';
 import helmet from 'helmet';
@@ -60,6 +61,11 @@ export function createApp(): Express {
   app.use(cors(buildCorsOptions()));
   app.use(express.json({ limit: '1mb' }));
   app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+
+  // Reads the httpOnly refresh cookie. Unsigned on purpose: the cookie carries an
+  // opaque 256-bit token that is verified against its stored hash, so a cookie
+  // signature would add a second secret without adding a guarantee.
+  app.use(cookieParser());
 
   app.use(globalRateLimit);
 

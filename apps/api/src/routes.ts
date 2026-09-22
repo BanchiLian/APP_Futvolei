@@ -1,5 +1,7 @@
 import { Router } from 'express';
 
+import { authRoutes } from './modules/auth/auth.routes.js';
+
 /**
  * The versioned API surface (`/api/v1`).
  *
@@ -7,6 +9,8 @@ import { Router } from 'express';
  * bookings, attendance, settings, reports and audit.
  */
 export const apiRoutes: Router = Router();
+
+apiRoutes.use('/auth', authRoutes);
 
 apiRoutes.get('/', (_req, res) => {
   res.json({
