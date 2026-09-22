@@ -42,12 +42,9 @@ function authRoute(
 }
 
 const routes: RouteRecordRaw[] = [
-  {
-    path: '/',
-    name: 'status',
-    component: () => import('@/pages/StatusPage.vue'),
-    meta: { public: true, title: 'FutCheck' },
-  },
+  // The root has no screen of its own: the guard sends a visitor to the login
+  // and a signed-in user straight into the app.
+  { path: '/', redirect: { name: 'home' } },
 
   authRoute('/entrar', 'login', 'Entrar', () => import('@/pages/auth/LoginPage.vue')),
   authRoute(

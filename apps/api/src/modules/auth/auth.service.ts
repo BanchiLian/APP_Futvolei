@@ -133,7 +133,7 @@ function isUniqueViolation(error: unknown): boolean {
  * password checks out, so it cannot be used to enumerate accounts either.
  */
 export async function login(input: LoginInput, ctx: RequestContext): Promise<IssuedSession> {
-  const user = await repo.findUserByEmailWithCredentials(input.email);
+  const user = await repo.findUserByLoginWithCredentials(input.login);
 
   const passwordMatches = user
     ? await verifyPassword(user.passwordHash, input.password)
@@ -146,7 +146,7 @@ export async function login(input: LoginInput, ctx: RequestContext): Promise<Iss
       entity: 'user',
       entityId: user?.id ?? null,
       // The attempted e-mail is recorded; the attempted password never is.
-      metadata: { email: input.email, reason: user ? 'bad_password' : 'unknown_email' },
+      metadata: { login: input.login, reason: user ? 'bad_password' : 'unknown_login' },
       ...ctx,
     });
 

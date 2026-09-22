@@ -78,7 +78,7 @@ export const ERROR_MESSAGES_PT: Record<ErrorCode, string> = {
   PAYLOAD_TOO_LARGE: 'O conteúdo enviado é grande demais.',
   INTERNAL_ERROR: 'Algo deu errado do nosso lado. Tente novamente.',
 
-  INVALID_CREDENTIALS: 'E-mail ou senha incorretos.',
+  INVALID_CREDENTIALS: 'Login ou senha incorretos.',
   ACCOUNT_DISABLED: 'Esta conta está desativada. Fale com a administração.',
   TOKEN_EXPIRED: 'Sua sessão expirou. Entre novamente.',
   TOKEN_INVALID: 'Sua sessão é inválida. Entre novamente.',

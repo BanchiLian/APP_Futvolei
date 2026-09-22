@@ -13,7 +13,7 @@ import { RouterLink } from 'vue-router';
     </p>
 
     <RouterLink
-      :to="{ name: 'status' }"
+      :to="{ name: 'home' }"
       class="tap-target bg-brand-900 rounded-lg px-4 text-sm font-semibold text-white"
     >
       Voltar ao início

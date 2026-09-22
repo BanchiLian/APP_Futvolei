@@ -44,10 +44,10 @@ const onSubmit = handleSubmit(async (values) => {
   <form class="flex flex-col gap-5" novalidate @submit="onSubmit">
     <header class="flex flex-col gap-1">
       <h1 class="text-brand-900 text-lg font-semibold">Entrar</h1>
-      <p class="text-brand-500 text-sm">Use o e-mail e a senha da sua conta.</p>
+      <p class="text-brand-500 text-sm">Use seu e-mail ou usuário e a sua senha.</p>
     </header>
 
-    <AppInput name="email" label="E-mail" type="email" autocomplete="email" />
+    <AppInput name="login" label="E-mail ou usuário" autocomplete="username" />
     <AppInput name="password" label="Senha" type="password" autocomplete="current-password" />
 
     <p v-if="formError" role="alert" class="text-danger-600 text-sm font-medium">

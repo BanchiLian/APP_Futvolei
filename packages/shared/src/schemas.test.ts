@@ -10,6 +10,7 @@ import {
   paginationSchema,
   registerSchema,
   superAdminPasswordSchema,
+  usernameSchema,
 } from './schemas.js';
 
 const validRegistration = {
@@ -87,9 +88,29 @@ describe('registerSchema', () => {
 });
 
 describe('loginSchema', () => {
-  it('normalises the e-mail so login is case-insensitive', () => {
-    const result = loginSchema.parse({ email: 'ANA@EXAMPLE.COM', password: 'x' });
-    expect(result.email).toBe('ana@example.com');
+  it('normalises an e-mail so login is case-insensitive', () => {
+    const result = loginSchema.parse({ login: '  ANA@EXAMPLE.COM ', password: 'x' });
+    expect(result.login).toBe('ana@example.com');
+  });
+
+  it('accepts a username in the same field', () => {
+    expect(loginSchema.parse({ login: 'Admin', password: 'x' }).login).toBe('admin');
+  });
+
+  it('refuses an empty login', () => {
+    expect(loginSchema.safeParse({ login: '   ', password: 'x' }).success).toBe(false);
+  });
+});
+
+describe('usernameSchema', () => {
+  it('lowercases and accepts a simple handle', () => {
+    expect(usernameSchema.parse(' Admin ')).toBe('admin');
+  });
+
+  it('refuses spaces, @ and handles that are too short', () => {
+    for (const bad of ['ad', 'meu admin', 'a@b', 'x'.repeat(31)]) {
+      expect(usernameSchema.safeParse(bad).success).toBe(false);
+    }
   });
 });
 

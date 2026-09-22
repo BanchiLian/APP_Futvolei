@@ -58,6 +58,7 @@ export async function ensureSuperAdmin(): Promise<EnsureSuperAdminResult> {
     data: {
       name: credentials.name,
       email: credentials.email,
+      username: credentials.username,
       phone: '00000000000',
       passwordHash,
       role: ROLES.SUPER_ADMIN,

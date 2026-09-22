@@ -73,9 +73,24 @@ export const registerSchema = z.object({
 
 export type RegisterInput = z.infer<typeof registerSchema>;
 
+/**
+ * Short handle an account can log in with instead of its e-mail. Today only the
+ * super admin has one ("admin"); everyone else logs in by e-mail.
+ */
+export const usernameSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .regex(/^[a-z0-9._-]{3,30}$/, 'Use de 3 a 30 letras, números, ponto, hífen ou sublinhado');
+
+/**
+ * Login accepts either an e-mail or a username in the same field. It is only
+ * trimmed and lowercased here; the service decides which one it is by the `@`.
+ * Both are stored lowercase, so the lookup stays case-insensitive either way.
+ */
 export const loginSchema = z.object({
-  email: emailSchema,
-  password: z.string().min(1, 'Informe a senha'),
+  login: z.string().trim().toLowerCase().min(1, 'Informe o e-mail ou o usuário').max(255),
+  password: z.string().min(1, 'Informe a senha').max(128),
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;

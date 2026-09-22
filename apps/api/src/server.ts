@@ -1,7 +1,17 @@
 import { createApp } from './app.js';
-import { env } from './config/env.js';
+import { env, isProduction } from './config/env.js';
 import { logger } from './lib/logger.js';
 import { disconnectPrisma } from './lib/prisma.js';
+import { assertSuperAdminPasswordIsNotWeak } from './lib/startupChecks.js';
+
+if (isProduction) {
+  try {
+    await assertSuperAdminPasswordIsNotWeak();
+  } catch (error) {
+    logger.fatal({ err: error }, 'startup check failed');
+    process.exit(1);
+  }
+}
 
 const app = createApp();
 

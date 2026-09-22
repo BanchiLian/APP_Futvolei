@@ -71,6 +71,10 @@ model User {
   /// what makes the unique constraint behave case-insensitively.
   email String @unique @db.VarChar(255)
 
+  /// Optional short login handle, always lowercase (see `usernameSchema`). Only
+  /// the super admin has one today; everyone else logs in by e-mail.
+  username String? @unique @db.VarChar(30)
+
   /// Digits only, 10–11 chars (Brazilian numbers).
   phone String @db.VarChar(11)
 

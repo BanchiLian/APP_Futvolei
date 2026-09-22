@@ -38,9 +38,12 @@ interface SeedUser {
   skillLevel?: SkillLevel;
 }
 
+/**
+ * No ADMIN here on purpose: the owner decided the super admin is the only account
+ * with administrative access for now (ADR-24). They can still promote someone of
+ * trust to ADMIN later, from the panel.
+ */
 const SEED_USERS: SeedUser[] = [
-  { name: 'Marina Prado', email: 'admin@futcheck.local', phone: '11999990001', role: ROLES.ADMIN },
-
   {
     name: 'Carlos Mendes',
     email: 'carlos.professor@futcheck.local',

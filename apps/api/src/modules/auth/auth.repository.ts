@@ -19,12 +19,17 @@ export interface UserWithCredentials extends SafeUser {
   deletedAt: Date | null;
 }
 
-export function findUserByEmailWithCredentials(
-  email: string,
+/**
+ * Resolves a login identifier. An `@` means an e-mail; anything else is a
+ * username. Both columns are unique and stored lowercase, so each lookup hits
+ * exactly one index and can match at most one account.
+ */
+export function findUserByLoginWithCredentials(
+  login: string,
   db: Db = prisma,
 ): Promise<UserWithCredentials | null> {
   return db.user.findUnique({
-    where: { email },
+    where: login.includes('@') ? { email: login } : { username: login },
     select: { ...USER_SAFE_SELECT, passwordHash: true, deletedAt: true },
   });
 }

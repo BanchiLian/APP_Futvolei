@@ -68,10 +68,16 @@ describe('POST /auth/register — validation', () => {
 });
 
 describe('POST /auth/login — validation', () => {
-  it('refuses a malformed e-mail', async () => {
+  it('refuses a missing login', async () => {
+    const response = await request(app).post('/api/v1/auth/login').send({ password: 'whatever' });
+
+    expect(response.status).toBe(422);
+  });
+
+  it('refuses a blank login', async () => {
     const response = await request(app)
       .post('/api/v1/auth/login')
-      .send({ email: 'nope', password: 'whatever' });
+      .send({ login: '   ', password: 'whatever' });
 
     expect(response.status).toBe(422);
   });
@@ -79,7 +85,7 @@ describe('POST /auth/login — validation', () => {
   it('refuses a missing password', async () => {
     const response = await request(app)
       .post('/api/v1/auth/login')
-      .send({ email: 'ana@example.com' });
+      .send({ login: 'ana@example.com' });
 
     expect(response.status).toBe(422);
   });
@@ -87,7 +93,7 @@ describe('POST /auth/login — validation', () => {
   it('never echoes the submitted password back in the error', async () => {
     const response = await request(app)
       .post('/api/v1/auth/login')
-      .send({ email: 'nope', password: 'minha-senha-secreta' });
+      .send({ login: '', password: 'minha-senha-secreta' });
 
     expect(JSON.stringify(response.body)).not.toContain('minha-senha-secreta');
   });
