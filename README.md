@@ -143,10 +143,10 @@ nunca fica no controller nem em componente Vue.
 
 ## Estado
 
-**Fase 1 — Fundação: concluída.**
+**Fase 2 — Autenticação e RBAC: concluída.**
 
 - [x] 1. Fundação
-- [ ] 2. Autenticação e RBAC
+- [x] 2. Autenticação e RBAC
 - [ ] 3. Perfil e foto
 - [ ] 4. Grade e sessões
 - [ ] 5. Respostas (Vou / Não vou)

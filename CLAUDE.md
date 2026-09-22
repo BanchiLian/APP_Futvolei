@@ -124,4 +124,19 @@ Hooks: `pre-commit` roda lint-staged, `commit-msg` roda commitlint.
 
 ## Estado atual
 
-**Fase 1 (Fundação) concluída.** Próxima: Fase 2 — Autenticação e RBAC.
+**Fases 1 (Fundação) e 2 (Autenticação e RBAC) concluídas.** Próxima: Fase 3 — Perfil e foto.
+
+Peças de autenticação já disponíveis para as próximas fases:
+
+- `authenticate` (middleware) resolve `req.auth = { userId, role, permissions }` relendo o usuário
+  do banco a cada requisição.
+- `requirePermission(...)` (middleware) é o portão de rota. **Não dispensa** a checagem de posse no
+  service.
+- `validateBody(schema)` valida e **substitui** o corpo pelo valor parseado, o que é o que descarta
+  campos não declarados.
+- `recordAudit(...)` grava na auditoria e nunca lança.
+- `assertRoleIsAssignable`, `assertCanMutateUser`, `assertCanAssignRole` e
+  `superAdminVisibilityFilter` em `src/lib/superAdmin.ts` — use todos ao construir o módulo de
+  usuários na Fase 7.
+- `USER_SAFE_SELECT` e `toMeResponse` em `src/modules/users/user.serializer.ts` são o único caminho
+  pelo qual um usuário sai da API.

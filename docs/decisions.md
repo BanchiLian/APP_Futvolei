@@ -273,3 +273,83 @@ responder por terceiros pelo endpoint separado.
 As permissões pessoais e a de "em nome de" permanecem distintas de propósito: se um dia a arena
 quiser um admin que só administre, basta remover as duas pessoais da lista em
 `packages/shared/src/permissions.ts`, sem tocar em nada dos poderes de gestão.
+
+---
+
+## ADR-19 — Access token magro, com autorização relida do banco
+
+**Contexto.** O caminho comum é embutir perfil e permissões no JWT, para evitar uma consulta por
+requisição. Com access token de 15 minutos, isso significa que um usuário rebaixado, desativado ou
+excluído continua com os poderes antigos até o token vencer.
+
+**Decisão.** O access token carrega apenas `sub`, `iss`, `aud`, `iat` e `exp` — nenhuma claim de
+perfil ou permissão. O middleware `authenticate` relê o usuário do banco a cada requisição
+(`id`, `role`, `isActive`) e monta as permissões a partir da matriz.
+
+Biblioteca: `jose`, e não `jsonwebtoken` — é ESM nativa, já vem tipada (sem `@types`) e não exige
+interoperabilidade CJS num projeto que é todo ESM.
+
+**Consequência.** Uma consulta indexada por requisição, em troca de revogação imediata: desativar
+alguém tem efeito no próximo request, não em até 15 minutos. Há teste garantindo que o token não
+carrega `role` nem `permissions`, e que um token assinado com o segredo de refresh é recusado.
+
+---
+
+## ADR-20 — SHA-256 para tokens opacos, Argon2id só para senhas
+
+**Contexto.** Refresh tokens e tokens de redefinição de senha são guardados apenas como hash. A
+tentação é usar Argon2 para tudo, "porque é mais seguro".
+
+**Decisão.** Senhas usam Argon2id. Refresh tokens e tokens de redefinição usam SHA-256.
+
+**Consequência.** Argon2 existe para tornar lento o ataque de força bruta contra segredos de
+**baixa entropia**, escolhidos por humanos. Esses tokens são 256 bits de saída de CSPRNG — força
+bruta não é uma ameaça real. E como o Argon2 usa salt por hash, não seria possível **buscar** um
+token pelo seu hash, que é exatamente o que a validação precisa fazer. Usar Argon2 aqui custaria
+desempenho e quebraria a busca, sem ganho de segurança.
+
+---
+
+## ADR-21 — Refresh token rotativo, com detecção de reuso
+
+**Contexto.** Um refresh token de 30 dias em cookie é um alvo valioso. Se for roubado, o atacante
+mantém acesso indefinidamente.
+
+**Decisão.** Todo refresh **rotaciona**: o token apresentado é revogado e um novo é emitido. Se
+chegar um token **já revogado**, tratamos como replay: todas as sessões daquele usuário são
+revogadas e o evento vai para a auditoria com `auth.refresh.reuse_detected`.
+
+A revogação da própria linha usa `updateMany` com guarda `revokedAt: null`, e só quem ganha essa
+atualização emite sessão nova — dois refreshes simultâneos nunca geram duas sessões válidas do
+mesmo token.
+
+**Consequência.** Um token roubado serve no máximo uma vez, e usá-lo derruba ladrão e vítima
+juntos — o que a vítima percebe, em vez de um acesso silencioso e permanente.
+
+Detalhe de implementação que importa: a revogação em massa e seu registro de auditoria acontecem
+**fora** da transação que depois lança o erro. Dentro dela, o rollback apagaria justamente a
+revogação e o rastro do incidente.
+
+---
+
+## ADR-22 — Detecção estrutural de erro do Zod no error handler
+
+**Contexto.** Todo endpoint de validação retornava **500 em vez de 422**. O `errorHandler` usava
+`error instanceof ZodError`, e o `instanceof` falhava silenciosamente: o monorepo tinha **três
+cópias físicas do zod** (uma em `apps/api`, uma em `apps/web`, uma em `packages/shared`), todas na
+mesma versão. Um erro lançado por um schema do `shared` não é instância da classe que a API
+importou.
+
+**Decisão.** Duas medidas:
+
+1. O `errorHandler` identifica o erro pela **forma** (`name === 'ZodError'` e `issues` é array), e
+   não por `instanceof`. Correto independentemente de como a árvore de dependências for resolvida.
+2. `npm dedupe` colapsou as três cópias em uma só, na raiz.
+
+**Consequência.** Erro de validação volta 422 com detalhes por campo. A detecção estrutural
+continua valendo mesmo que uma instalação futura volte a aninhar o pacote — e há teste de endpoint
+cobrindo isso, justamente porque essa era uma falha invisível: parecia bug de servidor, era bug de
+validação.
+
+Os detalhes devolvidos contêm apenas `field` e `message`, nunca o valor rejeitado — caso contrário
+a resposta ecoaria de volta a senha enviada. Há teste para isso também.

@@ -36,10 +36,6 @@ export function findActiveUserByEmail(email: string, db: Db = prisma): Promise<S
   });
 }
 
-export function findUserIdByEmail(email: string, db: Db = prisma): Promise<{ id: string } | null> {
-  return db.user.findUnique({ where: { email }, select: { id: true } });
-}
-
 export function createUser(
   data: {
     name: string;
