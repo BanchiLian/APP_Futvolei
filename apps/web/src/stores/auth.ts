@@ -2,14 +2,17 @@ import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 
 import {
+  type LoginInput,
   type MeResponse,
   type Permission,
+  type RegisterInput,
   hasAllPermissions,
   hasAnyPermission,
   hasPermission,
 } from '@futcheck/shared';
 
-import { api, configureHttp } from '@/services/http';
+import * as authApi from '@/services/auth';
+import { configureHttp } from '@/services/http';
 
 /**
  * Session state.
@@ -53,10 +56,39 @@ export const useAuthStore = defineStore('auth', () => {
 
   /** Exchanges the httpOnly refresh cookie for a fresh access token. */
   async function refreshAccessToken(): Promise<string> {
-    const { data } = await api.post<{ accessToken: string; user: MeResponse }>('/auth/refresh');
+    const session = await authApi.refresh();
 
-    setSession(data.accessToken, data.user);
-    return data.accessToken;
+    setSession(session.accessToken, session.user);
+    return session.accessToken;
+  }
+
+  async function login(input: LoginInput): Promise<void> {
+    const session = await authApi.login(input);
+    setSession(session.accessToken, session.user);
+  }
+
+  /**
+   * Public sign-up. The server decides the role — the client has no say and sends
+   * no such field.
+   */
+  async function register(input: RegisterInput): Promise<void> {
+    const session = await authApi.register(input);
+    setSession(session.accessToken, session.user);
+  }
+
+  /** Resolves the same way whether or not the account exists, by design. */
+  async function forgotPassword(email: string): Promise<string> {
+    const { message } = await authApi.forgotPassword({ email });
+    return message;
+  }
+
+  /**
+   * After a reset the server has revoked every session, so there is nothing local
+   * left to trust either.
+   */
+  async function resetPassword(input: { token: string; password: string }): Promise<void> {
+    await authApi.resetPassword(input);
+    clearSession();
   }
 
   /**
@@ -77,8 +109,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function logout(): Promise<void> {
     try {
-      await api.post('/auth/logout');
+      await authApi.logout();
     } finally {
+      // Drop the local session even if the server call failed: the user asked to
+      // leave, and the refresh cookie expires on its own.
       clearSession();
     }
   }
@@ -103,6 +137,10 @@ export const useAuthStore = defineStore('auth', () => {
     clearSession,
     refreshAccessToken,
     bootstrap,
+    login,
+    register,
+    forgotPassword,
+    resetPassword,
     logout,
   };
 });

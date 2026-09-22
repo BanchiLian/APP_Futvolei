@@ -1,4 +1,9 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
+import {
+  createRouter,
+  createWebHistory,
+  type RouteComponent,
+  type RouteRecordRaw,
+} from 'vue-router';
 
 import type { Permission } from '@futcheck/shared';
 
@@ -14,6 +19,28 @@ declare module 'vue-router' {
   }
 }
 
+const AuthLayout = () => import('@/layouts/AuthLayout.vue');
+
+/**
+ * Wraps one public auth screen in the auth layout.
+ *
+ * Each screen gets its own top-level record instead of sharing a parent at `/`,
+ * which would collide with the landing page and make matching order-dependent.
+ */
+function authRoute(
+  path: string,
+  name: string,
+  title: string,
+  component: () => Promise<RouteComponent>,
+): RouteRecordRaw {
+  return {
+    path,
+    component: AuthLayout,
+    meta: { public: true },
+    children: [{ path: '', name, component, meta: { public: true, title } }],
+  };
+}
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -22,19 +49,26 @@ const routes: RouteRecordRaw[] = [
     meta: { public: true, title: 'FutCheck' },
   },
 
-  {
-    path: '/entrar',
-    component: () => import('@/layouts/AuthLayout.vue'),
-    meta: { public: true },
-    children: [
-      {
-        path: '',
-        name: 'login',
-        component: () => import('@/pages/auth/LoginPage.vue'),
-        meta: { public: true, title: 'Entrar' },
-      },
-    ],
-  },
+  authRoute('/entrar', 'login', 'Entrar', () => import('@/pages/auth/LoginPage.vue')),
+  authRoute(
+    '/criar-conta',
+    'register',
+    'Criar conta',
+    () => import('@/pages/auth/RegisterPage.vue'),
+  ),
+  authRoute(
+    '/esqueci-minha-senha',
+    'forgot-password',
+    'Esqueci minha senha',
+    () => import('@/pages/auth/ForgotPasswordPage.vue'),
+  ),
+  // The path the API builds into the password reset link.
+  authRoute(
+    '/redefinir-senha',
+    'reset-password',
+    'Criar nova senha',
+    () => import('@/pages/auth/ResetPasswordPage.vue'),
+  ),
 
   {
     path: '/app',
@@ -94,6 +128,11 @@ router.beforeEach(async (to) => {
   // On a hard reload the refresh cookie may still yield a session.
   if (auth.isBootstrapping) {
     await auth.bootstrap();
+  }
+
+  // An authenticated user has no business on the login or sign-up screens.
+  if (auth.isAuthenticated && ['login', 'register'].includes(String(to.name))) {
+    return { name: 'home' };
   }
 
   if (to.meta.public) {
