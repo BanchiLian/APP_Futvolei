@@ -1,18 +1,30 @@
+import { computed } from 'vue';
+
+import { PERMISSIONS, type Permission } from '@futcheck/shared';
+
+import type { IconName } from '@/components/icons';
+import { useCan } from '@/composables/useCan';
+import type { TabName } from '@/router/navigation';
+
 export interface NavItem {
-  name: 'home' | 'agenda' | 'my-sessions' | 'profile';
+  /** Route name of the tab root; equal to its `TabName`. */
+  name: TabName;
   label: string;
-  /** Inline SVG path data, so the app needs no icon dependency. */
-  icon: string;
+  icon: IconName;
+  /** Hidden (not just disabled) when the user lacks it. */
+  permission?: Permission;
 }
 
 /** Shared by the phone bottom bar and the desktop sidebar so the two cannot drift apart. */
 export const NAV_ITEMS: readonly NavItem[] = [
-  { name: 'home', label: 'Início', icon: 'M3 11.5 12 4l9 7.5M5.5 10v9.5h13V10' },
-  { name: 'agenda', label: 'Agenda', icon: 'M4 7h16v13H4zM4 7V5h16v2M8 3v4M16 3v4M8 12h8M8 16h5' },
-  { name: 'my-sessions', label: 'Minhas', icon: 'M5 12l4.5 4.5L19 7M5 19h14' },
-  {
-    name: 'profile',
-    label: 'Perfil',
-    icon: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4.5 20a7.5 7.5 0 0 1 15 0',
-  },
+  { name: 'home', label: 'Início', icon: 'home' },
+  { name: 'agenda', label: 'Agenda', icon: 'calendar' },
+  { name: 'venues', label: 'CTs', icon: 'pin', permission: PERMISSIONS.VENUE_VIEW },
+  { name: 'community', label: 'Comunidade', icon: 'users', permission: PERMISSIONS.COMMUNITY_VIEW },
+  { name: 'profile', label: 'Perfil', icon: 'user' },
 ];
+
+export function useNavItems() {
+  const { can } = useCan();
+  return computed(() => NAV_ITEMS.filter((item) => !item.permission || can(item.permission)));
+}

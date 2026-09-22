@@ -16,6 +16,7 @@ function profileFor(role: Parameters<typeof permissionsForRole>[0]): MeResponse 
     birthDate: null,
     skillLevel: null,
     isActive: true,
+    showInCommunity: true,
     termsAcceptedAt: null,
     lastLoginAt: null,
     createdAt: '2026-09-21T12:00:00.000Z',

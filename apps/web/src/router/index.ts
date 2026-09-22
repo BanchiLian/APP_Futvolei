@@ -5,8 +5,17 @@ import {
   type RouteRecordRaw,
 } from 'vue-router';
 
-import type { Permission } from '@futcheck/shared';
+import { PERMISSIONS, type Permission } from '@futcheck/shared';
 
+import {
+  type PageTransition,
+  type TabName,
+  rememberTab,
+  saveScroll,
+  savedScroll,
+  setPageTitle,
+  waitForPageEnter,
+} from '@/router/navigation';
 import { useAuthStore } from '@/stores/auth';
 
 declare module 'vue-router' {
@@ -16,6 +25,12 @@ declare module 'vue-router' {
     /** Permissions the user must hold to open the route. */
     permissions?: Permission[];
     title?: string;
+    /** The bottom-bar tab this screen lives under. */
+    tab?: TabName;
+    /** 0 for a tab root, 1 for a screen pushed on top of it. Drives the transition. */
+    depth?: number;
+    /** Set by the router on every navigation; read by the layout's <Transition>. */
+    transition?: PageTransition;
   }
 }
 
@@ -75,26 +90,53 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'home',
         component: () => import('@/pages/app/HomePage.vue'),
-        meta: { title: 'Início' },
+        meta: { title: 'Início', tab: 'home', depth: 0 },
       },
       {
         path: 'agenda',
         name: 'agenda',
         component: () => import('@/pages/app/AgendaPage.vue'),
-        meta: { title: 'Agenda' },
+        meta: { title: 'Agenda', tab: 'agenda', depth: 0 },
       },
       {
-        path: 'minhas-sessoes',
-        name: 'my-sessions',
-        component: () => import('@/pages/app/MySessionsPage.vue'),
-        meta: { title: 'Minhas sessões' },
+        path: 'cts',
+        name: 'venues',
+        component: () => import('@/pages/app/VenuesPage.vue'),
+        meta: { title: 'CTs', tab: 'venues', depth: 0, permissions: [PERMISSIONS.VENUE_VIEW] },
+      },
+      {
+        path: 'cts/:id',
+        name: 'venue-detail',
+        component: () => import('@/pages/app/VenueDetailPage.vue'),
+        meta: { title: 'CT', tab: 'venues', depth: 1, permissions: [PERMISSIONS.VENUE_VIEW] },
+      },
+      {
+        path: 'comunidade',
+        name: 'community',
+        component: () => import('@/pages/app/CommunityPage.vue'),
+        meta: {
+          title: 'Comunidade',
+          tab: 'community',
+          depth: 0,
+          permissions: [PERMISSIONS.COMMUNITY_VIEW],
+        },
       },
       {
         path: 'perfil',
         name: 'profile',
         component: () => import('@/pages/app/ProfilePage.vue'),
-        meta: { title: 'Perfil' },
+        meta: { title: 'Perfil', tab: 'profile', depth: 0 },
       },
+      {
+        // Opened from any tab, so it has no tab of its own: the bar keeps showing
+        // the tab the user came from.
+        path: 'sessoes/:id',
+        name: 'session-detail',
+        component: () => import('@/pages/app/SessionDetailPage.vue'),
+        meta: { title: 'Sessão', depth: 1 },
+      },
+      // "Minhas sessões" now lives inside the profile tab; old links still land.
+      { path: 'minhas-sessoes', redirect: { name: 'profile', hash: '#minhas-sessoes' } },
     ],
   },
 
@@ -109,7 +151,17 @@ const routes: RouteRecordRaw[] = [
 export const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior: (_to, _from, savedPosition) => savedPosition ?? { top: 0 },
+  async scrollBehavior(to, from, savedPosition) {
+    if (to.path === from.path) return false;
+
+    // Back/forward uses the browser's memory; switching to a tab uses ours, so
+    // each tab keeps its own place like a native tab bar.
+    const tabTop = (to.meta.depth ?? 0) === 0 ? savedScroll(to.fullPath) : undefined;
+    const top = savedPosition?.top ?? tabTop ?? 0;
+
+    await waitForPageEnter();
+    return { top };
+  },
 });
 
 /**
@@ -148,7 +200,18 @@ router.beforeEach(async (to) => {
   return true;
 });
 
-router.afterEach((to) => {
+router.beforeEach((_to, from) => {
+  if (from.matched.length > 0) saveScroll(from.fullPath);
+});
+
+router.afterEach((to, from) => {
+  const toDepth = to.meta.depth ?? 0;
+  const fromDepth = from.meta.depth ?? 0;
+  to.meta.transition = toDepth > fromDepth ? 'push' : toDepth < fromDepth ? 'pop' : 'tab';
+
+  rememberTab(to.meta.tab);
+  setPageTitle(null);
+
   const title = to.meta.title;
   document.title = title ? `${title} · FutCheck` : 'FutCheck';
 });

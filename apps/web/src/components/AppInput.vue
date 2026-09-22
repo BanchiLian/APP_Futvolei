@@ -12,13 +12,15 @@ import { useField } from 'vee-validate';
 const props = defineProps<{
   name: string;
   label: string;
-  type?: 'text' | 'email' | 'tel' | 'password';
+  type?: 'text' | 'email' | 'tel' | 'password' | 'date';
   autocomplete?: string;
   placeholder?: string;
   hint?: string;
 }>();
 
-const { value, errorMessage, handleBlur } = useField<string>(() => props.name);
+// Field names are fixed at the call site, so a plain string is enough; a getter
+// would only tell VeeValidate to watch for a name that never changes.
+const { value, errorMessage, handleBlur } = useField<string>(props.name);
 
 const uid = useId();
 const inputId = `${uid}-input`;

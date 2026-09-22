@@ -9,7 +9,9 @@ import { RouterView } from 'vue-router';
     floating in empty space. Vertical padding shrinks there so the sign-up form
     fits a 768px-tall laptop screen without scrolling.
   -->
-  <div class="bg-brand-900 flex min-h-dvh flex-col justify-center px-4 py-8 lg:px-10 lg:py-6">
+  <div
+    class="bg-brand-900 flex min-h-dvh flex-col justify-center px-4 pt-[max(2rem,env(safe-area-inset-top))] pb-8 lg:px-10 lg:py-6"
+  >
     <div
       class="mx-auto flex w-full max-w-sm flex-col lg:max-w-5xl lg:flex-row lg:items-center lg:justify-between lg:gap-16"
     >

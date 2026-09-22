@@ -55,6 +55,24 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
+    // Listen on the LAN too, so the app can be opened from a phone on the same
+    // Wi-Fi — which is how this product is actually used.
+    host: true,
+
+    /**
+     * The API is proxied under the app's own origin in development.
+     *
+     * Without this the app is on :5173 and the API on :3333, which are different
+     * sites: the browser then refuses to keep the httpOnly refresh cookie, and
+     * the session silently dies on every reload. Proxying makes them one origin,
+     * which is also how they are deployed.
+     */
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3333',
+        changeOrigin: false,
+      },
+    },
   },
 
   test: {
