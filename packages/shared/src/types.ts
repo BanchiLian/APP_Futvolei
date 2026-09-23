@@ -174,3 +174,26 @@ export interface AuthTokens {
 export interface LoginResponse extends AuthTokens {
   user: MeResponse;
 }
+
+// -----------------------------------------------------------------------------
+// Feed
+// -----------------------------------------------------------------------------
+
+/** A photo shared by a member. */
+export interface PostDto {
+  id: string;
+  author: PublicUserSummary;
+  /** The CT the photo is from, when the author tagged one. */
+  venue: VenueRefDto | null;
+  imageUrl: string;
+  thumbnailUrl: string;
+  /** Intrinsic size, so the feed can reserve space and not jump while loading. */
+  width: number;
+  height: number;
+  caption: string | null;
+  likeCount: number;
+  likedByMe: boolean;
+  /** Whether the caller may remove this post: their own, or as a moderator. */
+  canDelete: boolean;
+  createdAt: string;
+}

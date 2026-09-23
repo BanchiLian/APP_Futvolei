@@ -77,3 +77,16 @@ export const loginAccountRateLimit = rateLimit({
   // not apply here.
   validate: false,
 });
+
+/**
+ * Image uploads: the most expensive thing an authenticated user can ask for,
+ * since each one decodes and re-encodes a photo. Keyed by account rather than by
+ * address, so one person cannot exhaust the budget of everyone on the arena Wi-Fi.
+ */
+export const uploadRateLimit = rateLimit({
+  ...sharedOptions,
+  windowMs: 60_000,
+  limit: 12,
+  keyGenerator: (req) => `user:${req.auth?.userId ?? req.ip}`,
+  validate: false,
+});

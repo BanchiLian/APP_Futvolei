@@ -221,3 +221,40 @@ export function buildPaginationMeta(
     totalPages: Math.max(1, Math.ceil(total / pageSize)),
   };
 }
+
+// -----------------------------------------------------------------------------
+// Feed
+// -----------------------------------------------------------------------------
+
+/**
+ * The photo travels as multipart, so these are the text fields beside it.
+ * Both are optional: a photo with no words and no CT is still a valid post.
+ */
+export const createPostSchema = z.object({
+  caption: z
+    .string()
+    .trim()
+    .max(500, 'A legenda é longa demais')
+    .optional()
+    .transform((value) => (value ? value : undefined)),
+  venueId: z.string().uuid('CT inválido').optional(),
+});
+
+export type CreatePostInput = z.infer<typeof createPostSchema>;
+
+export const feedQuerySchema = z.object({
+  /** Only photos from one CT. */
+  venueId: z.string().uuid('CT inválido').optional(),
+  /** Only a given member's photos, for a profile gallery. */
+  authorId: z.string().uuid('Pessoa inválida').optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(30).default(12),
+});
+
+export type FeedQuery = z.infer<typeof feedQuerySchema>;
+
+/** Limits the API enforces on an uploaded image, shared so the app can warn first. */
+export const IMAGE_UPLOAD = {
+  maxBytes: 8 * 1024 * 1024,
+  acceptedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'],
+} as const;

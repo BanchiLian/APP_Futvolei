@@ -72,10 +72,15 @@ function goBack(): void {
           >
             <UserAvatar :name="userName" :src="avatar" size="sm" />
           </RouterLink>
-          <div v-if="userName" class="hidden min-w-0 items-center gap-2 lg:flex">
+          <RouterLink
+            v-if="userName"
+            :to="{ name: 'profile' }"
+            class="press hover:bg-brand-100 hidden min-h-11 min-w-0 items-center gap-2 rounded-full px-2 lg:flex"
+            aria-label="Abrir perfil"
+          >
             <span class="text-brand-700 truncate text-sm font-medium">{{ userName }}</span>
             <UserAvatar :name="userName" :src="avatar" size="sm" />
-          </div>
+          </RouterLink>
         </div>
       </header>
 

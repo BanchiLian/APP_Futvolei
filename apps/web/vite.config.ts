@@ -72,6 +72,12 @@ export default defineConfig({
         target: 'http://127.0.0.1:3333',
         changeOrigin: false,
       },
+      // Uploaded images are served by the API; proxying them keeps every URL in
+      // the app relative, which is what makes it work from a phone as well.
+      '/static': {
+        target: 'http://127.0.0.1:3333',
+        changeOrigin: false,
+      },
     },
   },
 

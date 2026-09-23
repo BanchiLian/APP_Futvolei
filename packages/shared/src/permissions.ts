@@ -72,6 +72,13 @@ export const PERMISSIONS = {
   /** Create and edit training centres. */
   VENUE_MANAGE: 'venue:manage',
 
+  /** See the photo feed. */
+  FEED_VIEW: 'feed:view',
+  /** Publish a photo to the feed. */
+  FEED_POST: 'feed:post',
+  /** Remove anyone's post, not just one's own. */
+  FEED_MODERATE: 'feed:moderate',
+
   /**
    * Browse the community directory: name, photo and skill level of members who
    * chose to appear. Never e-mail, phone or access role (LGPD, ADR-26).
@@ -95,6 +102,8 @@ const MEMBER_PERMISSIONS: readonly Permission[] = [
   PERMISSIONS.PROFILE_MANAGE_OWN,
   PERMISSIONS.VENUE_VIEW,
   PERMISSIONS.COMMUNITY_VIEW,
+  PERMISSIONS.FEED_VIEW,
+  PERMISSIONS.FEED_POST,
 ];
 
 /** Lowest tier: dayuse-only player. Never sees the aula agenda. */
@@ -156,6 +165,7 @@ const ADMIN_PERMISSIONS: readonly Permission[] = [
   PERMISSIONS.REPORT_VIEW_ANY,
   PERMISSIONS.SETTINGS_MANAGE,
   PERMISSIONS.VENUE_MANAGE,
+  PERMISSIONS.FEED_MODERATE,
 ];
 
 /** Super admin: every admin permission, plus admin management and the audit log. */

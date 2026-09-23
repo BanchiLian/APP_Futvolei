@@ -115,6 +115,9 @@ model User {
   passwordResetTokens PasswordResetToken[]
   auditLogs           AuditLog[]          @relation("AuditActor")
   settingsUpdated     Setting[]           @relation("SettingUpdatedBy")
+  posts               Post[]              @relation("PostAuthor")
+  postsRemoved        Post[]              @relation("PostRemovedBy")
+  postLikes           PostLike[]
 
   @@index([role, isActive])
   @@index([deletedAt])
@@ -239,6 +242,7 @@ model Venue {
 
   templates ScheduleTemplate[]
   sessions  Session[]
+  posts     Post[]
 
   @@index([isActive])
   @@map("venues")
@@ -329,6 +333,66 @@ model Booking {
   @@index([sessionId, status])
   @@index([userId, status])
   @@map("bookings")
+}
+
+// -----------------------------------------------------------------------------
+// Feed — photos members share from the CTs
+// -----------------------------------------------------------------------------
+
+/// A photo post. The image itself lives in the storage driver; only its key is
+/// here, so moving from local disk to S3 changes nothing in this table.
+model Post {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  authorId String @map("author_id") @db.Uuid
+
+  /// The CT the photo is from, when the author tagged one.
+  venueId String? @map("venue_id") @db.Uuid
+
+  /// Storage keys, not URLs: the public prefix is configuration, not data.
+  imageKey     String @map("image_key") @db.VarChar(255)
+  thumbnailKey String @map("thumbnail_key") @db.VarChar(255)
+
+  /// Intrinsic size, so the feed can reserve the right space before the image
+  /// loads and avoid the layout jumping under the reader's thumb.
+  width  Int
+  height Int
+
+  caption String? @db.VarChar(500)
+
+  /// Soft delete: the author or an admin hides a post, and the row stays for the
+  /// audit trail. Moderation must leave a record of what was removed and by whom.
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(3)
+  removedById String?   @map("removed_by") @db.Uuid
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  author    User       @relation("PostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  removedBy User?      @relation("PostRemovedBy", fields: [removedById], references: [id], onDelete: SetNull)
+  venue     Venue?     @relation(fields: [venueId], references: [id], onDelete: SetNull)
+  likes     PostLike[]
+
+  /// The feed is read newest-first, filtered to what is still visible.
+  @@index([deletedAt, createdAt])
+  @@index([authorId, createdAt])
+  @@index([venueId, createdAt])
+  @@map("posts")
+}
+
+model PostLike {
+  postId String @map("post_id") @db.Uuid
+  userId String @map("user_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// One like per person per post; the composite key is the whole row.
+  @@id([postId, userId])
+  @@index([userId])
+  @@map("post_likes")
 }
 
 // -----------------------------------------------------------------------------

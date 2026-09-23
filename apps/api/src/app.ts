@@ -9,6 +9,7 @@ import { env, isProduction } from './config/env.js';
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler.js';
 import { httpLogger } from './middlewares/httpLogger.js';
 import { globalRateLimit } from './middlewares/rateLimit.js';
+import { storageRoot } from './lib/storage.js';
 import { healthRoutes } from './modules/health/health.routes.js';
 import { apiRoutes } from './routes.js';
 
@@ -68,6 +69,25 @@ export function createApp(): Express {
   app.use(cookieParser());
 
   app.use(globalRateLimit);
+
+  /**
+   * Uploaded images, served from the same origin as the app.
+   *
+   * Everything here was re-encoded by us, so the extension and the bytes always
+   * agree. `nosniff` (from helmet) plus an explicit type means a browser will
+   * never be talked into executing one of these files, and the long cache is
+   * safe because the names are random and a replaced image gets a new one.
+   */
+  app.use(
+    '/static',
+    express.static(storageRoot(), {
+      maxAge: '365d',
+      immutable: true,
+      index: false,
+      dotfiles: 'deny',
+      setHeaders: (res) => res.setHeader('Cross-Origin-Resource-Policy', 'same-origin'),
+    }),
+  );
 
   app.use(healthRoutes);
   app.use('/api/v1', apiRoutes);

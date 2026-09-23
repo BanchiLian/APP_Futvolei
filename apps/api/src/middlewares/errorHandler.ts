@@ -117,6 +117,13 @@ export const errorHandler: ErrorRequestHandler = (error, req, res, _next) => {
     }
   }
 
+  if (isMulterLimit(error)) {
+    // multer stops reading as soon as the limit is passed, so the oversized body
+    // never lands in memory.
+    res.status(413).json(body(ERROR_CODES.FILE_TOO_LARGE));
+    return;
+  }
+
   if (isPayloadTooLarge(error)) {
     res.status(413).json(body(ERROR_CODES.PAYLOAD_TOO_LARGE));
     return;
@@ -160,3 +167,14 @@ function isMalformedJson(error: unknown): boolean {
 export const notFoundHandler: RequestHandler = (_req, res) => {
   res.status(404).json(body(ERROR_CODES.NOT_FOUND, 'Rota não encontrada.'));
 };
+
+/** multer signals its own limits with a `MulterError` carrying a `LIMIT_*` code. */
+function isMulterLimit(error: unknown): boolean {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    (error as { name?: unknown }).name === 'MulterError' &&
+    typeof (error as { code?: unknown }).code === 'string' &&
+    (error as { code: string }).code.startsWith('LIMIT_')
+  );
+}

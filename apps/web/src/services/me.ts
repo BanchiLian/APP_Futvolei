@@ -34,3 +34,17 @@ export async function listMyBookings(period: BookingPeriod): Promise<SessionSumm
   });
   return data.data;
 }
+
+/** Replaces the profile photo. The server re-encodes it and strips its metadata. */
+export async function updateAvatar(file: Blob): Promise<MeResponse> {
+  const form = new FormData();
+  form.append('image', file, 'avatar.jpg');
+
+  const { data } = await api.put<MeResponse>('/me/avatar', form);
+  return data;
+}
+
+export async function removeAvatar(): Promise<MeResponse> {
+  const { data } = await api.delete<MeResponse>('/me/avatar');
+  return data;
+}

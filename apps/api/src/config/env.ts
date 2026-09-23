@@ -93,7 +93,17 @@ const envSchema = z
     // --- storage ---
     STORAGE_DRIVER: z.enum(['local', 's3']).default('local'),
     STORAGE_LOCAL_DIR: z.string().default('storage/uploads'),
-    STORAGE_PUBLIC_URL: z.string().url().default('http://localhost:3333/static'),
+    // Either an absolute URL (a CDN) or a path on this origin. A path is what
+    // development uses, so images load through the same proxy as the API and
+    // work from a phone on the local network.
+    STORAGE_PUBLIC_URL: z
+      .string()
+      .refine(
+        (value) =>
+          value.startsWith('/') || value.startsWith('http://') || value.startsWith('https://'),
+        'STORAGE_PUBLIC_URL must be an absolute URL or a path starting with /',
+      )
+      .default('/static'),
     S3_ENDPOINT: z.string().optional(),
     S3_REGION: z.string().optional(),
     S3_BUCKET: z.string().optional(),

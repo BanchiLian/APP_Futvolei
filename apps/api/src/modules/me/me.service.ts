@@ -11,7 +11,9 @@ import {
 import { recordAudit } from '../../lib/audit.js';
 import { badRequest, notFound, unauthorized } from '../../lib/errors.js';
 import { hashPassword, verifyPassword } from '../../lib/password.js';
+import { processSquareImage } from '../../lib/images.js';
 import { prisma } from '../../lib/prisma.js';
+import { buildKey, deleteObject, keyFromUrl, publicUrl, saveObject } from '../../lib/storage.js';
 import type { AuthContext } from '../../types/express.js';
 import { issueSession, type IssuedSession, type RequestContext } from '../auth/auth.service.js';
 import { SESSION_SUMMARY_SELECT, buildSessionSummaries } from '../sessions/session.summaries.js';
@@ -166,4 +168,84 @@ export async function listMyBookings(
   });
 
   return buildSessionSummaries(rows, auth.userId);
+}
+
+// -----------------------------------------------------------------------------
+// Profile photo
+// -----------------------------------------------------------------------------
+
+/** Full-size avatar and the small one lists render. */
+const AVATAR_SIZE = 512;
+const AVATAR_THUMBNAIL_SIZE = 128;
+
+/**
+ * Replaces the caller's profile photo.
+ *
+ * The image is decoded and re-encoded, which is what removes the EXIF location a
+ * phone writes into a photo — a profile picture must not publish where it was
+ * taken. The previous files are deleted only after the new ones are stored, so a
+ * failure halfway leaves the old photo intact rather than none at all.
+ */
+export async function updateMyAvatar(
+  auth: AuthContext,
+  file: Express.Multer.File,
+  ctx: RequestContext,
+): Promise<MeResponse> {
+  const current = await loadSelf(auth.userId);
+
+  const [full, thumbnail] = await Promise.all([
+    processSquareImage(file.buffer, AVATAR_SIZE),
+    processSquareImage(file.buffer, AVATAR_THUMBNAIL_SIZE),
+  ]);
+
+  const imageKey = buildKey('avatars');
+  const thumbnailKey = buildKey('avatars');
+
+  await Promise.all([saveObject(imageKey, full.data), saveObject(thumbnailKey, thumbnail.data)]);
+
+  const updated = await prisma.user.update({
+    where: { id: auth.userId },
+    data: { avatarUrl: publicUrl(imageKey), avatarThumbnailUrl: publicUrl(thumbnailKey) },
+    select: USER_SAFE_SELECT,
+  });
+
+  await Promise.all([
+    deleteObject(keyFromUrl(current.avatarUrl)),
+    deleteObject(keyFromUrl(current.avatarThumbnailUrl)),
+  ]);
+
+  await recordAudit({
+    actorId: auth.userId,
+    action: 'user.avatar.updated',
+    entity: 'user',
+    entityId: auth.userId,
+    ...ctx,
+  });
+
+  return toMeResponse(updated);
+}
+
+export async function removeMyAvatar(auth: AuthContext, ctx: RequestContext): Promise<MeResponse> {
+  const current = await loadSelf(auth.userId);
+
+  const updated = await prisma.user.update({
+    where: { id: auth.userId },
+    data: { avatarUrl: null, avatarThumbnailUrl: null },
+    select: USER_SAFE_SELECT,
+  });
+
+  await Promise.all([
+    deleteObject(keyFromUrl(current.avatarUrl)),
+    deleteObject(keyFromUrl(current.avatarThumbnailUrl)),
+  ]);
+
+  await recordAudit({
+    actorId: auth.userId,
+    action: 'user.avatar.removed',
+    entity: 'user',
+    entityId: auth.userId,
+    ...ctx,
+  });
+
+  return toMeResponse(updated);
 }

@@ -4,11 +4,12 @@ import { useRouter } from 'vue-router';
 import { useField, useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 
-import { updateProfileSchema, type SkillLevel } from '@futcheck/shared';
+import { updateProfileSchema, type MeResponse, type SkillLevel } from '@futcheck/shared';
 
 import AppButton from '@/components/AppButton.vue';
 import AppIcon from '@/components/AppIcon.vue';
 import AppInput from '@/components/AppInput.vue';
+import AvatarPicker from '@/components/AvatarPicker.vue';
 import BottomSheet from '@/components/BottomSheet.vue';
 import ChangePasswordForm from '@/components/ChangePasswordForm.vue';
 import EmptyState from '@/components/EmptyState.vue';
@@ -17,7 +18,6 @@ import SegmentedControl from '@/components/SegmentedControl.vue';
 import SessionCard from '@/components/SessionCard.vue';
 import SessionCardSkeleton from '@/components/SessionCardSkeleton.vue';
 import ToggleSwitch from '@/components/ToggleSwitch.vue';
-import UserAvatar from '@/components/UserAvatar.vue';
 import { useResource } from '@/composables/useResource';
 import { useToast } from '@/composables/useToast';
 import { SKILL_LEVEL_OPTIONS } from '@/lib/skillLevel';
@@ -64,6 +64,11 @@ watch(() => user.value?.id, fillForm);
 
 // The level is a radio group, so it needs its own field binding.
 const { value: skillLevelModel } = useField<SkillLevel | undefined>('skillLevel');
+
+/** Any change the server confirms replaces the session copy shown everywhere. */
+function onProfileUpdated(updated: MeResponse): void {
+  if (auth.accessToken) auth.setSession(auth.accessToken, updated);
+}
 
 const onSaveProfile = handleSubmit(async (values) => {
   try {
@@ -139,13 +144,14 @@ async function onLogout(): Promise<void> {
 
 <template>
   <div class="flex flex-col gap-6">
-    <header class="flex items-center gap-4">
-      <UserAvatar :name="user?.name ?? ''" :src="user?.avatarThumbnailUrl ?? null" size="xl" />
-      <div class="min-w-0">
-        <h2 class="text-brand-900 truncate text-lg font-semibold">{{ user?.name }}</h2>
-        <p class="text-brand-500 truncate text-sm">{{ user?.email }}</p>
-      </div>
-    </header>
+    <AvatarPicker
+      :name="user?.name ?? ''"
+      :src="user?.avatarThumbnailUrl ?? null"
+      @updated="onProfileUpdated"
+    >
+      <h2 class="text-brand-900 truncate text-lg font-semibold">{{ user?.name }}</h2>
+      <p class="text-brand-500 truncate text-sm">{{ user?.email }}</p>
+    </AvatarPicker>
 
     <section class="flex flex-col gap-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5">
       <h3 class="text-brand-900 text-sm font-semibold">Seus dados</h3>
