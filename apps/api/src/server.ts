@@ -16,7 +16,14 @@ if (isProduction) {
 
 const app = createApp();
 
-const server = app.listen(env.PORT, () => {
+/**
+ * Bind on IPv4 explicitly.
+ *
+ * Left to itself, Node listens on `::` only, and on Windows that leaves
+ * `127.0.0.1:3333` refusing connections — which broke the dev proxy and would
+ * break any IPv4 client on the local network, such as a phone on the same Wi-Fi.
+ */
+const server = app.listen(env.PORT, '0.0.0.0', () => {
   startSessionGenerationJob();
   logger.info(
     { port: env.PORT, environment: env.NODE_ENV, timezone: env.BUSINESS_TIMEZONE },
