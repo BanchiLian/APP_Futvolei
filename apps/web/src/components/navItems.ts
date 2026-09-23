@@ -20,7 +20,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { name: 'home', label: 'Início', icon: 'home' },
   { name: 'agenda', label: 'Agenda', icon: 'calendar' },
   { name: 'venues', label: 'CTs', icon: 'pin', permission: PERMISSIONS.VENUE_VIEW },
-  { name: 'community', label: 'Comunidade', icon: 'users', permission: PERMISSIONS.COMMUNITY_VIEW },
+  { name: 'feed', label: 'Feed', icon: 'camera', permission: PERMISSIONS.FEED_VIEW },
   { name: 'profile', label: 'Perfil', icon: 'user' },
 ];
 

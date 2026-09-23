@@ -5,7 +5,7 @@ import { readonly, ref } from 'vue';
  * screen on top, and where each tab was scrolled to when the user left it.
  */
 
-export type TabName = 'home' | 'agenda' | 'venues' | 'community' | 'profile';
+export type TabName = 'home' | 'agenda' | 'venues' | 'feed' | 'profile';
 export type PageTransition = 'tab' | 'push' | 'pop';
 
 /** The tab a pushed screen (e.g. a session opened from Agenda) belongs to. */

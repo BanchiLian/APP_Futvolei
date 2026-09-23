@@ -111,13 +111,20 @@ const routes: RouteRecordRaw[] = [
         meta: { title: 'CT', tab: 'venues', depth: 1, permissions: [PERMISSIONS.VENUE_VIEW] },
       },
       {
+        path: 'feed',
+        name: 'feed',
+        component: () => import('@/pages/app/FeedPage.vue'),
+        meta: { title: 'Feed', tab: 'feed', depth: 0, permissions: [PERMISSIONS.FEED_VIEW] },
+      },
+      {
+        // Reached from the feed, so it keeps that tab highlighted while open.
         path: 'comunidade',
         name: 'community',
         component: () => import('@/pages/app/CommunityPage.vue'),
         meta: {
-          title: 'Comunidade',
-          tab: 'community',
-          depth: 0,
+          title: 'Pessoas',
+          tab: 'feed',
+          depth: 1,
           permissions: [PERMISSIONS.COMMUNITY_VIEW],
         },
       },

@@ -20,30 +20,50 @@ const toast = useToast();
 const isLiking = ref(false);
 const isRemoving = ref(false);
 const confirmingRemoval = ref(false);
+/** Shows the big heart for a moment after a double tap. */
+const burst = ref(false);
 
 /**
  * Reserving the exact aspect ratio keeps the feed from jumping while photos
- * load — the thing that makes a web page feel unlike an app.
+ * load — the thing that most makes a web page feel unlike an app.
  */
 const aspectRatio = computed(() => `${props.post.width} / ${props.post.height}`);
 
-async function toggleLike(): Promise<void> {
-  if (isLiking.value) return;
+const likeLabel = computed(() =>
+  props.post.likeCount === 1 ? '1 curtida' : `${props.post.likeCount} curtidas`,
+);
+
+async function setLiked(liked: boolean): Promise<void> {
+  if (isLiking.value || liked === props.post.likedByMe) return;
   isLiking.value = true;
   tapFeedback();
 
   try {
     // The server returns the post, so the count on screen is its count, not ours.
-    const updated = props.post.likedByMe
-      ? await unlikePost(props.post.id)
-      : await likePost(props.post.id);
-
-    emit('update', updated);
+    emit('update', liked ? await likePost(props.post.id) : await unlikePost(props.post.id));
   } catch (error) {
     toast.error(normalizeApiError(error).message);
   } finally {
     isLiking.value = false;
   }
+}
+
+/**
+ * Double tap on the photo likes it, the way every photo feed works. It only ever
+ * likes: undoing by accident on a second double tap would be a surprise.
+ */
+let lastTap = 0;
+
+function onPhotoTap(): void {
+  const now = Date.now();
+  const isDoubleTap = now - lastTap < 300;
+  lastTap = isDoubleTap ? 0 : now;
+
+  if (!isDoubleTap) return;
+
+  burst.value = true;
+  window.setTimeout(() => (burst.value = false), 700);
+  void setLiked(true);
 }
 
 async function remove(): Promise<void> {
@@ -63,23 +83,20 @@ async function remove(): Promise<void> {
 </script>
 
 <template>
-  <article class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
-    <header class="flex items-center gap-3 p-3">
+  <article class="bg-white sm:rounded-2xl sm:shadow-sm sm:ring-1 sm:ring-black/5">
+    <header class="flex items-center gap-3 px-4 py-3">
       <UserAvatar :name="post.author.name" :src="post.author.avatarUrl" size="sm" />
 
-      <div class="min-w-0 flex-1">
+      <div class="min-w-0 flex-1 leading-tight">
         <p class="text-brand-900 truncate text-sm font-semibold">{{ post.author.name }}</p>
-        <p class="text-brand-500 truncate text-xs">
-          <RouterLink
-            v-if="post.venue"
-            :to="{ name: 'venue-detail', params: { id: post.venue.id } }"
-            class="text-aula-700 -my-3 inline-flex min-h-11 items-center font-medium"
-          >
-            {{ post.venue.name }}
-          </RouterLink>
-          <span v-if="post.venue"> · </span>
-          {{ formatRelativeMoment(post.createdAt) }}
-        </p>
+        <RouterLink
+          v-if="post.venue"
+          :to="{ name: 'venue-detail', params: { id: post.venue.id } }"
+          class="text-brand-500 -my-2.5 flex min-h-11 items-center gap-1 text-xs"
+        >
+          <AppIcon name="pin" class="size-3.5" />
+          <span class="truncate">{{ post.venue.name }}</span>
+        </RouterLink>
       </div>
 
       <button
@@ -95,7 +112,7 @@ async function remove(): Promise<void> {
 
     <div
       v-if="confirmingRemoval"
-      class="bg-danger-50 flex items-center justify-between gap-3 px-3 pb-3"
+      class="bg-danger-50 flex items-center justify-between gap-3 px-4 pb-3"
     >
       <p class="text-danger-700 text-xs">Apagar esta publicação?</p>
       <div class="flex gap-2">
@@ -117,33 +134,57 @@ async function remove(): Promise<void> {
       </div>
     </div>
 
-    <!-- The image carries the caption as its description, so it is not silent to
-         a screen reader; there is no separate alt text to ask the author for. -->
-    <img
-      :src="post.imageUrl"
-      :alt="post.caption ?? `Foto publicada por ${post.author.name}`"
+    <!-- The photo fills the width, as in any photo feed. Tapping is a gesture,
+         not a control, so the keyboard path is the like button below. -->
+    <div
+      class="bg-brand-100 relative overflow-hidden select-none"
       :style="{ aspectRatio }"
-      class="bg-brand-100 w-full object-cover"
-      loading="lazy"
-      decoding="async"
-    />
+      @click="onPhotoTap"
+    >
+      <img
+        :src="post.imageUrl"
+        :alt="post.caption ?? `Foto publicada por ${post.author.name}`"
+        class="size-full object-cover"
+        loading="lazy"
+        decoding="async"
+      />
 
-    <footer class="flex flex-col gap-2 p-3">
-      <button
-        type="button"
-        class="tap-target press -ml-2 w-fit gap-2 rounded-full px-2"
-        :class="post.likedByMe ? 'text-danger-600' : 'text-brand-500'"
-        :aria-pressed="post.likedByMe"
-        :aria-label="post.likedByMe ? 'Remover curtida' : 'Curtir'"
-        @click="toggleLike"
+      <Transition
+        enter-active-class="transition duration-150 ease-out"
+        enter-from-class="scale-50 opacity-0"
+        leave-active-class="transition duration-500 ease-in"
+        leave-to-class="scale-125 opacity-0"
       >
-        <AppIcon name="heart" class="size-6" :stroke-width="post.likedByMe ? 2.4 : 1.8" />
-        <span class="text-sm font-semibold">{{ post.likeCount }}</span>
-      </button>
+        <div v-if="burst" class="pointer-events-none absolute inset-0 grid place-items-center">
+          <AppIcon name="heart" class="size-24 text-white/90 drop-shadow-lg" :stroke-width="1.5" />
+        </div>
+      </Transition>
+    </div>
+
+    <footer class="flex flex-col gap-1.5 px-4 py-3">
+      <div class="-ml-2 flex items-center gap-1">
+        <button
+          type="button"
+          class="tap-target press rounded-full"
+          :class="post.likedByMe ? 'text-danger-600' : 'text-brand-600'"
+          :aria-pressed="post.likedByMe"
+          :aria-label="post.likedByMe ? 'Remover curtida' : 'Curtir'"
+          @click="setLiked(!post.likedByMe)"
+        >
+          <AppIcon name="heart" class="size-7" :stroke-width="post.likedByMe ? 2.6 : 1.8" />
+        </button>
+      </div>
+
+      <p v-if="post.likeCount > 0" class="text-brand-900 text-sm font-semibold">
+        {{ likeLabel }}
+      </p>
 
       <p v-if="post.caption" class="text-brand-700 text-sm whitespace-pre-line">
+        <span class="text-brand-900 font-semibold">{{ post.author.name }}</span>
         {{ post.caption }}
       </p>
+
+      <p class="text-brand-400 text-xs">{{ formatRelativeMoment(post.createdAt) }}</p>
     </footer>
   </article>
 </template>

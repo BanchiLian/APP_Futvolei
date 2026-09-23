@@ -29,6 +29,7 @@ import { hashPassword } from '../src/lib/password.js';
 import { prisma } from '../src/lib/prisma.js';
 import type { Prisma } from '../src/generated/prisma/client.js';
 import { generateSessions } from '../src/modules/sessions/sessions.service.js';
+import { seedFeed } from './seedFeed.js';
 
 const SEED_PASSWORD = process.env['SEED_DEFAULT_PASSWORD'] ?? 'Futcheck@2026';
 
@@ -493,6 +494,16 @@ async function main(): Promise<void> {
 
   const answers = await seedDayuseAnswers(userIds);
   console.log(`✔ ${answers} confirmações de exemplo nos dayuses`);
+
+  const posts = await seedFeed(
+    userIds,
+    SEED_VENUES.map((venue) => venue.id),
+  );
+  console.log(
+    posts > 0
+      ? `✔ ${posts} publicações de exemplo no feed`
+      : '• O feed já tinha publicações; nada foi criado',
+  );
 
   console.log('\nSeed concluído.');
 }
