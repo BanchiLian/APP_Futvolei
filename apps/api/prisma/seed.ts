@@ -461,9 +461,31 @@ async function seedSettings(): Promise<void> {
   }
 }
 
+/**
+ * The one way to put demo data into a production database.
+ *
+ * It exists because nothing in the product can create a CT or a weekly grid yet:
+ * those rows only come from here, so a fresh production database has no venue,
+ * no agenda and nothing to sign up for. The opt-in is deliberately a whole
+ * sentence, so it can only ever be typed on purpose.
+ *
+ * Delete this escape hatch once the admin screens can create a CT and a grid.
+ */
+const PRODUCTION_SEED_OPT_IN = 'sim-quero-dados-de-demonstracao';
+
 async function main(): Promise<void> {
   if (env.NODE_ENV === 'production') {
-    throw new Error('Refusing to seed a production database.');
+    if (process.env['SEED_DEMO_DATA'] !== PRODUCTION_SEED_OPT_IN) {
+      // Not an error: the deploy runs this on every boot, and "no demo data
+      // wanted" is the normal answer. Exit quietly so the server still starts.
+      console.log('• Banco de produção sem SEED_DEMO_DATA: nenhum dado de demonstração carregado.');
+      return;
+    }
+
+    console.warn(
+      '\n!!  Carregando dados de DEMONSTRACAO num banco de producao: pessoas, ' +
+        'CTs e fotos ficticias.\n!!  Remova SEED_DEMO_DATA quando houver dados reais.\n',
+    );
   }
 
   console.log(`Seeding ${env.NODE_ENV} database…`);

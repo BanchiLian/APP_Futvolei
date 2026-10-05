@@ -1,6 +1,6 @@
 import cookieParser from 'cookie-parser';
-import cors, { type CorsOptions } from 'cors';
-import express, { type Express } from 'express';
+import cors, { type CorsOptionsDelegate } from 'cors';
+import express, { type Express, type Request } from 'express';
 import helmet from 'helmet';
 
 import { configureBusinessTimezone } from '@futcheck/shared';
@@ -10,6 +10,7 @@ import { errorHandler, notFoundHandler } from './middlewares/errorHandler.js';
 import { httpLogger } from './middlewares/httpLogger.js';
 import { globalRateLimit } from './middlewares/rateLimit.js';
 import { storageRoot } from './lib/storage.js';
+import { mountWebApp } from './lib/webApp.js';
 import { healthRoutes } from './modules/health/health.routes.js';
 import { apiRoutes } from './routes.js';
 
@@ -17,34 +18,40 @@ import { apiRoutes } from './routes.js';
 // before any request can be served.
 configureBusinessTimezone(env.BUSINESS_TIMEZONE);
 
-function buildCorsOptions(): CorsOptions {
+/**
+ * Same origin means the browser is asking the very server that served the page.
+ *
+ * This has to be allowed unconditionally. Vite marks its module scripts
+ * `crossorigin`, so the browser sends an Origin header even for the app's own
+ * JavaScript: without this the API rejects it and the page never boots. Behind a
+ * proxy `req.protocol` follows X-Forwarded-Proto, which is why TRUST_PROXY_HOPS
+ * has to be right in production.
+ */
+function isSameOrigin(req: Request, origin: string): boolean {
+  const host = req.headers.host;
+  return host ? origin === `${req.protocol}://${host}` : false;
+}
+
+/**
+ * A rejected origin answers without the CORS headers rather than throwing: the
+ * browser is what must refuse the response, and an exception here would turn a
+ * cross-origin probe into a 500.
+ */
+const corsDelegate: CorsOptionsDelegate<Request> = (req, callback) => {
+  const origin = req.headers.origin;
   const allowlist = env.CORS_ORIGINS;
 
-  return {
-    // Cookies carry the refresh token, so the browser needs credentials allowed.
-    credentials: true,
-    origin(origin, callback) {
-      // Same-origin requests and server-to-server calls send no Origin header.
-      if (!origin) {
-        callback(null, true);
-        return;
-      }
+  const allowed =
+    // Server-to-server calls and same-origin navigations send no Origin at all.
+    !origin ||
+    isSameOrigin(req, origin) ||
+    allowlist.includes(origin) ||
+    // Outside production an empty allowlist means "developer machine, be permissive".
+    (!isProduction && allowlist.length === 0);
 
-      if (allowlist.includes(origin)) {
-        callback(null, true);
-        return;
-      }
-
-      // Outside production an empty allowlist means "developer machine, be permissive".
-      if (!isProduction && allowlist.length === 0) {
-        callback(null, true);
-        return;
-      }
-
-      callback(new Error(`Origin not allowed by CORS: ${origin}`));
-    },
-  };
-}
+  // Cookies carry the refresh token, so the browser needs credentials allowed.
+  callback(null, { credentials: true, origin: allowed });
+};
 
 /**
  * Builds the Express app without binding a port, so Supertest can drive it
@@ -58,8 +65,28 @@ export function createApp(): Express {
   app.disable('x-powered-by');
 
   app.use(httpLogger);
-  app.use(helmet());
-  app.use(cors(buildCorsOptions()));
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+          // Upload previews are object URLs: the app shows the photo before the
+          // file has ever reached the server.
+          'img-src': ["'self'", 'data:', 'blob:'],
+          // Vue writes inline style attributes for its :style bindings. Nothing
+          // loads a stylesheet or a font from another host, so both drop the
+          // blanket https: that helmet allows by default.
+          'style-src': ["'self'", "'unsafe-inline'"],
+          'font-src': ["'self'", 'data:'],
+          'connect-src': ["'self'"],
+          // Only meaningful behind HTTPS, and it would break a plain-http smoke
+          // test of the production build on a developer machine.
+          ...(env.COOKIE_SECURE ? {} : { 'upgrade-insecure-requests': null }),
+        },
+      },
+    }),
+  );
+  app.use(cors(corsDelegate));
   app.use(express.json({ limit: '1mb' }));
   app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
@@ -91,6 +118,10 @@ export function createApp(): Express {
 
   app.use(healthRoutes);
   app.use('/api/v1', apiRoutes);
+
+  // After the API routes, so an unknown /api path still answers with a JSON
+  // error instead of the app shell.
+  mountWebApp(app);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

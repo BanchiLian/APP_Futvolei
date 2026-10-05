@@ -84,4 +84,25 @@ describe('security posture', () => {
 
     expect(response.headers['access-control-allow-origin']).toBeUndefined();
   });
+
+  it('answers a refused origin without failing the request', async () => {
+    // The browser is what must refuse the response. Throwing here turned every
+    // cross-origin probe into a 500 and hid the real problem.
+    const response = await request(app).get('/health').set('Origin', 'https://site-malicioso.com');
+
+    expect(response.status).toBe(200);
+  });
+
+  it('allows a request from the origin it is itself served on', async () => {
+    // Vite marks its module scripts `crossorigin`, so the browser sends an
+    // Origin header even for the app's own JavaScript. Rejecting that left the
+    // page with no scripts at all.
+    const response = await request(app)
+      .get('/health')
+      .set('Host', 'futcheck.example')
+      .set('Origin', 'http://futcheck.example');
+
+    expect(response.status).toBe(200);
+    expect(response.headers['access-control-allow-origin']).toBe('http://futcheck.example');
+  });
 });

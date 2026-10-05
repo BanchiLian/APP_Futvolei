@@ -12,9 +12,14 @@ import { ERROR_CODES, type ApiErrorBody, type ErrorCode, errorMessageFor } from 
  *
  * `withCredentials` is on because the refresh token lives in an httpOnly cookie —
  * the access token is the only thing JavaScript ever holds.
+ *
+ * The base URL falls back to the path the API is mounted on, because in the
+ * deployed build the API serves this app from the same origin. Without the
+ * fallback a build made without the variable set still succeeds and produces an
+ * app whose every request silently goes to the wrong path.
  */
 export const api: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL ?? '/api/v1',
   withCredentials: true,
   timeout: 15_000,
   headers: { 'Content-Type': 'application/json' },

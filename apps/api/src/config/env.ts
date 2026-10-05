@@ -90,6 +90,13 @@ const envSchema = z
     LOGIN_RATE_LIMIT_MAX_PER_ACCOUNT: z.coerce.number().int().min(1).default(8),
     TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(10).default(0),
 
+    // --- web app ---
+    // When set, the API also serves the built Vue app from this directory, so
+    // app and API share one origin. That is what keeps the httpOnly refresh
+    // cookie same-site in production — Safari blocks third-party cookies, and
+    // this product is used mostly on phones.
+    WEB_DIST_DIR: z.string().optional(),
+
     // --- storage ---
     STORAGE_DRIVER: z.enum(['local', 's3']).default('local'),
     STORAGE_LOCAL_DIR: z.string().default('storage/uploads'),
@@ -138,7 +145,9 @@ const envSchema = z
     }
 
     if (value.NODE_ENV === 'production') {
-      if (value.CORS_ORIGINS.length === 0) {
+      // When the API serves the app itself there is no cross-origin browser
+      // request to allow, so an empty allowlist is the correct, tighter setting.
+      if (value.CORS_ORIGINS.length === 0 && !value.WEB_DIST_DIR) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['CORS_ORIGINS'],

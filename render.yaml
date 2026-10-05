@@ -1,0 +1,83 @@
+# Blueprint de deploy (Render).
+#
+# Um único serviço web serve tudo: a API em /api/v1, as imagens em /static e o
+# app Vue em todo o resto. Isso é proposital — app e API na mesma origem mantêm
+# o cookie de sessão "same-site", e o Safari do iPhone bloqueia cookie de
+# terceiro. Separar os dois quebraria o login justamente no celular.
+#
+# O banco NÃO está aqui: use um PostgreSQL gerenciado (Neon tem plano gratuito
+# permanente) e cole a string de conexão em DATABASE_URL.
+
+services:
+  - type: web
+    name: futcheck
+    runtime: node
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+
+    # --include=dev é obrigatório: o build precisa de vite, tsc e do CLI do
+    # Prisma, que são devDependencies, e NODE_ENV=production faria o npm pulá-las.
+    buildCommand: npm ci --include=dev && npm run db:generate -w @futcheck/api && npm run build
+    # Roda a cada boot, nesta ordem, e tudo aqui é idempotente:
+    #   1. aplica as migrations pendentes;
+    #   2. garante o super admin (o plano gratuito não dá terminal, então esta
+    #      é a única forma de criá-lo; se já existe, não faz nada);
+    #   3. carrega os dados de demonstração APENAS se SEED_DEMO_DATA estiver
+    #      com a frase de confirmação. Sem ela, apenas avisa e segue.
+    startCommand: >-
+      npm run db:deploy -w @futcheck/api &&
+      npm run superadmin:create -w @futcheck/api &&
+      npm run db:seed -w @futcheck/api &&
+      node apps/api/dist/server.js
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      # String de conexão do Postgres gerenciado. Cole a do Neon aqui.
+      - key: DATABASE_URL
+        sync: false
+
+      # Faz a API servir o app. Caminho relativo à raiz do repositório, que é de
+      # onde o startCommand roda.
+      - key: WEB_DIST_DIR
+        value: apps/web/dist
+
+      # Gerados pelo Render, diferentes entre si, nunca vistos por ninguém.
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+
+      # Dono do sistema. A senha precisa de 12+ caracteres e não pode ser uma
+      # senha conhecida: a API se recusa a subir se for.
+      - key: SUPER_ADMIN_NAME
+        sync: false
+      - key: SUPER_ADMIN_EMAIL
+        sync: false
+      - key: SUPER_ADMIN_USERNAME
+        sync: false
+      - key: SUPER_ADMIN_PASSWORD
+        sync: false
+
+      # Sessão. HTTPS é obrigatório em produção, e como app e API dividem a
+      # origem, "lax" basta — não é preciso afrouxar para "none".
+      - key: COOKIE_SECURE
+        value: 'true'
+      - key: COOKIE_SAME_SITE
+        value: lax
+
+      # O Render põe um proxy na frente. Sem isso o rate limit veria todo mundo
+      # como o mesmo IP e o log de auditoria gravaria o endereço errado.
+      - key: TRUST_PROXY_HOPS
+        value: '1'
+
+      - key: BUSINESS_TIMEZONE
+        value: America/Sao_Paulo
+      - key: LOG_LEVEL
+        value: info
+
+      # Mesma origem: não há requisição de outro site para liberar.
+      - key: CORS_ORIGINS
+        value: ''
