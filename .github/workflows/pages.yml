@@ -1,0 +1,68 @@
+# Publica a demonstração do app no GitHub Pages.
+#
+# O Pages só serve arquivos estáticos: não roda Node nem PostgreSQL. Então o que
+# vai para lá é o app de verdade, compilado com VITE_DEMO=true, que troca o
+# transporte do axios por um servidor em memória com um retrato das respostas
+# reais da API. Todas as telas são as mesmas; só o backend é de mentira.
+#
+# O deploy de produção, com API e banco, está em docs/deploy.md.
+
+name: Demonstração no GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Uma publicação por vez, sem cancelar a que já está subindo.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build -w @futcheck/shared
+
+      - run: npm run build -w @futcheck/web
+        env:
+          VITE_DEMO: 'true'
+          # O site de projeto do Pages fica em /<repositório>/.
+          VITE_BASE: /APP_Futvolei/
+
+      # O Vue Router usa history mode, então um link direto para /app/feed pede
+      # ao Pages um arquivo que não existe. O Pages responde 404.html nesses
+      # casos, e servindo o próprio index.html ali o roteador resolve no cliente.
+      - name: Fazer links diretos funcionarem
+        run: cp apps/web/dist/index.html apps/web/dist/404.html
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/web/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

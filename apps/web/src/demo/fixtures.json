@@ -1,0 +1,2964 @@
+{
+  "me": {
+    "id": "01a0c71b-9ceb-732f-8d64-400975b73624",
+    "name": "Administrador",
+    "email": "dono@futcheck.local",
+    "phone": "00000000000",
+    "avatarUrl": "/static/avatars/41d6bc3b0ee411c4b0bdc7816775e27a.webp",
+    "avatarThumbnailUrl": "/static/avatars/1f402f96a814a7dfe1dbc1de92edca28.webp",
+    "birthDate": null,
+    "skillLevel": null,
+    "isActive": true,
+    "showInCommunity": true,
+    "termsAcceptedAt": "2026-09-22T03:14:30.757Z",
+    "lastLoginAt": "2026-10-06T00:19:41.666Z",
+    "createdAt": "2026-09-22T03:14:30.763Z",
+    "permissions": [
+      "profile:manage:own",
+      "venue:view",
+      "community:view",
+      "feed:view",
+      "feed:post",
+      "session:view:aula",
+      "session:view:dayuse",
+      "session:rsvp:aula",
+      "session:rsvp:dayuse",
+      "session:rsvp:on-behalf",
+      "session:attendees:view:aula",
+      "session:attendees:view:dayuse",
+      "session:manage",
+      "schedule:manage",
+      "attendance:manage:any",
+      "user:view:any",
+      "user:manage",
+      "user:role:assign:basic",
+      "user:role-label:view",
+      "report:view:any",
+      "settings:manage",
+      "venue:manage",
+      "feed:moderate",
+      "admin:manage",
+      "audit:view"
+    ],
+    "role": "SUPER_ADMIN"
+  },
+  "venues": {
+    "data": [
+      {
+        "id": "01990000-0000-7000-8000-000000000001",
+        "name": "Arena FutCheck Pinheiros",
+        "address": "Rua dos Pinheiros, 1000 — Pinheiros",
+        "city": "São Paulo",
+        "state": "SP",
+        "latitude": -23.5673,
+        "longitude": -46.6923,
+        "distanceKm": null,
+        "offersDayuse": true,
+        "offersAula": true,
+        "nextDayuse": {
+          "id": "01a0c749-4a18-765e-845f-b91e2d4a4df8",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-09T22:00:00.000Z",
+          "endsAt": "2026-10-10T01:00:00.000Z",
+          "title": "Dayuse — sexta à noite",
+          "capacity": 24,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 24,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        }
+      },
+      {
+        "id": "01990000-0000-7000-8000-000000000005",
+        "name": "Arena Leste Tatuapé",
+        "address": "Rua Tuiuti, 2000 — Tatuapé",
+        "city": "São Paulo",
+        "state": "SP",
+        "latitude": -23.54,
+        "longitude": -46.576,
+        "distanceKm": null,
+        "offersDayuse": false,
+        "offersAula": true,
+        "nextDayuse": null
+      },
+      {
+        "id": "01990000-0000-7000-8000-000000000002",
+        "name": "CT Areia Ibirapuera",
+        "address": "Av. Ibirapuera, 2500 — Moema",
+        "city": "São Paulo",
+        "state": "SP",
+        "latitude": -23.601,
+        "longitude": -46.665,
+        "distanceKm": null,
+        "offersDayuse": true,
+        "offersAula": false,
+        "nextDayuse": {
+          "id": "01a0cb5b-645c-7740-91d8-324c3804b683",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-10T11:00:00.000Z",
+          "endsAt": "2026-10-10T14:00:00.000Z",
+          "title": "Dayuse de sábado",
+          "capacity": 16,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 16,
+          "venue": { "id": "01990000-0000-7000-8000-000000000002", "name": "CT Areia Ibirapuera" },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        }
+      },
+      {
+        "id": "01990000-0000-7000-8000-000000000004",
+        "name": "CT Zona Norte Santana",
+        "address": "Rua Voluntários da Pátria, 4000 — Santana",
+        "city": "São Paulo",
+        "state": "SP",
+        "latitude": -23.502,
+        "longitude": -46.625,
+        "distanceKm": null,
+        "offersDayuse": true,
+        "offersAula": false,
+        "nextDayuse": {
+          "id": "01a0cb5b-645c-7740-91d8-3dce1c2189d4",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-11T17:00:00.000Z",
+          "endsAt": "2026-10-11T20:00:00.000Z",
+          "title": "Dayuse de domingo à tarde",
+          "capacity": 20,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 20,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000004",
+            "name": "CT Zona Norte Santana"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        }
+      },
+      {
+        "id": "01990000-0000-7000-8000-000000000003",
+        "name": "Futevôlei Vila Madalena",
+        "address": "Rua Harmonia, 300 — Vila Madalena",
+        "city": "São Paulo",
+        "state": "SP",
+        "latitude": -23.553,
+        "longitude": -46.691,
+        "distanceKm": null,
+        "offersDayuse": true,
+        "offersAula": false,
+        "nextDayuse": {
+          "id": "01a0cb5b-645c-7740-91d8-0a3727909e7d",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-06T22:30:00.000Z",
+          "endsAt": "2026-10-07T01:00:00.000Z",
+          "title": "Dayuse noturno",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000003",
+            "name": "Futevôlei Vila Madalena"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        }
+      }
+    ]
+  },
+  "community": {
+    "data": [
+      {
+        "id": "01a0c71b-9d1b-703c-b644-1fd6bf8d9366",
+        "name": "Ana Souza",
+        "avatarUrl": null,
+        "skillLevel": "INICIANTE"
+      },
+      {
+        "id": "01a0c71b-9d1e-76bf-a650-042596f97bc3",
+        "name": "Bruno Lima",
+        "avatarUrl": null,
+        "skillLevel": "INTERMEDIARIO"
+      },
+      {
+        "id": "01a0c71b-9d21-76c6-86cd-78c3d7c58c92",
+        "name": "Camila Rocha",
+        "avatarUrl": null,
+        "skillLevel": "INTERMEDIARIO"
+      },
+      {
+        "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+        "name": "Carlos Mendes",
+        "avatarUrl": null,
+        "skillLevel": null
+      },
+      {
+        "id": "01a0c71b-9d25-77e1-b5fd-3dfe0803968d",
+        "name": "Diego Ferreira",
+        "avatarUrl": null,
+        "skillLevel": "AVANCADO"
+      },
+      {
+        "id": "01a0c71b-9d28-71af-8ebd-c7dab713c3f7",
+        "name": "Elisa Nunes",
+        "avatarUrl": null,
+        "skillLevel": "INICIANTE"
+      },
+      {
+        "id": "01a0c71b-9d2b-738b-8a91-cd5552114e09",
+        "name": "Felipe Castro",
+        "avatarUrl": null,
+        "skillLevel": null
+      },
+      {
+        "id": "01a0c71b-9d2e-771e-981b-531990973502",
+        "name": "Gabriela Dias",
+        "avatarUrl": null,
+        "skillLevel": null
+      },
+      {
+        "id": "01a0c71b-9d30-77ea-ba5e-7e50c3fdf02b",
+        "name": "Henrique Barros",
+        "avatarUrl": null,
+        "skillLevel": null
+      },
+      {
+        "id": "01a0cb5b-6339-7228-864d-b702abe0d428",
+        "name": "Isabela Moura",
+        "avatarUrl": null,
+        "skillLevel": "AVANCADO"
+      },
+      {
+        "id": "01a0cb5b-6348-73ea-bd46-507ee986340a",
+        "name": "João Pedro Reis",
+        "avatarUrl": null,
+        "skillLevel": "INTERMEDIARIO"
+      },
+      {
+        "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+        "name": "Juliana Alves",
+        "avatarUrl": null,
+        "skillLevel": null
+      },
+      {
+        "id": "01a0cb5b-634e-746e-94a1-586bb22bd1e8",
+        "name": "Larissa Teixeira",
+        "avatarUrl": null,
+        "skillLevel": "INICIANTE"
+      },
+      {
+        "id": "01a0cb5b-6352-7478-8612-579028cb3c89",
+        "name": "Mateus Oliveira",
+        "avatarUrl": null,
+        "skillLevel": "AVANCADO"
+      }
+    ],
+    "meta": { "page": 1, "pageSize": 30, "total": 14, "totalPages": 1 }
+  },
+  "feed": {
+    "data": [
+      {
+        "id": "01a0cbff-4fc4-750d-a759-7c2c8ee31c7a",
+        "author": {
+          "id": "01a0c71b-9d1b-703c-b644-1fd6bf8d9366",
+          "name": "Ana Souza",
+          "avatarUrl": null
+        },
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "imageUrl": "/static/posts/66e6264072da6eb2701913b939056395.webp",
+        "thumbnailUrl": "/static/posts/0e73cf1d8c9078624340012ab959450a.webp",
+        "width": 1440,
+        "height": 1080,
+        "caption": "Primeiro treino da semana. Sol e areia, do jeito que tem que ser.",
+        "likeCount": 6,
+        "likedByMe": false,
+        "canDelete": true,
+        "createdAt": "2026-09-22T23:01:42.083Z"
+      },
+      {
+        "id": "01a0cbff-51bf-7039-b6cc-29b5745a273e",
+        "author": {
+          "id": "01a0c71b-9d25-77e1-b5fd-3dfe0803968d",
+          "name": "Diego Ferreira",
+          "avatarUrl": null
+        },
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000003",
+          "name": "Futevôlei Vila Madalena"
+        },
+        "imageUrl": "/static/posts/3a5ef73134158f63e9abd90959ecb640.webp",
+        "thumbnailUrl": "/static/posts/5a20d2bfae970c7e26ca9f586ed2290f.webp",
+        "width": 1080,
+        "height": 1350,
+        "caption": "Dayuse de terça no Vila Madalena. Quadra cheia!",
+        "likeCount": 4,
+        "likedByMe": false,
+        "canDelete": true,
+        "createdAt": "2026-09-22T17:01:42.591Z"
+      },
+      {
+        "id": "01a0cbff-547c-778c-9160-c866a7250701",
+        "author": {
+          "id": "01a0cb5b-6339-7228-864d-b702abe0d428",
+          "name": "Isabela Moura",
+          "avatarUrl": null
+        },
+        "venue": { "id": "01990000-0000-7000-8000-000000000002", "name": "CT Areia Ibirapuera" },
+        "imageUrl": "/static/posts/9cfcfedca1979c52e4919efc95a0f660.webp",
+        "thumbnailUrl": "/static/posts/10df7b2523cdd4449148738edb73250c.webp",
+        "width": 1440,
+        "height": 1080,
+        "caption": "Sábado de manhã no Ibirapuera 🌤️",
+        "likeCount": 9,
+        "likedByMe": false,
+        "canDelete": true,
+        "createdAt": "2026-09-22T00:01:43.292Z"
+      },
+      {
+        "id": "01a0cbff-5691-715a-bf56-a581814792ac",
+        "author": {
+          "id": "01a0c71b-9d1e-76bf-a650-042596f97bc3",
+          "name": "Bruno Lima",
+          "avatarUrl": null
+        },
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "imageUrl": "/static/posts/be5e86cb87c1108f6ba3ecf4321917f0.webp",
+        "thumbnailUrl": "/static/posts/20a6f077d228e7e1660dab88e74f647a.webp",
+        "width": 1440,
+        "height": 1080,
+        "caption": null,
+        "likeCount": 2,
+        "likedByMe": false,
+        "canDelete": true,
+        "createdAt": "2026-09-21T17:01:43.824Z"
+      },
+      {
+        "id": "01a0cbff-586e-727a-af39-118000402890",
+        "author": {
+          "id": "01a0c71b-9d21-76c6-86cd-78c3d7c58c92",
+          "name": "Camila Rocha",
+          "avatarUrl": null
+        },
+        "venue": { "id": "01990000-0000-7000-8000-000000000004", "name": "CT Zona Norte Santana" },
+        "imageUrl": "/static/posts/2e3296b3ee47149cf6e1e64733f29e3b.webp",
+        "thumbnailUrl": "/static/posts/a2f0b6a1dfe1ca222b3871408dad72f3.webp",
+        "width": 1080,
+        "height": 1350,
+        "caption": "Domingo à tarde na Zona Norte. Vale cada viagem.",
+        "likeCount": 7,
+        "likedByMe": false,
+        "canDelete": true,
+        "createdAt": "2026-09-21T00:01:44.301Z"
+      },
+      {
+        "id": "01a0cbff-59d3-721c-b5a7-f3becba8b817",
+        "author": {
+          "id": "01a0cb5b-6348-73ea-bd46-507ee986340a",
+          "name": "João Pedro Reis",
+          "avatarUrl": null
+        },
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "imageUrl": "/static/posts/fb66808ce466a1ab14f2df05d1cfa5bc.webp",
+        "thumbnailUrl": "/static/posts/34f288b041f90daf989012310f516f23.webp",
+        "width": 1440,
+        "height": 1080,
+        "caption": "Treino da noite sob os refletores.",
+        "likeCount": 5,
+        "likedByMe": false,
+        "canDelete": true,
+        "createdAt": "2026-09-20T02:01:44.658Z"
+      }
+    ],
+    "meta": { "page": 1, "pageSize": 12, "total": 6, "totalPages": 1 }
+  },
+  "bookings": { "data": [] },
+  "sessions": {
+    "data": [
+      {
+        "id": "01a0c749-4a18-765e-845f-9f50b2a78785",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-05T22:00:00.000Z",
+        "endsAt": "2026-10-05T23:00:00.000Z",
+        "title": "Aula — turma 1",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+          "name": "Carlos Mendes",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-9908e4863d49",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-05T23:00:00.000Z",
+        "endsAt": "2026-10-06T00:00:00.000Z",
+        "title": "Aula — turma 2",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0cb5b-645c-7740-91d8-0c83f95da075",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-06T21:00:00.000Z",
+        "endsAt": "2026-10-06T22:00:00.000Z",
+        "title": "Aula — iniciantes",
+        "capacity": 10,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 10,
+        "venue": { "id": "01990000-0000-7000-8000-000000000005", "name": "Arena Leste Tatuapé" },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-a70f9383db02",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-06T22:00:00.000Z",
+        "endsAt": "2026-10-06T23:00:00.000Z",
+        "title": "Aula — turma 1",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+          "name": "Carlos Mendes",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0cb5b-645c-7740-91d8-0a3727909e7d",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-06T22:30:00.000Z",
+        "endsAt": "2026-10-07T01:00:00.000Z",
+        "title": "Dayuse noturno",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000003",
+          "name": "Futevôlei Vila Madalena"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-a3be3eed5224",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-06T23:00:00.000Z",
+        "endsAt": "2026-10-07T00:00:00.000Z",
+        "title": "Aula — turma 2",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-add3993c878c",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-07T22:00:00.000Z",
+        "endsAt": "2026-10-07T23:00:00.000Z",
+        "title": "Aula — turma 1",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+          "name": "Carlos Mendes",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-a8786ff1a6f6",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-07T23:00:00.000Z",
+        "endsAt": "2026-10-08T00:00:00.000Z",
+        "title": "Aula — turma 2",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-b4d40d3f5c95",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-08T22:00:00.000Z",
+        "endsAt": "2026-10-08T23:00:00.000Z",
+        "title": "Aula — turma 1",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+          "name": "Carlos Mendes",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0cb5b-645c-7740-91d8-22e6c1ab219c",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-08T22:30:00.000Z",
+        "endsAt": "2026-10-09T01:00:00.000Z",
+        "title": "Dayuse noturno",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000003",
+          "name": "Futevôlei Vila Madalena"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-b260b9020f98",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-08T23:00:00.000Z",
+        "endsAt": "2026-10-09T00:00:00.000Z",
+        "title": "Aula — turma 2",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-b91e2d4a4df8",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-09T22:00:00.000Z",
+        "endsAt": "2026-10-10T01:00:00.000Z",
+        "title": "Dayuse — sexta à noite",
+        "capacity": 24,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 24,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0cb5b-645c-7740-91d8-324c3804b683",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-10T11:00:00.000Z",
+        "endsAt": "2026-10-10T14:00:00.000Z",
+        "title": "Dayuse de sábado",
+        "capacity": 16,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 16,
+        "venue": { "id": "01990000-0000-7000-8000-000000000002", "name": "CT Areia Ibirapuera" },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-c3338d998e2a",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-10T12:00:00.000Z",
+        "endsAt": "2026-10-10T15:00:00.000Z",
+        "title": "Dayuse — sábado de manhã",
+        "capacity": 24,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 24,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-bdb14fb24196",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-10T18:00:00.000Z",
+        "endsAt": "2026-10-10T21:00:00.000Z",
+        "title": "Dayuse — sábado à tarde",
+        "capacity": 24,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 24,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0cb5b-645c-7740-91d8-3b45c2fefdf9",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-11T11:00:00.000Z",
+        "endsAt": "2026-10-11T14:00:00.000Z",
+        "title": "Dayuse de domingo",
+        "capacity": 16,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 16,
+        "venue": { "id": "01990000-0000-7000-8000-000000000002", "name": "CT Areia Ibirapuera" },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-c6cdee6bc766",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-11T12:00:00.000Z",
+        "endsAt": "2026-10-11T15:00:00.000Z",
+        "title": "Dayuse — domingo de manhã",
+        "capacity": 24,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 24,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0cb5b-645c-7740-91d8-3dce1c2189d4",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-11T17:00:00.000Z",
+        "endsAt": "2026-10-11T20:00:00.000Z",
+        "title": "Dayuse de domingo à tarde",
+        "capacity": 20,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 20,
+        "venue": { "id": "01990000-0000-7000-8000-000000000004", "name": "CT Zona Norte Santana" },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-cf29f1a592c4",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-12T22:00:00.000Z",
+        "endsAt": "2026-10-12T23:00:00.000Z",
+        "title": "Aula — turma 1",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+          "name": "Carlos Mendes",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-c85edf9568af",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-12T23:00:00.000Z",
+        "endsAt": "2026-10-13T00:00:00.000Z",
+        "title": "Aula — turma 2",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0cb5b-645c-7740-91d8-570b5fa4b55d",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-13T21:00:00.000Z",
+        "endsAt": "2026-10-13T22:00:00.000Z",
+        "title": "Aula — iniciantes",
+        "capacity": 10,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 10,
+        "venue": { "id": "01990000-0000-7000-8000-000000000005", "name": "Arena Leste Tatuapé" },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-d5cd08de9fda",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-13T22:00:00.000Z",
+        "endsAt": "2026-10-13T23:00:00.000Z",
+        "title": "Aula — turma 1",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+          "name": "Carlos Mendes",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0cb5b-645c-7740-91d8-53fa68e68535",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-13T22:30:00.000Z",
+        "endsAt": "2026-10-14T01:00:00.000Z",
+        "title": "Dayuse noturno",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000003",
+          "name": "Futevôlei Vila Madalena"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-d2724c988f6c",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-13T23:00:00.000Z",
+        "endsAt": "2026-10-14T00:00:00.000Z",
+        "title": "Aula — turma 2",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-deb84c81bbaf",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-14T22:00:00.000Z",
+        "endsAt": "2026-10-14T23:00:00.000Z",
+        "title": "Aula — turma 1",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+          "name": "Carlos Mendes",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-db55b067bc79",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-14T23:00:00.000Z",
+        "endsAt": "2026-10-15T00:00:00.000Z",
+        "title": "Aula — turma 2",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-e74979bdd870",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-15T22:00:00.000Z",
+        "endsAt": "2026-10-15T23:00:00.000Z",
+        "title": "Aula — turma 1",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+          "name": "Carlos Mendes",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0cb5b-645c-7740-91d8-69097a0b8640",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-15T22:30:00.000Z",
+        "endsAt": "2026-10-16T01:00:00.000Z",
+        "title": "Dayuse noturno",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000003",
+          "name": "Futevôlei Vila Madalena"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-e201bb372fb9",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-15T23:00:00.000Z",
+        "endsAt": "2026-10-16T00:00:00.000Z",
+        "title": "Aula — turma 2",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-e804e4e5c6ca",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-16T22:00:00.000Z",
+        "endsAt": "2026-10-17T01:00:00.000Z",
+        "title": "Dayuse — sexta à noite",
+        "capacity": 24,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 24,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0cb5b-645c-7740-91d8-7927a4cf87f7",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-17T11:00:00.000Z",
+        "endsAt": "2026-10-17T14:00:00.000Z",
+        "title": "Dayuse de sábado",
+        "capacity": 16,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 16,
+        "venue": { "id": "01990000-0000-7000-8000-000000000002", "name": "CT Areia Ibirapuera" },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-f01ffa8f8d66",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-17T12:00:00.000Z",
+        "endsAt": "2026-10-17T15:00:00.000Z",
+        "title": "Dayuse — sábado de manhã",
+        "capacity": 24,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 24,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-ee46c087a572",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-17T18:00:00.000Z",
+        "endsAt": "2026-10-17T21:00:00.000Z",
+        "title": "Dayuse — sábado à tarde",
+        "capacity": 24,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 24,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0cb5b-645c-7740-91d8-815c98d74da1",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-18T11:00:00.000Z",
+        "endsAt": "2026-10-18T14:00:00.000Z",
+        "title": "Dayuse de domingo",
+        "capacity": 16,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 16,
+        "venue": { "id": "01990000-0000-7000-8000-000000000002", "name": "CT Areia Ibirapuera" },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-f72a73b1cc43",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-18T12:00:00.000Z",
+        "endsAt": "2026-10-18T15:00:00.000Z",
+        "title": "Dayuse — domingo de manhã",
+        "capacity": 24,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 24,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0cb5b-645d-7799-b20e-d50eb2530d21",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-18T17:00:00.000Z",
+        "endsAt": "2026-10-18T20:00:00.000Z",
+        "title": "Dayuse de domingo à tarde",
+        "capacity": 20,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 20,
+        "venue": { "id": "01990000-0000-7000-8000-000000000004", "name": "CT Zona Norte Santana" },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-fd55e006dd1f",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-19T22:00:00.000Z",
+        "endsAt": "2026-10-19T23:00:00.000Z",
+        "title": "Aula — turma 1",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+          "name": "Carlos Mendes",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0c749-4a18-765e-845f-fb134c289265",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-19T23:00:00.000Z",
+        "endsAt": "2026-10-20T00:00:00.000Z",
+        "title": "Aula — turma 2",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0ccd9-7d4b-71bb-a0ee-a5415f8a5590",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-20T21:00:00.000Z",
+        "endsAt": "2026-10-20T22:00:00.000Z",
+        "title": "Aula — iniciantes",
+        "capacity": 10,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 10,
+        "venue": { "id": "01990000-0000-7000-8000-000000000005", "name": "Arena Leste Tatuapé" },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0ccd9-7d4b-71bb-a0ee-aea2dd08ab75",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-20T22:00:00.000Z",
+        "endsAt": "2026-10-20T23:00:00.000Z",
+        "title": "Aula — turma 1",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+          "name": "Carlos Mendes",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0ccd9-7d4b-71bb-a0ee-a191508322d6",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-20T22:30:00.000Z",
+        "endsAt": "2026-10-21T01:00:00.000Z",
+        "title": "Dayuse noturno",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000003",
+          "name": "Futevôlei Vila Madalena"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a0ccd9-7d4b-71bb-a0ee-a96144f07ef2",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-20T23:00:00.000Z",
+        "endsAt": "2026-10-21T00:00:00.000Z",
+        "title": "Aula — turma 2",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a10e61-5b30-70bf-a276-d6e7af9488a3",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-21T22:00:00.000Z",
+        "endsAt": "2026-10-21T23:00:00.000Z",
+        "title": "Aula — turma 1",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+          "name": "Carlos Mendes",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a10e61-5b30-70bf-a276-d30c9b0d859e",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-21T23:00:00.000Z",
+        "endsAt": "2026-10-22T00:00:00.000Z",
+        "title": "Aula — turma 2",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a10e61-5b30-70bf-a276-e360e51f2fa8",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-22T22:00:00.000Z",
+        "endsAt": "2026-10-22T23:00:00.000Z",
+        "title": "Aula — turma 1",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+          "name": "Carlos Mendes",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a10e61-5b30-70bf-a276-db0c025e5a06",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-22T22:30:00.000Z",
+        "endsAt": "2026-10-23T01:00:00.000Z",
+        "title": "Dayuse noturno",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000003",
+          "name": "Futevôlei Vila Madalena"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a10e61-5b30-70bf-a276-dc7c9e8cfcb3",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-22T23:00:00.000Z",
+        "endsAt": "2026-10-23T00:00:00.000Z",
+        "title": "Aula — turma 2",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a10e61-5b30-70bf-a276-e62f1aa6dce1",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-23T22:00:00.000Z",
+        "endsAt": "2026-10-24T01:00:00.000Z",
+        "title": "Dayuse — sexta à noite",
+        "capacity": 24,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 24,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a10e61-5b30-70bf-a276-eac08d4530bd",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-24T11:00:00.000Z",
+        "endsAt": "2026-10-24T14:00:00.000Z",
+        "title": "Dayuse de sábado",
+        "capacity": 16,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 16,
+        "venue": { "id": "01990000-0000-7000-8000-000000000002", "name": "CT Areia Ibirapuera" },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a10e61-5b31-7312-b579-28799b36f520",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-24T12:00:00.000Z",
+        "endsAt": "2026-10-24T15:00:00.000Z",
+        "title": "Dayuse — sábado de manhã",
+        "capacity": 24,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 24,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a10e61-5b31-7312-b579-24f81efdfd50",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-24T18:00:00.000Z",
+        "endsAt": "2026-10-24T21:00:00.000Z",
+        "title": "Dayuse — sábado à tarde",
+        "capacity": 24,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 24,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a10e61-5b31-7312-b579-2c621abf9fcf",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-25T11:00:00.000Z",
+        "endsAt": "2026-10-25T14:00:00.000Z",
+        "title": "Dayuse de domingo",
+        "capacity": 16,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 16,
+        "venue": { "id": "01990000-0000-7000-8000-000000000002", "name": "CT Areia Ibirapuera" },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a10e61-5b31-7312-b579-3518f64fab80",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-25T12:00:00.000Z",
+        "endsAt": "2026-10-25T15:00:00.000Z",
+        "title": "Dayuse — domingo de manhã",
+        "capacity": 24,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 24,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a10e61-5b31-7312-b579-33f3b73dcc72",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-25T17:00:00.000Z",
+        "endsAt": "2026-10-25T20:00:00.000Z",
+        "title": "Dayuse de domingo à tarde",
+        "capacity": 20,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 20,
+        "venue": { "id": "01990000-0000-7000-8000-000000000004", "name": "CT Zona Norte Santana" },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a10e61-5b31-7312-b579-3d100b87e5da",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-26T22:00:00.000Z",
+        "endsAt": "2026-10-26T23:00:00.000Z",
+        "title": "Aula — turma 1",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+          "name": "Carlos Mendes",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      {
+        "id": "01a10e61-5b31-7312-b579-3947790f1bdf",
+        "type": "AULA",
+        "status": "ABERTA",
+        "startsAt": "2026-10-26T23:00:00.000Z",
+        "endsAt": "2026-10-27T00:00:00.000Z",
+        "title": "Aula — turma 2",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": {
+          "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+          "name": "Juliana Alves",
+          "avatarUrl": null
+        },
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      }
+    ]
+  },
+  "sessionDetails": {
+    "01a0c749-4a18-765e-845f-9f50b2a78785": {
+      "id": "01a0c749-4a18-765e-845f-9f50b2a78785",
+      "type": "AULA",
+      "status": "ABERTA",
+      "startsAt": "2026-10-05T22:00:00.000Z",
+      "endsAt": "2026-10-05T23:00:00.000Z",
+      "title": "Aula — turma 1",
+      "capacity": 12,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 12,
+      "venue": { "id": "01990000-0000-7000-8000-000000000001", "name": "Arena FutCheck Pinheiros" },
+      "responsible": {
+        "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+        "name": "Carlos Mendes",
+        "avatarUrl": null
+      },
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": false,
+        "blockedReason": "RSVP_SESSION_IN_PAST",
+        "opensAt": "2026-09-28T22:00:00.000Z",
+        "changeDeadline": "2026-10-05T20:00:00.000Z"
+      }
+    },
+    "01a0c749-4a18-765e-845f-9908e4863d49": {
+      "id": "01a0c749-4a18-765e-845f-9908e4863d49",
+      "type": "AULA",
+      "status": "ABERTA",
+      "startsAt": "2026-10-05T23:00:00.000Z",
+      "endsAt": "2026-10-06T00:00:00.000Z",
+      "title": "Aula — turma 2",
+      "capacity": 12,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 12,
+      "venue": { "id": "01990000-0000-7000-8000-000000000001", "name": "Arena FutCheck Pinheiros" },
+      "responsible": {
+        "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+        "name": "Juliana Alves",
+        "avatarUrl": null
+      },
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": false,
+        "blockedReason": "RSVP_SESSION_IN_PAST",
+        "opensAt": "2026-09-28T23:00:00.000Z",
+        "changeDeadline": "2026-10-05T21:00:00.000Z"
+      }
+    },
+    "01a0cb5b-645c-7740-91d8-0c83f95da075": {
+      "id": "01a0cb5b-645c-7740-91d8-0c83f95da075",
+      "type": "AULA",
+      "status": "ABERTA",
+      "startsAt": "2026-10-06T21:00:00.000Z",
+      "endsAt": "2026-10-06T22:00:00.000Z",
+      "title": "Aula — iniciantes",
+      "capacity": 10,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 10,
+      "venue": { "id": "01990000-0000-7000-8000-000000000005", "name": "Arena Leste Tatuapé" },
+      "responsible": {
+        "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+        "name": "Juliana Alves",
+        "avatarUrl": null
+      },
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": true,
+        "blockedReason": null,
+        "opensAt": "2026-09-29T21:00:00.000Z",
+        "changeDeadline": "2026-10-06T19:00:00.000Z"
+      }
+    },
+    "01a0c749-4a18-765e-845f-a70f9383db02": {
+      "id": "01a0c749-4a18-765e-845f-a70f9383db02",
+      "type": "AULA",
+      "status": "ABERTA",
+      "startsAt": "2026-10-06T22:00:00.000Z",
+      "endsAt": "2026-10-06T23:00:00.000Z",
+      "title": "Aula — turma 1",
+      "capacity": 12,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 12,
+      "venue": { "id": "01990000-0000-7000-8000-000000000001", "name": "Arena FutCheck Pinheiros" },
+      "responsible": {
+        "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+        "name": "Carlos Mendes",
+        "avatarUrl": null
+      },
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": true,
+        "blockedReason": null,
+        "opensAt": "2026-09-29T22:00:00.000Z",
+        "changeDeadline": "2026-10-06T20:00:00.000Z"
+      }
+    },
+    "01a0cb5b-645c-7740-91d8-0a3727909e7d": {
+      "id": "01a0cb5b-645c-7740-91d8-0a3727909e7d",
+      "type": "DAYUSE",
+      "status": "ABERTA",
+      "startsAt": "2026-10-06T22:30:00.000Z",
+      "endsAt": "2026-10-07T01:00:00.000Z",
+      "title": "Dayuse noturno",
+      "capacity": 12,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 12,
+      "venue": { "id": "01990000-0000-7000-8000-000000000003", "name": "Futevôlei Vila Madalena" },
+      "responsible": null,
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": true,
+        "blockedReason": null,
+        "opensAt": "2026-09-29T22:30:00.000Z",
+        "changeDeadline": "2026-10-06T20:30:00.000Z"
+      }
+    },
+    "01a0c749-4a18-765e-845f-a3be3eed5224": {
+      "id": "01a0c749-4a18-765e-845f-a3be3eed5224",
+      "type": "AULA",
+      "status": "ABERTA",
+      "startsAt": "2026-10-06T23:00:00.000Z",
+      "endsAt": "2026-10-07T00:00:00.000Z",
+      "title": "Aula — turma 2",
+      "capacity": 12,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 12,
+      "venue": { "id": "01990000-0000-7000-8000-000000000001", "name": "Arena FutCheck Pinheiros" },
+      "responsible": {
+        "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+        "name": "Juliana Alves",
+        "avatarUrl": null
+      },
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": true,
+        "blockedReason": null,
+        "opensAt": "2026-09-29T23:00:00.000Z",
+        "changeDeadline": "2026-10-06T21:00:00.000Z"
+      }
+    },
+    "01a0c749-4a18-765e-845f-add3993c878c": {
+      "id": "01a0c749-4a18-765e-845f-add3993c878c",
+      "type": "AULA",
+      "status": "ABERTA",
+      "startsAt": "2026-10-07T22:00:00.000Z",
+      "endsAt": "2026-10-07T23:00:00.000Z",
+      "title": "Aula — turma 1",
+      "capacity": 12,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 12,
+      "venue": { "id": "01990000-0000-7000-8000-000000000001", "name": "Arena FutCheck Pinheiros" },
+      "responsible": {
+        "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+        "name": "Carlos Mendes",
+        "avatarUrl": null
+      },
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": true,
+        "blockedReason": null,
+        "opensAt": "2026-09-30T22:00:00.000Z",
+        "changeDeadline": "2026-10-07T20:00:00.000Z"
+      }
+    },
+    "01a0c749-4a18-765e-845f-a8786ff1a6f6": {
+      "id": "01a0c749-4a18-765e-845f-a8786ff1a6f6",
+      "type": "AULA",
+      "status": "ABERTA",
+      "startsAt": "2026-10-07T23:00:00.000Z",
+      "endsAt": "2026-10-08T00:00:00.000Z",
+      "title": "Aula — turma 2",
+      "capacity": 12,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 12,
+      "venue": { "id": "01990000-0000-7000-8000-000000000001", "name": "Arena FutCheck Pinheiros" },
+      "responsible": {
+        "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+        "name": "Juliana Alves",
+        "avatarUrl": null
+      },
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": true,
+        "blockedReason": null,
+        "opensAt": "2026-09-30T23:00:00.000Z",
+        "changeDeadline": "2026-10-07T21:00:00.000Z"
+      }
+    },
+    "01a0c749-4a18-765e-845f-b4d40d3f5c95": {
+      "id": "01a0c749-4a18-765e-845f-b4d40d3f5c95",
+      "type": "AULA",
+      "status": "ABERTA",
+      "startsAt": "2026-10-08T22:00:00.000Z",
+      "endsAt": "2026-10-08T23:00:00.000Z",
+      "title": "Aula — turma 1",
+      "capacity": 12,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 12,
+      "venue": { "id": "01990000-0000-7000-8000-000000000001", "name": "Arena FutCheck Pinheiros" },
+      "responsible": {
+        "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+        "name": "Carlos Mendes",
+        "avatarUrl": null
+      },
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": true,
+        "blockedReason": null,
+        "opensAt": "2026-10-01T22:00:00.000Z",
+        "changeDeadline": "2026-10-08T20:00:00.000Z"
+      }
+    },
+    "01a0cb5b-645c-7740-91d8-22e6c1ab219c": {
+      "id": "01a0cb5b-645c-7740-91d8-22e6c1ab219c",
+      "type": "DAYUSE",
+      "status": "ABERTA",
+      "startsAt": "2026-10-08T22:30:00.000Z",
+      "endsAt": "2026-10-09T01:00:00.000Z",
+      "title": "Dayuse noturno",
+      "capacity": 12,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 12,
+      "venue": { "id": "01990000-0000-7000-8000-000000000003", "name": "Futevôlei Vila Madalena" },
+      "responsible": null,
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": true,
+        "blockedReason": null,
+        "opensAt": "2026-10-01T22:30:00.000Z",
+        "changeDeadline": "2026-10-08T20:30:00.000Z"
+      }
+    },
+    "01a0c749-4a18-765e-845f-b260b9020f98": {
+      "id": "01a0c749-4a18-765e-845f-b260b9020f98",
+      "type": "AULA",
+      "status": "ABERTA",
+      "startsAt": "2026-10-08T23:00:00.000Z",
+      "endsAt": "2026-10-09T00:00:00.000Z",
+      "title": "Aula — turma 2",
+      "capacity": 12,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 12,
+      "venue": { "id": "01990000-0000-7000-8000-000000000001", "name": "Arena FutCheck Pinheiros" },
+      "responsible": {
+        "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+        "name": "Juliana Alves",
+        "avatarUrl": null
+      },
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": true,
+        "blockedReason": null,
+        "opensAt": "2026-10-01T23:00:00.000Z",
+        "changeDeadline": "2026-10-08T21:00:00.000Z"
+      }
+    },
+    "01a0c749-4a18-765e-845f-b91e2d4a4df8": {
+      "id": "01a0c749-4a18-765e-845f-b91e2d4a4df8",
+      "type": "DAYUSE",
+      "status": "ABERTA",
+      "startsAt": "2026-10-09T22:00:00.000Z",
+      "endsAt": "2026-10-10T01:00:00.000Z",
+      "title": "Dayuse — sexta à noite",
+      "capacity": 24,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 24,
+      "venue": { "id": "01990000-0000-7000-8000-000000000001", "name": "Arena FutCheck Pinheiros" },
+      "responsible": null,
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": true,
+        "blockedReason": null,
+        "opensAt": "2026-10-02T22:00:00.000Z",
+        "changeDeadline": "2026-10-09T20:00:00.000Z"
+      }
+    },
+    "01a0cb5b-645c-7740-91d8-324c3804b683": {
+      "id": "01a0cb5b-645c-7740-91d8-324c3804b683",
+      "type": "DAYUSE",
+      "status": "ABERTA",
+      "startsAt": "2026-10-10T11:00:00.000Z",
+      "endsAt": "2026-10-10T14:00:00.000Z",
+      "title": "Dayuse de sábado",
+      "capacity": 16,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 16,
+      "venue": { "id": "01990000-0000-7000-8000-000000000002", "name": "CT Areia Ibirapuera" },
+      "responsible": null,
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": true,
+        "blockedReason": null,
+        "opensAt": "2026-10-03T11:00:00.000Z",
+        "changeDeadline": "2026-10-10T09:00:00.000Z"
+      }
+    },
+    "01a0c749-4a18-765e-845f-c3338d998e2a": {
+      "id": "01a0c749-4a18-765e-845f-c3338d998e2a",
+      "type": "DAYUSE",
+      "status": "ABERTA",
+      "startsAt": "2026-10-10T12:00:00.000Z",
+      "endsAt": "2026-10-10T15:00:00.000Z",
+      "title": "Dayuse — sábado de manhã",
+      "capacity": 24,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 24,
+      "venue": { "id": "01990000-0000-7000-8000-000000000001", "name": "Arena FutCheck Pinheiros" },
+      "responsible": null,
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": true,
+        "blockedReason": null,
+        "opensAt": "2026-10-03T12:00:00.000Z",
+        "changeDeadline": "2026-10-10T10:00:00.000Z"
+      }
+    },
+    "01a0c749-4a18-765e-845f-bdb14fb24196": {
+      "id": "01a0c749-4a18-765e-845f-bdb14fb24196",
+      "type": "DAYUSE",
+      "status": "ABERTA",
+      "startsAt": "2026-10-10T18:00:00.000Z",
+      "endsAt": "2026-10-10T21:00:00.000Z",
+      "title": "Dayuse — sábado à tarde",
+      "capacity": 24,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 24,
+      "venue": { "id": "01990000-0000-7000-8000-000000000001", "name": "Arena FutCheck Pinheiros" },
+      "responsible": null,
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": true,
+        "blockedReason": null,
+        "opensAt": "2026-10-03T18:00:00.000Z",
+        "changeDeadline": "2026-10-10T16:00:00.000Z"
+      }
+    },
+    "01a0cb5b-645c-7740-91d8-3b45c2fefdf9": {
+      "id": "01a0cb5b-645c-7740-91d8-3b45c2fefdf9",
+      "type": "DAYUSE",
+      "status": "ABERTA",
+      "startsAt": "2026-10-11T11:00:00.000Z",
+      "endsAt": "2026-10-11T14:00:00.000Z",
+      "title": "Dayuse de domingo",
+      "capacity": 16,
+      "confirmedCount": 0,
+      "waitlistCount": 0,
+      "availableSeats": 16,
+      "venue": { "id": "01990000-0000-7000-8000-000000000002", "name": "CT Areia Ibirapuera" },
+      "responsible": null,
+      "cancelReason": null,
+      "myBookingStatus": null,
+      "myWaitlistPosition": null,
+      "attendees": [],
+      "rsvp": {
+        "canAnswer": true,
+        "blockedReason": null,
+        "opensAt": "2026-10-04T11:00:00.000Z",
+        "changeDeadline": "2026-10-11T09:00:00.000Z"
+      }
+    }
+  },
+  "venueDetails": {
+    "01990000-0000-7000-8000-000000000001": {
+      "id": "01990000-0000-7000-8000-000000000001",
+      "name": "Arena FutCheck Pinheiros",
+      "address": "Rua dos Pinheiros, 1000 — Pinheiros",
+      "city": "São Paulo",
+      "state": "SP",
+      "latitude": -23.5673,
+      "longitude": -46.6923,
+      "distanceKm": null,
+      "offersDayuse": true,
+      "offersAula": true,
+      "description": "Arena principal: aulas de segunda a quinta e dayuse no fim de semana. (Dados de exemplo.)",
+      "phone": null,
+      "instagram": "arenafutcheck",
+      "nextDayuse": {
+        "id": "01a0c749-4a18-765e-845f-b91e2d4a4df8",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-09T22:00:00.000Z",
+        "endsAt": "2026-10-10T01:00:00.000Z",
+        "title": "Dayuse — sexta à noite",
+        "capacity": 24,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 24,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000001",
+          "name": "Arena FutCheck Pinheiros"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      "upcomingSessions": [
+        {
+          "id": "01a0c749-4a18-765e-845f-a70f9383db02",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-06T22:00:00.000Z",
+          "endsAt": "2026-10-06T23:00:00.000Z",
+          "title": "Aula — turma 1",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+            "name": "Carlos Mendes",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-a3be3eed5224",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-06T23:00:00.000Z",
+          "endsAt": "2026-10-07T00:00:00.000Z",
+          "title": "Aula — turma 2",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+            "name": "Juliana Alves",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-add3993c878c",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-07T22:00:00.000Z",
+          "endsAt": "2026-10-07T23:00:00.000Z",
+          "title": "Aula — turma 1",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+            "name": "Carlos Mendes",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-a8786ff1a6f6",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-07T23:00:00.000Z",
+          "endsAt": "2026-10-08T00:00:00.000Z",
+          "title": "Aula — turma 2",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+            "name": "Juliana Alves",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-b4d40d3f5c95",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-08T22:00:00.000Z",
+          "endsAt": "2026-10-08T23:00:00.000Z",
+          "title": "Aula — turma 1",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+            "name": "Carlos Mendes",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-b260b9020f98",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-08T23:00:00.000Z",
+          "endsAt": "2026-10-09T00:00:00.000Z",
+          "title": "Aula — turma 2",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+            "name": "Juliana Alves",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-b91e2d4a4df8",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-09T22:00:00.000Z",
+          "endsAt": "2026-10-10T01:00:00.000Z",
+          "title": "Dayuse — sexta à noite",
+          "capacity": 24,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 24,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-c3338d998e2a",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-10T12:00:00.000Z",
+          "endsAt": "2026-10-10T15:00:00.000Z",
+          "title": "Dayuse — sábado de manhã",
+          "capacity": 24,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 24,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-bdb14fb24196",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-10T18:00:00.000Z",
+          "endsAt": "2026-10-10T21:00:00.000Z",
+          "title": "Dayuse — sábado à tarde",
+          "capacity": 24,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 24,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-c6cdee6bc766",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-11T12:00:00.000Z",
+          "endsAt": "2026-10-11T15:00:00.000Z",
+          "title": "Dayuse — domingo de manhã",
+          "capacity": 24,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 24,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-cf29f1a592c4",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-12T22:00:00.000Z",
+          "endsAt": "2026-10-12T23:00:00.000Z",
+          "title": "Aula — turma 1",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+            "name": "Carlos Mendes",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-c85edf9568af",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-12T23:00:00.000Z",
+          "endsAt": "2026-10-13T00:00:00.000Z",
+          "title": "Aula — turma 2",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+            "name": "Juliana Alves",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-d5cd08de9fda",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-13T22:00:00.000Z",
+          "endsAt": "2026-10-13T23:00:00.000Z",
+          "title": "Aula — turma 1",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+            "name": "Carlos Mendes",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-d2724c988f6c",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-13T23:00:00.000Z",
+          "endsAt": "2026-10-14T00:00:00.000Z",
+          "title": "Aula — turma 2",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+            "name": "Juliana Alves",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-deb84c81bbaf",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-14T22:00:00.000Z",
+          "endsAt": "2026-10-14T23:00:00.000Z",
+          "title": "Aula — turma 1",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+            "name": "Carlos Mendes",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-db55b067bc79",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-14T23:00:00.000Z",
+          "endsAt": "2026-10-15T00:00:00.000Z",
+          "title": "Aula — turma 2",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+            "name": "Juliana Alves",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-e74979bdd870",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-15T22:00:00.000Z",
+          "endsAt": "2026-10-15T23:00:00.000Z",
+          "title": "Aula — turma 1",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+            "name": "Carlos Mendes",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-e201bb372fb9",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-15T23:00:00.000Z",
+          "endsAt": "2026-10-16T00:00:00.000Z",
+          "title": "Aula — turma 2",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+            "name": "Juliana Alves",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-e804e4e5c6ca",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-16T22:00:00.000Z",
+          "endsAt": "2026-10-17T01:00:00.000Z",
+          "title": "Dayuse — sexta à noite",
+          "capacity": 24,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 24,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-f01ffa8f8d66",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-17T12:00:00.000Z",
+          "endsAt": "2026-10-17T15:00:00.000Z",
+          "title": "Dayuse — sábado de manhã",
+          "capacity": 24,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 24,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-ee46c087a572",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-17T18:00:00.000Z",
+          "endsAt": "2026-10-17T21:00:00.000Z",
+          "title": "Dayuse — sábado à tarde",
+          "capacity": 24,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 24,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-f72a73b1cc43",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-18T12:00:00.000Z",
+          "endsAt": "2026-10-18T15:00:00.000Z",
+          "title": "Dayuse — domingo de manhã",
+          "capacity": 24,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 24,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-fd55e006dd1f",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-19T22:00:00.000Z",
+          "endsAt": "2026-10-19T23:00:00.000Z",
+          "title": "Aula — turma 1",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
+            "name": "Carlos Mendes",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0c749-4a18-765e-845f-fb134c289265",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-19T23:00:00.000Z",
+          "endsAt": "2026-10-20T00:00:00.000Z",
+          "title": "Aula — turma 2",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000001",
+            "name": "Arena FutCheck Pinheiros"
+          },
+          "responsible": {
+            "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+            "name": "Juliana Alves",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        }
+      ]
+    },
+    "01990000-0000-7000-8000-000000000005": {
+      "id": "01990000-0000-7000-8000-000000000005",
+      "name": "Arena Leste Tatuapé",
+      "address": "Rua Tuiuti, 2000 — Tatuapé",
+      "city": "São Paulo",
+      "state": "SP",
+      "latitude": -23.54,
+      "longitude": -46.576,
+      "distanceKm": null,
+      "offersDayuse": false,
+      "offersAula": true,
+      "description": "Só aulas, sem dayuse no momento. (Dados de exemplo.)",
+      "phone": null,
+      "instagram": null,
+      "nextDayuse": null,
+      "upcomingSessions": [
+        {
+          "id": "01a0cb5b-645c-7740-91d8-0c83f95da075",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-06T21:00:00.000Z",
+          "endsAt": "2026-10-06T22:00:00.000Z",
+          "title": "Aula — iniciantes",
+          "capacity": 10,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 10,
+          "venue": { "id": "01990000-0000-7000-8000-000000000005", "name": "Arena Leste Tatuapé" },
+          "responsible": {
+            "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+            "name": "Juliana Alves",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0cb5b-645c-7740-91d8-570b5fa4b55d",
+          "type": "AULA",
+          "status": "ABERTA",
+          "startsAt": "2026-10-13T21:00:00.000Z",
+          "endsAt": "2026-10-13T22:00:00.000Z",
+          "title": "Aula — iniciantes",
+          "capacity": 10,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 10,
+          "venue": { "id": "01990000-0000-7000-8000-000000000005", "name": "Arena Leste Tatuapé" },
+          "responsible": {
+            "id": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
+            "name": "Juliana Alves",
+            "avatarUrl": null
+          },
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        }
+      ]
+    },
+    "01990000-0000-7000-8000-000000000002": {
+      "id": "01990000-0000-7000-8000-000000000002",
+      "name": "CT Areia Ibirapuera",
+      "address": "Av. Ibirapuera, 2500 — Moema",
+      "city": "São Paulo",
+      "state": "SP",
+      "latitude": -23.601,
+      "longitude": -46.665,
+      "distanceKm": null,
+      "offersDayuse": true,
+      "offersAula": false,
+      "description": "Quadras de areia perto do parque, dayuse aos sábados e domingos. (Dados de exemplo.)",
+      "phone": null,
+      "instagram": null,
+      "nextDayuse": {
+        "id": "01a0cb5b-645c-7740-91d8-324c3804b683",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-10T11:00:00.000Z",
+        "endsAt": "2026-10-10T14:00:00.000Z",
+        "title": "Dayuse de sábado",
+        "capacity": 16,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 16,
+        "venue": { "id": "01990000-0000-7000-8000-000000000002", "name": "CT Areia Ibirapuera" },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      "upcomingSessions": [
+        {
+          "id": "01a0cb5b-645c-7740-91d8-324c3804b683",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-10T11:00:00.000Z",
+          "endsAt": "2026-10-10T14:00:00.000Z",
+          "title": "Dayuse de sábado",
+          "capacity": 16,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 16,
+          "venue": { "id": "01990000-0000-7000-8000-000000000002", "name": "CT Areia Ibirapuera" },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0cb5b-645c-7740-91d8-3b45c2fefdf9",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-11T11:00:00.000Z",
+          "endsAt": "2026-10-11T14:00:00.000Z",
+          "title": "Dayuse de domingo",
+          "capacity": 16,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 16,
+          "venue": { "id": "01990000-0000-7000-8000-000000000002", "name": "CT Areia Ibirapuera" },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0cb5b-645c-7740-91d8-7927a4cf87f7",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-17T11:00:00.000Z",
+          "endsAt": "2026-10-17T14:00:00.000Z",
+          "title": "Dayuse de sábado",
+          "capacity": 16,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 16,
+          "venue": { "id": "01990000-0000-7000-8000-000000000002", "name": "CT Areia Ibirapuera" },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0cb5b-645c-7740-91d8-815c98d74da1",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-18T11:00:00.000Z",
+          "endsAt": "2026-10-18T14:00:00.000Z",
+          "title": "Dayuse de domingo",
+          "capacity": 16,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 16,
+          "venue": { "id": "01990000-0000-7000-8000-000000000002", "name": "CT Areia Ibirapuera" },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        }
+      ]
+    },
+    "01990000-0000-7000-8000-000000000004": {
+      "id": "01990000-0000-7000-8000-000000000004",
+      "name": "CT Zona Norte Santana",
+      "address": "Rua Voluntários da Pátria, 4000 — Santana",
+      "city": "São Paulo",
+      "state": "SP",
+      "latitude": -23.502,
+      "longitude": -46.625,
+      "distanceKm": null,
+      "offersDayuse": true,
+      "offersAula": false,
+      "description": "Dayuse de domingo à tarde. (Dados de exemplo.)",
+      "phone": null,
+      "instagram": null,
+      "nextDayuse": {
+        "id": "01a0cb5b-645c-7740-91d8-3dce1c2189d4",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-11T17:00:00.000Z",
+        "endsAt": "2026-10-11T20:00:00.000Z",
+        "title": "Dayuse de domingo à tarde",
+        "capacity": 20,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 20,
+        "venue": { "id": "01990000-0000-7000-8000-000000000004", "name": "CT Zona Norte Santana" },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      "upcomingSessions": [
+        {
+          "id": "01a0cb5b-645c-7740-91d8-3dce1c2189d4",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-11T17:00:00.000Z",
+          "endsAt": "2026-10-11T20:00:00.000Z",
+          "title": "Dayuse de domingo à tarde",
+          "capacity": 20,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 20,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000004",
+            "name": "CT Zona Norte Santana"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0cb5b-645d-7799-b20e-d50eb2530d21",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-18T17:00:00.000Z",
+          "endsAt": "2026-10-18T20:00:00.000Z",
+          "title": "Dayuse de domingo à tarde",
+          "capacity": 20,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 20,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000004",
+            "name": "CT Zona Norte Santana"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        }
+      ]
+    },
+    "01990000-0000-7000-8000-000000000003": {
+      "id": "01990000-0000-7000-8000-000000000003",
+      "name": "Futevôlei Vila Madalena",
+      "address": "Rua Harmonia, 300 — Vila Madalena",
+      "city": "São Paulo",
+      "state": "SP",
+      "latitude": -23.553,
+      "longitude": -46.691,
+      "distanceKm": null,
+      "offersDayuse": true,
+      "offersAula": false,
+      "description": "Dayuse à noite durante a semana. (Dados de exemplo.)",
+      "phone": null,
+      "instagram": null,
+      "nextDayuse": {
+        "id": "01a0cb5b-645c-7740-91d8-0a3727909e7d",
+        "type": "DAYUSE",
+        "status": "ABERTA",
+        "startsAt": "2026-10-06T22:30:00.000Z",
+        "endsAt": "2026-10-07T01:00:00.000Z",
+        "title": "Dayuse noturno",
+        "capacity": 12,
+        "confirmedCount": 0,
+        "waitlistCount": 0,
+        "availableSeats": 12,
+        "venue": {
+          "id": "01990000-0000-7000-8000-000000000003",
+          "name": "Futevôlei Vila Madalena"
+        },
+        "responsible": null,
+        "cancelReason": null,
+        "myBookingStatus": null,
+        "myWaitlistPosition": null
+      },
+      "upcomingSessions": [
+        {
+          "id": "01a0cb5b-645c-7740-91d8-0a3727909e7d",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-06T22:30:00.000Z",
+          "endsAt": "2026-10-07T01:00:00.000Z",
+          "title": "Dayuse noturno",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000003",
+            "name": "Futevôlei Vila Madalena"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0cb5b-645c-7740-91d8-22e6c1ab219c",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-08T22:30:00.000Z",
+          "endsAt": "2026-10-09T01:00:00.000Z",
+          "title": "Dayuse noturno",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000003",
+            "name": "Futevôlei Vila Madalena"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0cb5b-645c-7740-91d8-53fa68e68535",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-13T22:30:00.000Z",
+          "endsAt": "2026-10-14T01:00:00.000Z",
+          "title": "Dayuse noturno",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000003",
+            "name": "Futevôlei Vila Madalena"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        },
+        {
+          "id": "01a0cb5b-645c-7740-91d8-69097a0b8640",
+          "type": "DAYUSE",
+          "status": "ABERTA",
+          "startsAt": "2026-10-15T22:30:00.000Z",
+          "endsAt": "2026-10-16T01:00:00.000Z",
+          "title": "Dayuse noturno",
+          "capacity": 12,
+          "confirmedCount": 0,
+          "waitlistCount": 0,
+          "availableSeats": 12,
+          "venue": {
+            "id": "01990000-0000-7000-8000-000000000003",
+            "name": "Futevôlei Vila Madalena"
+          },
+          "responsible": null,
+          "cancelReason": null,
+          "myBookingStatus": null,
+          "myWaitlistPosition": null
+        }
+      ]
+    }
+  }
+}

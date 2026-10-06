@@ -8,7 +8,16 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
+/**
+ * Where the app will be served from. GitHub Pages puts a project site under
+ * /<repo>/, so the bundle, the router and the PWA manifest all have to agree on
+ * that prefix. Empty means the root, which is how it is deployed for real.
+ */
+const base = process.env['VITE_BASE'] ?? '/';
+
 export default defineConfig({
+  base,
+
   // VITE_ variables live in the single .env at the repository root.
   envDir: path.resolve(here, '../..'),
 
@@ -30,15 +39,15 @@ export default defineConfig({
         short_name: 'FutCheck',
         description: 'Check-in para aulas e dayuse de futevôlei',
         lang: 'pt-BR',
-        start_url: '/',
-        scope: '/',
+        start_url: base,
+        scope: base,
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#0b1120',
         theme_color: '#0b1120',
         icons: [
           {
-            src: '/icon.svg',
+            src: `${base}icon.svg`,
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'any',

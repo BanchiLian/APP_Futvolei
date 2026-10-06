@@ -156,7 +156,9 @@ const routes: RouteRecordRaw[] = [
 ];
 
 export const router = createRouter({
-  history: createWebHistory(),
+  // The build base, so the same bundle works at the domain root and under a
+  // project sub-path such as /APP_Futvolei/ on GitHub Pages.
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   async scrollBehavior(to, from, savedPosition) {
     if (to.path === from.path) return false;
