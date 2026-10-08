@@ -235,6 +235,13 @@ model Venue {
   phone     String? @db.VarChar(11)
   instagram String? @db.VarChar(60)
 
+  /// Where this row came from: MANUAL (someone typed it) or OSM (imported from
+  /// OpenStreetMap). Imported rows carry the OSM element id, which makes a
+  /// re-import update instead of duplicate, and lets us credit the source as the
+  /// ODbL licence requires.
+  source     String  @default("MANUAL") @db.VarChar(20)
+  externalId String? @map("external_id") @db.VarChar(60)
+
   isActive Boolean @default(true) @map("is_active")
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
@@ -244,6 +251,7 @@ model Venue {
   sessions  Session[]
   posts     Post[]
 
+  @@unique([source, externalId])
   @@index([isActive])
   @@map("venues")
 }

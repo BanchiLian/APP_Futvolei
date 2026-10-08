@@ -189,7 +189,7 @@ async function onLogout(): Promise<void> {
       <h3 class="text-brand-900 text-sm font-semibold">Privacidade</h3>
       <ToggleSwitch
         v-model="showInCommunity"
-        label="Aparecer na comunidade"
+        label="Aparecer em Pessoas"
         description="Outras pessoas veem seu nome, foto e nível. Nunca seu e-mail ou telefone."
       />
     </section>
@@ -249,7 +249,7 @@ async function onLogout(): Promise<void> {
     <BottomSheet
       v-model:open="passwordSheetOpen"
       title="Trocar senha"
-      description="Ao concluir, suas outras sessões serão encerradas."
+      description="Ao concluir, seus outros acessos serão encerrados."
     >
       <ChangePasswordForm @done="passwordSheetOpen = false" />
     </BottomSheet>

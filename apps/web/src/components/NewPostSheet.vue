@@ -80,7 +80,7 @@ async function publish(): Promise<void> {
 </script>
 
 <template>
-  <BottomSheet v-model:open="open" title="Nova foto" description="Mostre como foi o treino.">
+  <BottomSheet v-model:open="open" title="Nova foto" description="Mostre como foi o jogo.">
     <div class="flex flex-col gap-4">
       <input
         ref="fileInput"

@@ -20,9 +20,9 @@ import { RouterView } from 'vue-router';
       >
         <img src="/icon.svg" alt="" class="size-14 rounded-2xl lg:size-16" width="64" height="64" />
         <p class="text-2xl font-bold tracking-tight text-white lg:text-5xl">FutCheck</p>
-        <p class="text-brand-300 text-sm lg:hidden">Check-in de aulas e dayuse</p>
+        <p class="text-brand-300 text-sm lg:hidden">Check-in de Aula e Dayuse</p>
         <p class="text-brand-200 hidden text-xl leading-relaxed lg:block">
-          Confirme presença nas aulas e no dayuse em um toque.
+          Confirme presença na Aula e no Dayuse em um toque.
         </p>
         <ul class="hidden gap-3 lg:flex" aria-label="Tipos de sessão">
           <li class="bg-aula-600 rounded-full px-3 py-1 text-sm font-medium text-white">Aulas</li>

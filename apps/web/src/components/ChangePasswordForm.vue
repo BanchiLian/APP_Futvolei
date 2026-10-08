@@ -29,7 +29,7 @@ const onSubmit = handleSubmit(async (values) => {
   try {
     await changePassword(values);
     resetForm();
-    toast.success('Senha alterada. As outras sessões foram encerradas.');
+    toast.success('Senha alterada. Os outros acessos foram encerrados.');
     emit('done');
   } catch (error) {
     toast.error(normalizeApiError(error).message);

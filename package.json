@@ -34,7 +34,8 @@
     "db:studio": "npm run db:studio -w @futcheck/api",
     "superadmin:create": "npm run superadmin:create -w @futcheck/api",
     "superadmin:reset-password": "npm run superadmin:reset-password -w @futcheck/api",
-    "prepare": "husky"
+    "prepare": "husky",
+    "db:import-venues": "npm run db:import-venues -w @futcheck/api"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.3",

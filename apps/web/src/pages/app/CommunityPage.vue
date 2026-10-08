@@ -90,7 +90,7 @@ async function refresh(): Promise<void> {
 
       <template v-else>
         <p class="text-brand-500 text-xs">
-          {{ total }} {{ total === 1 ? 'pessoa' : 'pessoas' }} na comunidade
+          {{ total }} {{ total === 1 ? 'pessoa' : 'pessoas' }} em Pessoas
         </p>
 
         <ul class="flex flex-col gap-2">

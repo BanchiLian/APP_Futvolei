@@ -111,7 +111,7 @@ export function resolveRsvpView(session: SessionDetailDto, now: DateInput = new 
     return {
       ...base,
       tone: 'cancelled',
-      headline: 'Sessão cancelada pela arena',
+      headline: 'Sessão cancelada pelo CT',
       detail: session.cancelReason ? `Motivo: ${session.cancelReason}` : null,
     };
   }
@@ -144,7 +144,9 @@ export function resolveRsvpView(session: SessionDetailDto, now: DateInput = new 
 
   if (!session.rsvp.canAnswer) {
     const reason = session.rsvp.blockedReason;
-    let detail = reason ? errorMessageFor(reason) : 'Não é possível responder a esta sessão agora.';
+    let detail = reason
+      ? errorMessageFor(reason)
+      : 'Não é possível responder a esta sessão agora. Fale com o responsável pelo CT.';
     if (reason === ERROR_CODES.RSVP_DEADLINE_PASSED) {
       detail = `${detail} O limite era ${formatRelativeMoment(session.rsvp.changeDeadline, now)}.`;
     }
@@ -181,7 +183,7 @@ export function resolveRsvpView(session: SessionDetailDto, now: DateInput = new 
     ...base,
     tone: 'open',
     detail: isFull
-      ? `Sessão lotada. Você seria o ${session.waitlistCount + 1}º da lista de espera.`
+      ? `Sessão lotada. Sua posição na lista de espera seria a ${session.waitlistCount + 1}ª.`
       : null,
     primary,
     // Once "Não vou" is on record there is nothing to repeat.

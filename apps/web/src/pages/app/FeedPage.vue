@@ -109,7 +109,7 @@ function prependPost(post: PostDto): void {
         v-else-if="posts.length === 0"
         icon="image"
         title="Nenhuma foto ainda"
-        description="Publique a primeira e mostre como foi o treino."
+        description="Publique a primeira e mostre como foi o jogo."
       />
 
       <!-- Photos run edge to edge on a phone, as a photo feed should, and settle

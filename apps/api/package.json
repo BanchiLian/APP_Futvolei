@@ -19,7 +19,8 @@
     "db:format": "prisma format",
     "db:seed": "tsx prisma/seed.ts",
     "superadmin:create": "tsx scripts/superadmin-create.ts",
-    "superadmin:reset-password": "tsx scripts/superadmin-reset-password.ts"
+    "superadmin:reset-password": "tsx scripts/superadmin-reset-password.ts",
+    "db:import-venues": "tsx prisma/importVenues.ts"
   },
   "dependencies": {
     "@futcheck/shared": "^0.1.0",

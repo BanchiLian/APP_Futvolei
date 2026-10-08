@@ -55,7 +55,8 @@ describe('resolveRsvpView', () => {
 
     expect(view.isFull).toBe(true);
     expect(view.primary?.label).toBe('Entrar na lista de espera');
-    expect(view.detail).toContain('3º');
+    // Two people already waiting, so the user would be third.
+    expect(view.detail).toContain('3ª');
   });
 
   it('shows the waitlist position and lets the user leave it with confirmation', () => {

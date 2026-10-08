@@ -39,7 +39,7 @@ defineProps<{ venue: VenueSummaryDto }>();
       <SessionTypeBadge v-if="venue.offersAula" type="AULA" />
       <SessionTypeBadge v-if="venue.offersDayuse" type="DAYUSE" />
       <p v-if="venue.nextDayuse" class="text-dayuse-800 ml-auto text-xs font-medium">
-        Próximo dayuse {{ formatRelativeMoment(venue.nextDayuse.startsAt) }}
+        Próximo Dayuse {{ formatRelativeMoment(venue.nextDayuse.startsAt) }}
       </p>
     </div>
   </RouterLink>

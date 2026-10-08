@@ -76,7 +76,7 @@ const locationHint = computed(() => {
             type="checkbox"
             class="accent-aula-600 size-5 cursor-pointer"
           />
-          <span class="text-brand-700 text-sm font-medium">Só CTs com dayuse</span>
+          <span class="text-brand-700 text-sm font-medium">Só CTs com Dayuse</span>
         </label>
       </div>
 
@@ -97,13 +97,27 @@ const locationHint = computed(() => {
         title="Nenhum CT por aqui"
         :description="
           onlyDayuse
-            ? 'Nenhum CT com dayuse cadastrado. Tente sem o filtro.'
-            : 'Ainda não há centros de treinamento cadastrados.'
+            ? 'Nenhum CT com Dayuse cadastrado. Tente sem o filtro.'
+            : 'Ainda não há CTs cadastrados.'
         "
       />
 
       <div v-else class="flex flex-col gap-3">
         <VenueCard v-for="venue in venues.data.value ?? []" :key="venue.id" :venue="venue" />
+
+        <!-- Part of the list comes from OpenStreetMap, whose ODbL licence requires
+             the credit to be visible wherever the data is shown. -->
+        <p class="text-brand-400 px-2 pt-2 text-center text-xs">
+          Parte dos CTs vem do
+          <a
+            href="https://www.openstreetmap.org/copyright"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline underline-offset-2"
+            >OpenStreetMap</a
+          >
+          e ainda não foi confirmada pelo CT.
+        </p>
       </div>
     </div>
   </PullToRefresh>

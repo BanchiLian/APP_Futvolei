@@ -78,7 +78,7 @@ export default tseslint.config(
 
   // Operational CLIs: talking to the operator on stdout is the whole point.
   {
-    files: ['apps/api/scripts/**/*.ts', 'apps/api/prisma/seed.ts'],
+    files: ['apps/api/scripts/**/*.ts', 'apps/api/prisma/*.ts'],
     rules: {
       'no-console': 'off',
     },

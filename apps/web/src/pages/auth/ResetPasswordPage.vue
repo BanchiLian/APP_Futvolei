@@ -74,7 +74,7 @@ const onSubmit = handleSubmit(async (values) => {
     <header class="flex flex-col gap-1">
       <h1 class="text-brand-900 text-xl font-semibold sm:text-2xl">Criar nova senha</h1>
       <p class="text-brand-500 text-sm">
-        Ao concluir, todas as suas sessões ativas serão encerradas.
+        Ao concluir, todos os seus acessos ativos serão encerrados.
       </p>
     </header>
 

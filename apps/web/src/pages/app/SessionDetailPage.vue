@@ -90,7 +90,7 @@ function onAnswered(updated: SessionDetailDto): void {
             <dd>
               <RouterLink
                 :to="{ name: 'venue-detail', params: { id: session.data.value.venue.id } }"
-                class="text-aula-700 font-medium"
+                class="text-aula-700 -my-3 inline-flex min-h-11 items-center font-medium"
               >
                 {{ session.data.value.venue.name }}
               </RouterLink>
@@ -99,7 +99,7 @@ function onAnswered(updated: SessionDetailDto): void {
 
           <div v-if="session.data.value.responsible" class="flex items-center gap-2">
             <AppIcon name="user" class="text-brand-400 size-5" />
-            <dt class="sr-only">Professor</dt>
+            <dt class="sr-only">Responsável</dt>
             <dd class="text-brand-700">{{ session.data.value.responsible.name }}</dd>
           </div>
 

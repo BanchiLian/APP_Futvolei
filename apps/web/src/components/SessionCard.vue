@@ -51,7 +51,9 @@ const accessibleLabel = computed(() =>
     props.showDate ? formatRelativeDay(props.session.startsAt) : null,
     formatTimeRange(props.session.startsAt, props.session.endsAt).replace('–', 'até'),
     props.session.venue.name,
-    `${props.session.confirmedCount} de ${props.session.capacity} vagas ocupadas`,
+    `${props.session.confirmedCount} de ${props.session.capacity} ${
+      props.session.capacity === 1 ? 'vaga ocupada' : 'vagas ocupadas'
+    }`,
     myStatus.value?.label,
   ]
     .filter(Boolean)
@@ -106,7 +108,7 @@ const accessibleLabel = computed(() =>
           aria-hidden="true"
         >
           <AppIcon name="users" class="size-3.5" :stroke-width="2.2" />
-          {{ isFull ? 'Lotado' : `${session.confirmedCount}/${session.capacity}` }}
+          {{ isFull ? 'Lotada' : `${session.confirmedCount}/${session.capacity}` }}
         </span>
       </div>
     </div>

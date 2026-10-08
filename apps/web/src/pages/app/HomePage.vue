@@ -127,7 +127,7 @@ const greeting = computed(() => `${greetingFor()}, ${firstName(auth.user?.name ?
 
       <section v-if="nearbyDayuse.length > 0" class="flex flex-col gap-3">
         <div class="flex items-center justify-between px-1">
-          <h3 class="text-brand-900 text-sm font-semibold">Dayuses perto de você</h3>
+          <h3 class="text-brand-900 text-sm font-semibold">Dayuse perto de você</h3>
           <RouterLink
             :to="{ name: 'venues' }"
             class="text-aula-700 inline-flex min-h-11 items-center gap-1 px-1 text-xs font-semibold"
