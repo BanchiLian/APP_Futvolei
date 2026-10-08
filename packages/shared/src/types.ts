@@ -277,3 +277,32 @@ export interface ScheduleTemplateDto {
   responsible: PublicUserSummary | null;
   isActive: boolean;
 }
+
+/** A person as the staff screens list them, with the detail players never see. */
+export interface StaffUserDto {
+  id: string;
+  name: string;
+  email: string;
+  avatarUrl: string | null;
+  role: Role;
+  isActive: boolean;
+  createdAt: string;
+}
+
+/** One line of the audit log, for the super admin's screen. */
+export interface AuditEntryDto {
+  id: string;
+  action: string;
+  entity: string | null;
+  entityId: string | null;
+  actor: PublicUserSummary | null;
+  metadata: unknown;
+  ip: string | null;
+  createdAt: string;
+}
+
+/** What the staff panel opens with, in one call. */
+export interface StaffOverviewDto {
+  venues: VenueAdminDto[];
+  sessions: SessionSummaryDto[];
+}

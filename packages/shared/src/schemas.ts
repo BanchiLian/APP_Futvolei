@@ -360,3 +360,27 @@ export const cancelSessionSchema = z.object({
 });
 
 export type CancelSessionInput = z.infer<typeof cancelSessionSchema>;
+
+/** Creating a CT also hands it to someone, so it never exists unowned. */
+export const venueCreateSchema = venueWriteSchema.extend({
+  ownerId: z.string().uuid('Dono inválido').nullish(),
+});
+
+export type VenueCreateInput = z.infer<typeof venueCreateSchema>;
+
+/** Searching people to put on a CT's staff, or to look up in the admin panel. */
+export const staffUserQuerySchema = z.object({
+  q: z.string().trim().min(2, 'Digite ao menos 2 letras').max(80).optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(50).default(20),
+});
+
+export type StaffUserQuery = z.infer<typeof staffUserQuerySchema>;
+
+export const auditQuerySchema = z.object({
+  action: z.string().trim().max(60).optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(100).default(30),
+});
+
+export type AuditQuery = z.infer<typeof auditQuerySchema>;
