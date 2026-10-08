@@ -1,6 +1,11 @@
 import type { RequestHandler } from 'express';
 
-import { ERROR_CODES, permissionsForRole } from '@futcheck/shared';
+import {
+  ERROR_CODES,
+  VENUE_ROLE_PERMISSIONS,
+  permissionsForRole,
+  type Permission,
+} from '@futcheck/shared';
 
 import { auditContextFrom, recordAudit } from '../lib/audit.js';
 import { forbidden, unauthorized } from '../lib/errors.js';
@@ -37,7 +42,14 @@ export const authenticate: RequestHandler = async (req, _res, next) => {
 
     const user = await prisma.user.findFirst({
       where: { id: userId, deletedAt: null },
-      select: { id: true, role: true, isActive: true },
+      select: {
+        id: true,
+        role: true,
+        isActive: true,
+        // In the same round trip: every request needs to know which CTs this
+        // person runs, and a second query per request would not scale.
+        venueMemberships: { select: { venueId: true, role: true } },
+      },
     });
 
     if (!user) {
@@ -61,10 +73,20 @@ export const authenticate: RequestHandler = async (req, _res, next) => {
       return;
     }
 
+    // The union answers "could this account ever do this, anywhere?", which is
+    // what the route gate needs. Narrowing it to one CT is the service's job.
+    const reachable = new Set<Permission>(permissionsForRole(user.role));
+    for (const membership of user.venueMemberships) {
+      for (const permission of VENUE_ROLE_PERMISSIONS[membership.role]) {
+        reachable.add(permission);
+      }
+    }
+
     req.auth = {
       userId: user.id,
       role: user.role,
-      permissions: permissionsForRole(user.role),
+      permissions: [...reachable],
+      memberships: user.venueMemberships,
     };
 
     next();

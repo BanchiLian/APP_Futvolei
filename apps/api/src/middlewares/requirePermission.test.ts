@@ -22,6 +22,7 @@ function authFor(role: keyof typeof ROLES): AuthContext {
     userId: `${role.toLowerCase()}-id`,
     role: ROLES[role],
     permissions: permissionsForRole(ROLES[role]),
+    memberships: [],
   };
 }
 

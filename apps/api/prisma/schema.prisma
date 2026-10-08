@@ -32,6 +32,12 @@ enum Role {
   DAYUSE
 }
 
+/// Authority inside one CT. Mirrors VENUE_ROLES in packages/shared.
+enum VenueRole {
+  OWNER
+  PROFESSOR
+}
+
 enum SessionType {
   AULA
   DAYUSE
@@ -118,6 +124,7 @@ model User {
   posts               Post[]              @relation("PostAuthor")
   postsRemoved        Post[]              @relation("PostRemovedBy")
   postLikes           PostLike[]
+  venueMemberships    VenueMember[]
 
   @@index([role, isActive])
   @@index([deletedAt])
@@ -250,10 +257,34 @@ model Venue {
   templates ScheduleTemplate[]
   sessions  Session[]
   posts     Post[]
+  members   VenueMember[]
 
   @@unique([source, externalId])
   @@index([isActive])
   @@map("venues")
+}
+
+/// Who runs a CT.
+///
+/// This is what makes the product a network instead of a single arena: authority
+/// is held per CT, so an owner commands theirs and nothing else. Only the super
+/// admin is global, and that is enforced by the permission matrix, not here.
+model VenueMember {
+  id      String    @id @default(uuid(7)) @db.Uuid
+  venueId String    @map("venue_id") @db.Uuid
+  userId  String    @map("user_id") @db.Uuid
+  role    VenueRole
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  venue Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// One role per person per CT; promoting someone updates the row.
+  @@unique([venueId, userId])
+  @@index([userId])
+  @@map("venue_members")
 }
 
 // -----------------------------------------------------------------------------

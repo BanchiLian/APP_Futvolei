@@ -11,6 +11,7 @@ import type {
   SessionStatus,
   SessionType,
   SkillLevel,
+  VenueRole,
   Weekday,
 } from './enums.js';
 
@@ -196,4 +197,83 @@ export interface PostDto {
   /** Whether the caller may remove this post: their own, or as a moderator. */
   canDelete: boolean;
   createdAt: string;
+}
+
+// -----------------------------------------------------------------------------
+// Attendance
+// -----------------------------------------------------------------------------
+
+/** One line of the professor's checklist. */
+export interface AttendanceEntryDto {
+  userId: string;
+  name: string;
+  avatarUrl: string | null;
+  status: BookingStatus;
+  /** Turned up without answering. */
+  isWalkIn: boolean;
+  /** When attendance was marked, not when the person answered "Vou". */
+  checkedInAt: string | null;
+  checkedInBy: PublicUserSummary | null;
+  waitlistPosition: number | null;
+}
+
+/** Whether the checklist can be edited right now, and if not, why. */
+export interface AttendanceEditabilityDto {
+  canEdit: boolean;
+  blockedReason: ErrorCode | null;
+  /** When the checklist unlocks (ISO), for an "abre às ..." hint. */
+  opensAt: string;
+  /** Last instant this caller can still edit it (ISO), when there is a limit. */
+  editDeadline: string | null;
+}
+
+export interface AttendanceSheetDto {
+  session: SessionSummaryDto;
+  entries: AttendanceEntryDto[];
+  editability: AttendanceEditabilityDto;
+  /** Totals for the header, computed server-side so every screen agrees. */
+  summary: { expected: number; present: number; absent: number; pending: number };
+}
+
+// -----------------------------------------------------------------------------
+// Running a CT
+// -----------------------------------------------------------------------------
+
+/** A CT as its own staff sees it, with the fields the public list omits. */
+export interface VenueAdminDto {
+  id: string;
+  name: string;
+  description: string | null;
+  address: string;
+  city: string;
+  state: string;
+  latitude: number;
+  longitude: number;
+  phone: string | null;
+  instagram: string | null;
+  isActive: boolean;
+  /** MANUAL when someone typed it in, OSM when it came from OpenStreetMap. */
+  source: string;
+  /** The caller's own authority here; null for a super admin, who needs none. */
+  myRole: VenueRole | null;
+}
+
+export interface VenueStaffDto {
+  userId: string;
+  name: string;
+  avatarUrl: string | null;
+  role: VenueRole;
+  since: string;
+}
+
+export interface ScheduleTemplateDto {
+  id: string;
+  type: SessionType;
+  weekday: Weekday;
+  startTime: string;
+  endTime: string;
+  capacity: number;
+  title: string | null;
+  responsible: PublicUserSummary | null;
+  isActive: boolean;
 }

@@ -17,6 +17,7 @@ import {
   SESSION_TYPES,
   SETTING_KEYS,
   SKILL_LEVELS,
+  VENUE_ROLES,
   type Role,
   type SessionType,
   type SkillLevel,
@@ -349,6 +350,37 @@ async function seedUsers(): Promise<Map<string, string>> {
   return idsByEmail;
 }
 
+/**
+ * Who runs the example CT.
+ *
+ * Carlos owns it and Juliana teaches there, so the two levels of authority are
+ * visible from the first run: an owner sees the whole CT, a professor sees only
+ * the sessions they are responsible for. Neither can touch any other CT.
+ */
+async function seedVenueStaff(userIds: Map<string, string>): Promise<number> {
+  const staff = [
+    { email: 'carlos.professor@futcheck.local', role: VENUE_ROLES.OWNER },
+    { email: 'juliana.professor@futcheck.local', role: VENUE_ROLES.PROFESSOR },
+  ] as const;
+
+  let granted = 0;
+
+  for (const { email, role } of staff) {
+    const userId = userIds.get(email);
+    if (!userId) continue;
+
+    await prisma.venueMember.upsert({
+      where: { venueId_userId: { venueId: MAIN_VENUE_ID, userId } },
+      create: { venueId: MAIN_VENUE_ID, userId, role },
+      update: { role },
+    });
+
+    granted += 1;
+  }
+
+  return granted;
+}
+
 async function seedVenues(): Promise<void> {
   for (const { id, ...data } of SEED_VENUES) {
     await prisma.venue.upsert({
@@ -505,6 +537,9 @@ async function main(): Promise<void> {
 
   await seedVenues();
   console.log(`✔ ${SEED_VENUES.length} CTs de exemplo garantidos`);
+
+  const staff = await seedVenueStaff(userIds);
+  console.log(`✔ ${staff} responsáveis vinculados ao CT principal (1 dono, 1 professor)`);
 
   const templatesCreated = await seedTemplates(userIds);
   console.log(

@@ -1,6 +1,11 @@
 import type { RequestHandler } from 'express';
 
-import { ERROR_CODES, hasAllPermissions, type Permission } from '@futcheck/shared';
+import {
+  ERROR_CODES,
+  hasAllPermissions,
+  hasAnyPermission,
+  type Permission,
+} from '@futcheck/shared';
 
 import { auditContextFrom, recordAudit } from '../lib/audit.js';
 import { forbidden, unauthorized } from '../lib/errors.js';
@@ -16,6 +21,25 @@ import { forbidden, unauthorized } from '../lib/errors.js';
  * escalation attempt, so it lands in the audit log.
  */
 export function requirePermission(...required: Permission[]): RequestHandler {
+  return gate(required, hasAllPermissions);
+}
+
+/**
+ * Passes when the caller holds *any* of the listed permissions.
+ *
+ * For capabilities that several kinds of staff reach by different routes: a
+ * professor marks attendance through `ATTENDANCE_MANAGE_OWN`, whoever runs the
+ * CT through `ATTENDANCE_MANAGE_ANY`. The service still decides which sessions
+ * each of them may actually touch.
+ */
+export function requireAnyPermission(...required: Permission[]): RequestHandler {
+  return gate(required, hasAnyPermission);
+}
+
+function gate(
+  required: Permission[],
+  satisfies: (granted: readonly Permission[] | undefined, required: Permission[]) => boolean,
+): RequestHandler {
   return (req, _res, next) => {
     const auth = req.auth;
 
@@ -24,7 +48,7 @@ export function requirePermission(...required: Permission[]): RequestHandler {
       return;
     }
 
-    if (hasAllPermissions(auth.permissions, required)) {
+    if (satisfies(auth.permissions, required)) {
       next();
       return;
     }

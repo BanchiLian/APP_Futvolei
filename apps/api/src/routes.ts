@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import { attendanceRoutes } from './modules/attendance/attendance.routes.js';
 import { authRoutes } from './modules/auth/auth.routes.js';
 import { communityRoutes } from './modules/community/community.routes.js';
 import { feedRoutes } from './modules/feed/feed.routes.js';
@@ -18,6 +19,7 @@ export const apiRoutes: Router = Router();
 apiRoutes.use('/auth', authRoutes);
 apiRoutes.use('/me', meRoutes);
 apiRoutes.use('/sessions', sessionsRoutes);
+apiRoutes.use('/attendance', attendanceRoutes);
 apiRoutes.use('/venues', venuesRoutes);
 apiRoutes.use('/community', communityRoutes);
 apiRoutes.use('/feed', feedRoutes);

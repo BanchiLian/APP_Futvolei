@@ -25,6 +25,31 @@ export type Role = (typeof ROLES)[keyof typeof ROLES];
 export const ROLE_VALUES = Object.values(ROLES) as readonly Role[];
 
 /**
+ * Authority *inside one CT*, which is a different question from the account-wide
+ * role above.
+ *
+ * The product is a network of training centres: the person who runs a CT must be
+ * able to do everything there and nothing anywhere else. A global role cannot
+ * express that, so authority over a CT comes from membership in it. Only the
+ * super admin is global, by design.
+ */
+export const VENUE_ROLES = {
+  /** Runs the CT: its grid, its sessions, its staff, its attendance. */
+  OWNER: 'OWNER',
+  /** Teaches at the CT: attendance for the sessions they are responsible for. */
+  PROFESSOR: 'PROFESSOR',
+} as const;
+
+export type VenueRole = (typeof VENUE_ROLES)[keyof typeof VENUE_ROLES];
+
+export const VENUE_ROLE_VALUES = Object.values(VENUE_ROLES) as readonly VenueRole[];
+
+export const VENUE_ROLE_LABELS: Record<VenueRole, string> = {
+  [VENUE_ROLES.OWNER]: 'Dono do CT',
+  [VENUE_ROLES.PROFESSOR]: 'Professor',
+};
+
+/**
  * The role every public sign-up produces. Never configurable, never negotiable:
  * `POST /auth/register` ignores any role sent by the client.
  */

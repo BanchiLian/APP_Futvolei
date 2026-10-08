@@ -258,3 +258,105 @@ export const IMAGE_UPLOAD = {
   maxBytes: 8 * 1024 * 1024,
   acceptedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'],
 } as const;
+
+// -----------------------------------------------------------------------------
+// Attendance (the professor's checklist)
+// -----------------------------------------------------------------------------
+
+/** The three states the checklist can put someone in. */
+export const ATTENDANCE_MARKS = ['PRESENTE', 'FALTOU', 'CONFIRMADA'] as const;
+
+export type AttendanceMark = (typeof ATTENDANCE_MARKS)[number];
+
+/**
+ * A whole sheet is sent at once, so the professor taps through the list and
+ * saves one time. Marks are absolute, never deltas: re-sending the same sheet
+ * produces the same result, which is what makes a retry on a flaky arena
+ * connection safe.
+ */
+export const attendanceMarkSchema = z.object({
+  entries: z
+    .array(
+      z.object({
+        userId: z.string().uuid('Pessoa inválida'),
+        status: z.enum(ATTENDANCE_MARKS),
+      }),
+    )
+    .min(1, 'Marque ao menos uma pessoa')
+    .max(200, 'Lista longa demais'),
+});
+
+export type AttendanceMarkInput = z.infer<typeof attendanceMarkSchema>;
+
+/** Someone who turned up without answering. Allowed even on a full session. */
+export const walkInSchema = z.object({
+  userId: z.string().uuid('Pessoa inválida'),
+});
+
+export type WalkInInput = z.infer<typeof walkInSchema>;
+
+// -----------------------------------------------------------------------------
+// Running a CT
+// -----------------------------------------------------------------------------
+
+const brazilianStateSchema = z
+  .string()
+  .trim()
+  .length(2, 'Use a sigla do estado, por exemplo SP')
+  .regex(/^[A-Za-z]{2}$/, 'Use a sigla do estado, por exemplo SP')
+  .transform((value) => value.toUpperCase());
+
+export const venueWriteSchema = z.object({
+  name: z.string().trim().min(2, 'Informe o nome do CT').max(120, 'Nome longo demais'),
+  description: z.string().trim().max(1000, 'Descrição longa demais').nullish(),
+  address: z.string().trim().min(3, 'Informe o endereço').max(255, 'Endereço longo demais'),
+  city: z.string().trim().min(2, 'Informe a cidade').max(80, 'Cidade longa demais'),
+  state: brazilianStateSchema,
+  latitude: latitudeSchema,
+  longitude: longitudeSchema,
+  phone: z
+    .string()
+    .trim()
+    .regex(/^\d{10,11}$/, 'Telefone deve ter DDD e 8 ou 9 dígitos')
+    .nullish(),
+  instagram: z
+    .string()
+    .trim()
+    .max(60)
+    .regex(/^[A-Za-z0-9._]+$/, 'Use apenas o nome do perfil, sem @')
+    .nullish(),
+});
+
+export type VenueWriteInput = z.infer<typeof venueWriteSchema>;
+
+export const venueStaffSchema = z.object({
+  userId: z.string().uuid('Pessoa inválida'),
+  role: z.enum(['OWNER', 'PROFESSOR']),
+});
+
+export type VenueStaffInput = z.infer<typeof venueStaffSchema>;
+
+/** One weekly slot in a CT's grid. */
+export const scheduleTemplateSchema = z.object({
+  type: z.enum(['AULA', 'DAYUSE']),
+  /** 0 = Sunday, matching `Date#getDay` and the database column. */
+  weekday: z.coerce.number().int().min(0).max(6),
+  startTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Use o formato HH:mm'),
+  endTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Use o formato HH:mm'),
+  capacity: z.coerce.number().int().min(1, 'Capacidade mínima é 1').max(200),
+  title: z.string().trim().max(120).nullish(),
+  responsibleId: z.string().uuid('Professor inválido').nullish(),
+  isActive: z.boolean().default(true),
+});
+
+export type ScheduleTemplateInput = z.infer<typeof scheduleTemplateSchema>;
+
+export const cancelSessionSchema = z.object({
+  reason: z
+    .string()
+    .trim()
+    .min(3, 'Diga o motivo — quem ia jogar vai ler isso')
+    .max(255, 'Motivo longo demais'),
+});
+
+export type CancelSessionInput = z.infer<typeof cancelSessionSchema>;

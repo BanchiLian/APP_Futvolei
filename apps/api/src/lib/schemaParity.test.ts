@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   BOOKING_STATUS_VALUES,
   ROLE_VALUES,
+  VENUE_ROLE_VALUES,
   SESSION_STATUS_VALUES,
   SESSION_TYPE_VALUES,
   SKILL_LEVEL_VALUES,
@@ -14,6 +15,7 @@ import {
   SessionStatus,
   SessionType,
   SkillLevel,
+  VenueRole,
 } from '../generated/prisma/enums.js';
 
 /**
@@ -28,6 +30,7 @@ describe('Prisma schema matches the shared enums', () => {
     ['SessionStatus', SESSION_STATUS_VALUES, SessionStatus],
     ['BookingStatus', BOOKING_STATUS_VALUES, BookingStatus],
     ['SkillLevel', SKILL_LEVEL_VALUES, SkillLevel],
+    ['VenueRole', VENUE_ROLE_VALUES, VenueRole],
   ];
 
   it.each(cases)('%s has the same values on both sides', (_name, sharedValues, prismaEnum) => {

@@ -9,7 +9,7 @@
  * actions, the API uses it to refuse them.
  */
 
-import { ROLES, type Role } from './enums.js';
+import { ROLES, VENUE_ROLES, type Role, type VenueRole } from './enums.js';
 
 export const PERMISSIONS = {
   /** Log in, edit own profile, change own photo and password. Everyone has it. */
@@ -71,6 +71,8 @@ export const PERMISSIONS = {
   VENUE_VIEW: 'venue:view',
   /** Create and edit training centres. */
   VENUE_MANAGE: 'venue:manage',
+  /** Add and remove the people who run a CT: its owners and its professors. */
+  VENUE_STAFF_MANAGE: 'venue:staff:manage',
 
   /** See the photo feed. */
   FEED_VIEW: 'feed:view',
@@ -168,9 +170,15 @@ const ADMIN_PERMISSIONS: readonly Permission[] = [
   PERMISSIONS.FEED_MODERATE,
 ];
 
-/** Super admin: every admin permission, plus admin management and the audit log. */
+/**
+ * Super admin: every admin permission, plus admin management and the audit log.
+ *
+ * The only account with authority everywhere. Every other kind of staff is tied
+ * to a CT through `VENUE_ROLE_PERMISSIONS` below.
+ */
 const SUPER_ADMIN_PERMISSIONS: readonly Permission[] = [
   ...ADMIN_PERMISSIONS,
+  PERMISSIONS.VENUE_STAFF_MANAGE,
   PERMISSIONS.ADMIN_MANAGE,
   PERMISSIONS.AUDIT_VIEW,
 ];
@@ -184,11 +192,79 @@ export const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
 };
 
 // -----------------------------------------------------------------------------
+// Venue role → permissions (authority inside one CT)
+// -----------------------------------------------------------------------------
+
+/**
+ * Professor at a CT: runs the sessions they are responsible for.
+ *
+ * Deliberately narrow. A professor marks attendance for their own sessions and
+ * sees who is coming; they do not touch the grid, the staff or anyone else's
+ * session, because `ATTENDANCE_MANAGE_OWN` is checked against the session's
+ * responsible in the service.
+ */
+const VENUE_PROFESSOR_PERMISSIONS: readonly Permission[] = [
+  PERMISSIONS.SESSION_VIEW_AULA,
+  PERMISSIONS.SESSION_VIEW_DAYUSE,
+  PERMISSIONS.SESSION_ATTENDEES_VIEW_AULA,
+  PERMISSIONS.SESSION_ATTENDEES_VIEW_DAYUSE,
+  PERMISSIONS.ATTENDANCE_MANAGE_OWN,
+  PERMISSIONS.USER_VIEW_OWN_SESSIONS,
+  PERMISSIONS.REPORT_VIEW_OWN,
+];
+
+/**
+ * Owner of a CT: everything that happens there.
+ *
+ * Note what is absent: `USER_MANAGE`, `USER_ROLE_ASSIGN_BASIC`, `SETTINGS_MANAGE`,
+ * `ADMIN_MANAGE` and `AUDIT_VIEW`. Accounts and system-wide settings belong to
+ * the whole network, not to one CT, so they stay with the super admin. An owner
+ * runs their CT; they do not get to edit the people who visit it.
+ */
+const VENUE_OWNER_PERMISSIONS: readonly Permission[] = [
+  ...VENUE_PROFESSOR_PERMISSIONS,
+  PERMISSIONS.SESSION_RSVP_ON_BEHALF,
+  PERMISSIONS.SESSION_MANAGE,
+  PERMISSIONS.SCHEDULE_MANAGE,
+  PERMISSIONS.ATTENDANCE_MANAGE_ANY,
+  PERMISSIONS.USER_VIEW_ANY,
+  PERMISSIONS.USER_ROLE_LABEL_VIEW,
+  PERMISSIONS.REPORT_VIEW_ANY,
+  PERMISSIONS.VENUE_MANAGE,
+  PERMISSIONS.VENUE_STAFF_MANAGE,
+  PERMISSIONS.FEED_MODERATE,
+];
+
+export const VENUE_ROLE_PERMISSIONS: Record<VenueRole, readonly Permission[]> = {
+  [VENUE_ROLES.OWNER]: VENUE_OWNER_PERMISSIONS,
+  [VENUE_ROLES.PROFESSOR]: VENUE_PROFESSOR_PERMISSIONS,
+};
+
+// -----------------------------------------------------------------------------
 // Query helpers — used by the API middleware and the web `can()` composable.
 // -----------------------------------------------------------------------------
 
 export function permissionsForRole(role: Role): readonly Permission[] {
   return ROLE_PERMISSIONS[role];
+}
+
+/**
+ * What a user may do *inside one CT*: what their account can do anywhere, plus
+ * what their membership of that CT grants.
+ *
+ * Callers must pass the membership for the CT being acted on. Passing `null`
+ * yields the account-wide permissions alone, which is the correct answer for
+ * someone who is not staff there — including an owner looking at a CT that is
+ * not theirs.
+ */
+export function permissionsInVenue(
+  role: Role,
+  venueRole: VenueRole | null | undefined,
+): readonly Permission[] {
+  const global = ROLE_PERMISSIONS[role];
+  if (!venueRole) return global;
+
+  return [...new Set([...global, ...VENUE_ROLE_PERMISSIONS[venueRole]])];
 }
 
 export function roleHasPermission(role: Role, permission: Permission): boolean {
