@@ -141,6 +141,19 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
+        // Reachable by a professor too: the panel is where they find their
+        // students, and the server decides what travels back.
+        path: 'painel/ct/:venueId/pessoas',
+        name: 'staff-people',
+        component: () => import('@/pages/staff/VenuePeoplePage.vue'),
+        meta: {
+          title: 'Pessoas do CT',
+          tab: 'staff',
+          depth: 1,
+          permissions: [PERMISSIONS.VENUE_PEOPLE_VIEW],
+        },
+      },
+      {
         path: 'painel/ct/:venueId/grade',
         name: 'staff-schedule',
         component: () => import('@/pages/staff/SchedulePage.vue'),

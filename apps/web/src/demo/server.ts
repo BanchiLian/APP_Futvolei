@@ -9,30 +9,40 @@ import {
 import {
   BOOKING_STATUSES,
   ERROR_CODES,
+  type AttendanceSheetDto,
   type CommunityMemberDto,
   type MeResponse,
   type PostDto,
+  type ScheduleTemplateDto,
   type SessionDetailDto,
   type SessionSummaryDto,
+  type StaffOverviewDto,
   type VenueDetailDto,
+  type VenuePeopleDto,
+  type VenueStaffDto,
   type VenueSummaryDto,
 } from '@futcheck/shared';
 
 import rawFixtures from './fixtures.json';
+import { currentDemoRole, type DemoRole } from './roles.js';
 
 /**
  * The whole backend, running in the browser.
  *
- * GitHub Pages serves static files and nothing else — no Node, no PostgreSQL — so
- * a published build has no API to talk to. This replaces the axios transport with
- * a small in-memory server over a snapshot of real API responses, which is what
- * lets a published link show the actual app instead of a screenshot of it.
+ * GitHub Pages serves static files and nothing else — no Node, no PostgreSQL —
+ * so a published build has no API to talk to. This replaces the axios transport
+ * with an in-memory server over a snapshot of real API responses, which is what
+ * lets the published link show the actual app rather than a screenshot.
  *
- * Only reachable when VITE_DEMO=true. The deployed product keeps talking to the
- * real API, and this file is never imported there.
+ * The snapshot holds one view per kind of user, captured by logging in as each,
+ * so the demo can show the player's app, the professor's panel, the owner's
+ * panel and the network screens. Whatever a role could not reach was captured as
+ * null, and this server answers 403 for exactly those — the permission model is
+ * reproduced, not approximated.
+ *
+ * Only reachable when VITE_DEMO=true; the real build never imports this file.
  */
 
-/** Marks the browser session as signed in, so a reload keeps the user inside. */
 const SESSION_KEY = 'futcheck:demo:session';
 
 interface Page<T> {
@@ -40,15 +50,29 @@ interface Page<T> {
   meta: { page: number; limit: number; total: number; totalPages: number };
 }
 
-interface Fixtures {
+interface RoleSnapshot {
   me: MeResponse;
+  bookings: { data: SessionSummaryDto[] } | null;
+  overview: StaffOverviewDto | null;
+  sheets: Record<string, AttendanceSheetDto>;
+  people: VenuePeopleDto | null;
+  schedule: { data: ScheduleTemplateDto[] } | null;
+  team: { data: VenueStaffDto[] } | null;
+  venue: unknown | null;
+  staffVenues: { data: unknown[] } | null;
+  audit: Page<unknown> | null;
+  settings: unknown | null;
+  users: Page<unknown> | null;
+}
+
+interface Fixtures {
   venues: { data: VenueSummaryDto[] };
   community: Page<CommunityMemberDto>;
   feed: Page<PostDto>;
-  bookings: { data: SessionSummaryDto[] };
   sessions: { data: SessionSummaryDto[] };
   sessionDetails: Record<string, SessionDetailDto>;
   venueDetails: Record<string, VenueDetailDto>;
+  roles: Record<DemoRole, RoleSnapshot>;
 }
 
 /**
@@ -64,13 +88,30 @@ function rewriteAssetUrls<T>(value: T): T {
 
 const fixtures = rewriteAssetUrls(rawFixtures as unknown as Fixtures);
 
-/** Everything the demo can change lives here, so a reload starts clean. */
-const state = {
-  me: structuredClone(fixtures.me),
-  posts: structuredClone(fixtures.feed.data),
-  sessions: structuredClone(fixtures.sessions.data),
-  sessionDetails: structuredClone(fixtures.sessionDetails),
-};
+/** Everything the demo can change. Reset whenever the role changes. */
+function freshState(role: DemoRole) {
+  const snapshot = fixtures.roles[role];
+
+  return {
+    role,
+    me: structuredClone(snapshot.me),
+    posts: structuredClone(fixtures.feed.data),
+    sessions: structuredClone(fixtures.sessions.data),
+    sessionDetails: structuredClone(fixtures.sessionDetails),
+    sheets: structuredClone(snapshot.sheets),
+    schedule: structuredClone(snapshot.schedule?.data ?? []),
+  };
+}
+
+let state = freshState(currentDemoRole());
+
+export function reloadDemoState(): void {
+  state = freshState(currentDemoRole());
+}
+
+function snapshot(): RoleSnapshot {
+  return fixtures.roles[state.role];
+}
 
 // -----------------------------------------------------------------------------
 // Replies
@@ -97,13 +138,21 @@ function fail(
   return new AxiosError(message, String(status), config, null, response);
 }
 
-function currentSession(): { accessToken: string; user: MeResponse } {
-  return { accessToken: 'demo-access-token', user: state.me };
+/**
+ * Anything this role could not reach when the snapshot was taken is refused the
+ * same way the API refuses it, so the demo cannot show a screen the real product
+ * would deny.
+ */
+function orForbidden<T>(config: InternalAxiosRequestConfig, value: T | null | undefined) {
+  if (value == null) {
+    throw fail(config, 403, ERROR_CODES.FORBIDDEN, 'Você não tem permissão para fazer isso.');
+  }
+  return ok(config, value);
 }
 
 function paginate<T>(items: T[], query: URLSearchParams): Page<T> {
   const page = Number(query.get('page') ?? 1);
-  const limit = Number(query.get('limit') ?? 20);
+  const limit = Number(query.get('limit') ?? query.get('pageSize') ?? 20);
   const start = (page - 1) * limit;
 
   return {
@@ -123,7 +172,6 @@ function body<T>(config: InternalAxiosRequestConfig): T | null {
 
 /** Mirrors the real seat rules closely enough that the screen tells the truth. */
 function applyAnswer(detail: SessionDetailDto, response: 'VOU' | 'NAO_VOU'): SessionDetailDto {
-  // Hand back whatever the previous answer was holding.
   if (detail.myBookingStatus === BOOKING_STATUSES.CONFIRMADA) {
     detail.confirmedCount -= 1;
     detail.availableSeats += 1;
@@ -151,7 +199,6 @@ function applyAnswer(detail: SessionDetailDto, response: 'VOU' | 'NAO_VOU'): Ses
   return detail;
 }
 
-/** Keeps the agenda card in step with the detail screen. */
 function syncSummary(detail: SessionDetailDto): void {
   const summary = state.sessions.find((item) => item.id === detail.id);
   if (!summary) return;
@@ -167,7 +214,6 @@ function detailFor(id: string): SessionDetailDto | null {
   const existing = state.sessionDetails[id];
   if (existing) return existing;
 
-  // Sessions past the captured window still open, only without an attendee list.
   const summary = state.sessions.find((item) => item.id === id);
   if (!summary) return null;
 
@@ -190,7 +236,22 @@ function detailFor(id: string): SessionDetailDto | null {
   return built;
 }
 
-/** Shows the photo the user just picked, straight from the browser. */
+/** Recounts a sheet after the user has marked people on it. */
+function recount(sheet: AttendanceSheetDto): AttendanceSheetDto {
+  const expected = sheet.entries.filter((e) => e.status !== BOOKING_STATUSES.LISTA_ESPERA);
+  const present = expected.filter((e) => e.status === BOOKING_STATUSES.PRESENTE).length;
+  const absent = expected.filter((e) => e.status === BOOKING_STATUSES.FALTOU).length;
+
+  sheet.summary = {
+    expected: expected.length,
+    present,
+    absent,
+    pending: expected.length - present - absent,
+  };
+
+  return sheet;
+}
+
 async function readPhoto(data: unknown): Promise<{ url: string; width: number; height: number }> {
   const fallback = { url: `${import.meta.env.BASE_URL}icon.svg`, width: 1080, height: 1080 };
   if (!(data instanceof FormData)) return fallback;
@@ -225,21 +286,23 @@ export const demoAdapter: AxiosAdapter = async (config) => {
   );
 
   // A touch of latency, so loading states show rather than being skipped over.
-  await new Promise((resolve) => setTimeout(resolve, 180));
+  await new Promise((resolve) => setTimeout(resolve, 150));
 
   const route = `${method} ${path}`;
+  const session = () => ({ accessToken: 'demo-access-token', user: state.me });
 
   // --- auth ---
   if (route === 'POST /auth/login' || route === 'POST /auth/register') {
     sessionStorage.setItem(SESSION_KEY, '1');
-    return ok(config, currentSession());
+    reloadDemoState();
+    return ok(config, session());
   }
 
   if (route === 'POST /auth/refresh') {
     if (sessionStorage.getItem(SESSION_KEY) !== '1') {
       throw fail(config, 401, ERROR_CODES.UNAUTHORIZED, 'Sessão encerrada.');
     }
-    return ok(config, currentSession());
+    return ok(config, session());
   }
 
   if (route === 'POST /auth/logout') {
@@ -247,9 +310,11 @@ export const demoAdapter: AxiosAdapter = async (config) => {
     return ok(config, { success: true });
   }
 
-  if (route === 'POST /auth/forgot-password' || route === 'POST /auth/reset-password') {
-    return ok(config, { success: true });
+  if (route === 'POST /auth/forgot-password') {
+    return ok(config, { success: true, message: 'Se o e-mail existir, enviamos um link.' });
   }
+
+  if (route === 'POST /auth/reset-password') return ok(config, { success: true });
 
   // --- me ---
   if (route === 'GET /me') return ok(config, state.me);
@@ -321,7 +386,7 @@ export const demoAdapter: AxiosAdapter = async (config) => {
     return ok(config, updated);
   }
 
-  // --- venues ---
+  // --- venues, community, feed ---
   if (route === 'GET /venues') return ok(config, { data: fixtures.venues.data });
 
   const venueDetail = /^\/venues\/([^/]+)$/.exec(path);
@@ -331,17 +396,14 @@ export const demoAdapter: AxiosAdapter = async (config) => {
     return ok(config, venue);
   }
 
-  // --- community ---
   if (route === 'GET /community') {
     const term = (query.get('q') ?? '').trim().toLowerCase();
     const people = term
       ? fixtures.community.data.filter((person) => person.name.toLowerCase().includes(term))
       : fixtures.community.data;
-
     return ok(config, paginate(people, query));
   }
 
-  // --- feed ---
   if (route === 'GET /feed') return ok(config, paginate(state.posts, query));
 
   if (route === 'POST /feed') {
@@ -389,6 +451,82 @@ export const demoAdapter: AxiosAdapter = async (config) => {
   if (method === 'DELETE' && removeRoute) {
     state.posts = state.posts.filter((item) => item.id !== removeRoute[1]);
     return ok(config, { success: true });
+  }
+
+  // --- the staff panel ---
+  if (route === 'GET /staff/overview') return orForbidden(config, snapshot().overview);
+  if (route === 'GET /staff/venues') return orForbidden(config, snapshot().staffVenues);
+  if (route === 'GET /staff/audit') return orForbidden(config, snapshot().audit);
+  if (route === 'GET /staff/settings') return orForbidden(config, snapshot().settings);
+  if (route === 'GET /staff/users') return orForbidden(config, snapshot().users);
+
+  const venuePeople = /^\/staff\/venues\/[^/]+\/people$/.exec(path);
+  if (method === 'GET' && venuePeople) return orForbidden(config, snapshot().people);
+
+  const venueTeam = /^\/staff\/venues\/[^/]+\/staff$/.exec(path);
+  if (method === 'GET' && venueTeam) return orForbidden(config, snapshot().team);
+
+  const venueSchedule = /^\/staff\/venues\/[^/]+\/schedule$/.exec(path);
+  if (method === 'GET' && venueSchedule) {
+    if (!snapshot().schedule) {
+      throw fail(config, 403, ERROR_CODES.FORBIDDEN, 'Você não tem permissão para fazer isso.');
+    }
+    return ok(config, { data: state.schedule });
+  }
+
+  const venueAdmin = /^\/staff\/venues\/[^/]+$/.exec(path);
+  if (method === 'GET' && venueAdmin) return orForbidden(config, snapshot().venue);
+
+  // --- the checklist ---
+  if (route === 'GET /attendance/mine') {
+    const overview = snapshot().overview;
+    if (!overview) {
+      throw fail(config, 403, ERROR_CODES.FORBIDDEN, 'Você não tem permissão para fazer isso.');
+    }
+    return ok(config, { data: overview.sessions });
+  }
+
+  const sheetRoute = /^\/attendance\/([^/]+)$/.exec(path);
+  if (sheetRoute) {
+    const id = decodeURIComponent(sheetRoute[1] ?? '');
+    const sheet = state.sheets[id];
+
+    if (!sheet) {
+      throw fail(
+        config,
+        403,
+        ERROR_CODES.FORBIDDEN,
+        'Nesta demonstração só as sessões do painel têm lista.',
+      );
+    }
+
+    if (method === 'GET') return ok(config, sheet);
+
+    if (method === 'PATCH') {
+      const marks = body<{ entries: Array<{ userId: string; status: string }> }>(config);
+
+      for (const entry of marks?.entries ?? []) {
+        const line = sheet.entries.find((item) => item.userId === entry.userId);
+        if (!line) continue;
+
+        line.status = entry.status as typeof line.status;
+        line.checkedInAt =
+          entry.status === BOOKING_STATUSES.CONFIRMADA ? null : new Date().toISOString();
+      }
+
+      return ok(config, recount(sheet));
+    }
+  }
+
+  // Writes the demo does not pretend to do, answered honestly rather than with a
+  // silent failure that would look like a bug.
+  if (path.startsWith('/staff/') || path.startsWith('/attendance/')) {
+    throw fail(
+      config,
+      403,
+      ERROR_CODES.FORBIDDEN,
+      'Esta demonstração é só de leitura. Rode o app localmente para alterar.',
+    );
   }
 
   throw fail(config, 404, ERROR_CODES.NOT_FOUND, `Sem resposta de demonstração para ${route}.`);

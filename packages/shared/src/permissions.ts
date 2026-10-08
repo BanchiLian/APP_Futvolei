@@ -73,6 +73,11 @@ export const PERMISSIONS = {
   VENUE_MANAGE: 'venue:manage',
   /** Add and remove the people who run a CT: its owners and its professors. */
   VENUE_STAFF_MANAGE: 'venue:staff:manage',
+  /**
+   * See the people of one CT — those who play there and, for whoever runs it,
+   * the staff too. Scoped to the CT: it never reveals anyone from another.
+   */
+  VENUE_PEOPLE_VIEW: 'venue:people:view',
 
   /** See the photo feed. */
   FEED_VIEW: 'feed:view',
@@ -179,6 +184,7 @@ const ADMIN_PERMISSIONS: readonly Permission[] = [
 const SUPER_ADMIN_PERMISSIONS: readonly Permission[] = [
   ...ADMIN_PERMISSIONS,
   PERMISSIONS.VENUE_STAFF_MANAGE,
+  PERMISSIONS.VENUE_PEOPLE_VIEW,
   PERMISSIONS.ADMIN_MANAGE,
   PERMISSIONS.AUDIT_VIEW,
 ];
@@ -210,6 +216,7 @@ const VENUE_PROFESSOR_PERMISSIONS: readonly Permission[] = [
   PERMISSIONS.SESSION_ATTENDEES_VIEW_DAYUSE,
   PERMISSIONS.ATTENDANCE_MANAGE_OWN,
   PERMISSIONS.USER_VIEW_OWN_SESSIONS,
+  PERMISSIONS.VENUE_PEOPLE_VIEW,
   PERMISSIONS.REPORT_VIEW_OWN,
 ];
 

@@ -10,6 +10,7 @@ import {
   startOfBusinessDay,
   uuidSchema,
   venueCreateSchema,
+  venuePeopleQuerySchema,
   venueStaffSchema,
   venueWriteSchema,
   type StaffOverviewDto,
@@ -17,6 +18,7 @@ import {
 
 import { requireAuth } from '../shared/requireAuth.js';
 import * as admin from '../venues/venueAdmin.service.js';
+import * as people from '../venues/venuePeople.service.js';
 import * as service from './staff.service.js';
 import * as superAdmin from './superAdmin.service.js';
 
@@ -85,6 +87,16 @@ export async function removeStaff(req: Request, res: Response): Promise<void> {
       uuidSchema.parse(req.params['userId']),
     ),
   });
+}
+
+export async function venuePeople(req: Request, res: Response): Promise<void> {
+  res.json(
+    await people.listVenuePeople(
+      requireAuth(req),
+      venueIdOf(req),
+      venuePeopleQuerySchema.parse(req.query),
+    ),
+  );
 }
 
 export async function schedule(req: Request, res: Response): Promise<void> {

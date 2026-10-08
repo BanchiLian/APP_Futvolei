@@ -77,6 +77,15 @@ staffRoutes.delete(
   controller.removeStaff,
 );
 
+// --- the people of one CT ---
+// Reachable by a professor too: the gate is the scoped permission, and the
+// service decides whether the staff list travels with the players.
+staffRoutes.get(
+  '/venues/:venueId/people',
+  requirePermission(PERMISSIONS.VENUE_PEOPLE_VIEW),
+  controller.venuePeople,
+);
+
 // --- the weekly grid ---
 staffRoutes.get(
   '/venues/:venueId/schedule',

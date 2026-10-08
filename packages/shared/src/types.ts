@@ -306,3 +306,34 @@ export interface StaffOverviewDto {
   venues: VenueAdminDto[];
   sessions: SessionSummaryDto[];
 }
+
+/**
+ * A person as the staff of one CT sees them.
+ *
+ * Someone belongs to a CT by having answered for its sessions — there is no
+ * separate enrolment. `role` is the account label and travels only to callers
+ * who may see labels at all; a professor gets null, by design.
+ */
+export interface VenuePersonDto {
+  id: string;
+  name: string;
+  avatarUrl: string | null;
+  skillLevel: SkillLevel | null;
+  /** Authority at this CT, when they are staff here. */
+  venueRole: VenueRole | null;
+  /** Account label, only for callers allowed to see it. */
+  role: Role | null;
+  /** How many sessions of this CT they turned up to. */
+  attended: number;
+  /** How many they answered "Vou" for. */
+  booked: number;
+  /** The last session of this CT they answered for (ISO), if any. */
+  lastSeenAt: string | null;
+}
+
+export interface VenuePeopleDto {
+  /** Owners and professors of this CT. Empty for a caller who may not see them. */
+  staff: VenuePersonDto[];
+  /** Everyone who plays here. */
+  players: VenuePersonDto[];
+}

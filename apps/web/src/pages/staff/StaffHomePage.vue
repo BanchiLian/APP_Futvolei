@@ -2,7 +2,12 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 
-import { PERMISSIONS, SESSION_STATUSES, type SessionSummaryDto } from '@futcheck/shared';
+import {
+  PERMISSIONS,
+  SESSION_STATUSES,
+  VENUE_ROLE_LABELS,
+  type SessionSummaryDto,
+} from '@futcheck/shared';
 
 import AppIcon from '@/components/AppIcon.vue';
 import EmptyState from '@/components/EmptyState.vue';
@@ -59,6 +64,28 @@ const venuePicker = computed({
   },
 });
 
+/**
+ * Says plainly which hat the person is wearing and where.
+ *
+ * Added because the panel looks identical to an owner and to a professor until
+ * you notice which shortcuts are missing, and that is not something anyone
+ * should have to notice.
+ */
+const standing = computed(() => {
+  const venue = currentVenue.value;
+
+  if (can(PERMISSIONS.ADMIN_MANAGE) && !venue) return 'Você administra a rede inteira.';
+  if (!venue) return null;
+
+  const role = venue.myRole
+    ? VENUE_ROLE_LABELS[venue.myRole]
+    : can(PERMISSIONS.ADMIN_MANAGE)
+      ? 'Administração da rede'
+      : null;
+
+  return role ? `${role} · ${venue.name}` : venue.name;
+});
+
 const totals = computed(() => ({
   sessions: sessions.value.length,
   people: sessions.value.reduce((sum, session) => sum + session.confirmedCount, 0),
@@ -69,9 +96,19 @@ const shortcuts = computed(() => {
   const venue = currentVenue.value;
   const items: Array<{
     to: object;
-    icon: 'pin' | 'calendar' | 'users' | 'list' | 'lock';
+    icon: 'pin' | 'calendar' | 'users' | 'aula' | 'list' | 'lock';
     label: string;
   }> = [];
+
+  // First, because it is what both an owner and a professor open the panel for:
+  // who plays here. A professor has this and nothing else below it.
+  if (venue && can(PERMISSIONS.VENUE_PEOPLE_VIEW)) {
+    items.push({
+      to: { name: 'staff-people', params: { venueId: venue.id } },
+      icon: 'users',
+      label: 'Alunos',
+    });
+  }
 
   if (venue && can(PERMISSIONS.VENUE_MANAGE)) {
     items.push({
@@ -92,7 +129,7 @@ const shortcuts = computed(() => {
   if (venue && can(PERMISSIONS.VENUE_STAFF_MANAGE)) {
     items.push({
       to: { name: 'staff-team', params: { venueId: venue.id } },
-      icon: 'users',
+      icon: 'aula',
       label: 'Equipe',
     });
   }
@@ -123,6 +160,8 @@ function isCancelled(session: SessionSummaryDto): boolean {
         :options="venueOptions"
         label="CT"
       />
+
+      <p v-if="standing" class="text-brand-500 px-1 text-sm">{{ standing }}</p>
 
       <nav v-if="shortcuts.length > 0" class="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
         <RouterLink

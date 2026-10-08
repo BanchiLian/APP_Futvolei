@@ -8,6 +8,7 @@ import type {
   StaffUserDto,
   VenueAdminDto,
   VenueCreateInput,
+  VenuePeopleDto,
   VenueStaffDto,
   VenueStaffInput,
   VenueWriteInput,
@@ -63,6 +64,14 @@ export async function removeStaff(venueId: string, userId: string): Promise<Venu
     `/staff/venues/${venueId}/staff/${userId}`,
   );
   return data.data;
+}
+
+/** The people of one CT: players always, staff only for whoever runs it. */
+export async function listVenuePeople(venueId: string, q?: string): Promise<VenuePeopleDto> {
+  const { data } = await api.get<VenuePeopleDto>(`/staff/venues/${venueId}/people`, {
+    params: { q },
+  });
+  return data;
 }
 
 // --- weekly grid ---

@@ -384,3 +384,10 @@ export const auditQuerySchema = z.object({
 });
 
 export type AuditQuery = z.infer<typeof auditQuerySchema>;
+
+/** Searching inside one CT's people. */
+export const venuePeopleQuerySchema = z.object({
+  q: z.string().trim().max(80).optional(),
+});
+
+export type VenuePeopleQuery = z.infer<typeof venuePeopleQuerySchema>;

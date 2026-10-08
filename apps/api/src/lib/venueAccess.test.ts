@@ -109,3 +109,45 @@ describe('authority is held per CT', () => {
     expect(ownedVenueIds(both)).toEqual([MINE]);
   });
 });
+
+describe('seeing the people of a CT', () => {
+  it('lets both the owner and the professor see their CT people', () => {
+    expect(() => requireVenuePermission(owner, MINE, PERMISSIONS.VENUE_PEOPLE_VIEW)).not.toThrow();
+    expect(() =>
+      requireVenuePermission(professor, MINE, PERMISSIONS.VENUE_PEOPLE_VIEW),
+    ).not.toThrow();
+  });
+
+  it('refuses both of them at any other CT', () => {
+    expect(
+      refuses(() => requireVenuePermission(owner, THEIRS, PERMISSIONS.VENUE_PEOPLE_VIEW)),
+    ).toBe(true);
+    expect(
+      refuses(() => requireVenuePermission(professor, THEIRS, PERMISSIONS.VENUE_PEOPLE_VIEW)),
+    ).toBe(true);
+  });
+
+  it('refuses someone who only plays there', () => {
+    expect(refuses(() => requireVenuePermission(player, MINE, PERMISSIONS.VENUE_PEOPLE_VIEW))).toBe(
+      true,
+    );
+  });
+
+  it('withholds account labels from a professor, which is what hides them in the list', () => {
+    // The service shows the "Aluno"/"Dayuse" badge only to callers holding this,
+    // so the professor seeing their students never learns anyone's plan.
+    const asProfessor = venueAuthFor(professor, MINE);
+    const asOwner = venueAuthFor(owner, MINE);
+
+    expect(asProfessor.permissions).not.toContain(PERMISSIONS.USER_ROLE_LABEL_VIEW);
+    expect(asOwner.permissions).toContain(PERMISSIONS.USER_ROLE_LABEL_VIEW);
+  });
+
+  it('withholds the staff list from a professor', () => {
+    // Same mechanism: the service only includes `staff` for callers who may
+    // manage it, so a professor receives an empty list rather than a filtered one.
+    const asProfessor = venueAuthFor(professor, MINE);
+
+    expect(asProfessor.permissions).not.toContain(PERMISSIONS.VENUE_STAFF_MANAGE);
+  });
+});
