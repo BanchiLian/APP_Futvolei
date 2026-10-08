@@ -1,11 +1,12 @@
 import {
   PERMISSIONS,
-  permissionsForRole,
+  reachablePermissions,
   roleHasPermission,
   type MeResponse,
   type PublicUserSummary,
   type Role,
   type SkillLevel,
+  type VenueRole,
 } from '@futcheck/shared';
 
 /**
@@ -29,6 +30,10 @@ export const USER_SAFE_SELECT = {
   termsAcceptedAt: true,
   lastLoginAt: true,
   createdAt: true,
+  // The CTs this person runs decide part of what they may do, so they have to
+  // travel with the user: without them the app would hide screens the server
+  // would happily serve.
+  venueMemberships: { select: { venueId: true, role: true } },
 } as const;
 
 export interface SafeUser {
@@ -46,6 +51,7 @@ export interface SafeUser {
   termsAcceptedAt: Date | null;
   lastLoginAt: Date | null;
   createdAt: Date;
+  venueMemberships: readonly { venueId: string; role: VenueRole }[];
 }
 
 /**
@@ -57,7 +63,9 @@ export interface SafeUser {
  * that a user never learns they are labelled "dayuse" or "aluno" (section 4.2).
  */
 export function toMeResponse(user: SafeUser): MeResponse {
-  const permissions = [...permissionsForRole(user.role)];
+  // Same union the route gate uses, so the app and the API never disagree about
+  // which screens exist.
+  const permissions = [...reachablePermissions(user.role, user.venueMemberships)];
   const canSeeRoleLabel = roleHasPermission(user.role, PERMISSIONS.USER_ROLE_LABEL_VIEW);
 
   return {

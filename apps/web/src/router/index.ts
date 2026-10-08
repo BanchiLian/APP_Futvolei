@@ -130,6 +130,62 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: 'painel/ct/:venueId',
+        name: 'staff-venue',
+        component: () => import('@/pages/staff/VenueEditPage.vue'),
+        meta: {
+          title: 'Meu CT',
+          tab: 'staff',
+          depth: 1,
+          permissions: [PERMISSIONS.VENUE_MANAGE],
+        },
+      },
+      {
+        path: 'painel/ct/:venueId/grade',
+        name: 'staff-schedule',
+        component: () => import('@/pages/staff/SchedulePage.vue'),
+        meta: {
+          title: 'Grade',
+          tab: 'staff',
+          depth: 1,
+          permissions: [PERMISSIONS.SCHEDULE_MANAGE],
+        },
+      },
+      {
+        path: 'painel/ct/:venueId/equipe',
+        name: 'staff-team',
+        component: () => import('@/pages/staff/TeamPage.vue'),
+        meta: {
+          title: 'Equipe',
+          tab: 'staff',
+          depth: 1,
+          permissions: [PERMISSIONS.VENUE_STAFF_MANAGE],
+        },
+      },
+      {
+        // Network-wide, so only the super admin ever reaches it.
+        path: 'painel/rede',
+        name: 'staff-network',
+        component: () => import('@/pages/staff/NetworkPage.vue'),
+        meta: {
+          title: 'Rede',
+          tab: 'staff',
+          depth: 1,
+          permissions: [PERMISSIONS.ADMIN_MANAGE],
+        },
+      },
+      {
+        path: 'painel/auditoria',
+        name: 'staff-audit',
+        component: () => import('@/pages/staff/AuditPage.vue'),
+        meta: {
+          title: 'Auditoria',
+          tab: 'staff',
+          depth: 1,
+          permissions: [PERMISSIONS.AUDIT_VIEW],
+        },
+      },
+      {
         path: 'cts',
         name: 'venues',
         component: () => import('@/pages/app/VenuesPage.vue'),

@@ -267,6 +267,28 @@ export function permissionsInVenue(
   return [...new Set([...global, ...VENUE_ROLE_PERMISSIONS[venueRole]])];
 }
 
+/**
+ * Everything this account could do *somewhere*: its role's permissions plus
+ * those of every CT it is staff at.
+ *
+ * This is the set the route gate tests and the one the web app receives, so the
+ * two agree on which screens exist at all. It is deliberately wider than what
+ * the person may do at any single CT — narrowing to one is `permissionsInVenue`,
+ * and the service always does it before touching a CT's data.
+ */
+export function reachablePermissions(
+  role: Role,
+  memberships: readonly { role: VenueRole }[],
+): readonly Permission[] {
+  const reachable = new Set<Permission>(ROLE_PERMISSIONS[role]);
+
+  for (const membership of memberships) {
+    for (const permission of VENUE_ROLE_PERMISSIONS[membership.role]) reachable.add(permission);
+  }
+
+  return [...reachable];
+}
+
 export function roleHasPermission(role: Role, permission: Permission): boolean {
   return ROLE_PERMISSIONS[role].includes(permission);
 }

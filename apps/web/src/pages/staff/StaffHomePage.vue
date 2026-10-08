@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 
-import { SESSION_STATUSES, type SessionSummaryDto } from '@futcheck/shared';
+import { PERMISSIONS, SESSION_STATUSES, type SessionSummaryDto } from '@futcheck/shared';
 
 import AppIcon from '@/components/AppIcon.vue';
 import EmptyState from '@/components/EmptyState.vue';
@@ -11,36 +11,102 @@ import PullToRefresh from '@/components/PullToRefresh.vue';
 import SegmentedControl from '@/components/SegmentedControl.vue';
 import SessionCardSkeleton from '@/components/SessionCardSkeleton.vue';
 import SessionTypeBadge from '@/components/SessionTypeBadge.vue';
+import { useCan } from '@/composables/useCan';
 import { useResource } from '@/composables/useResource';
 import { formatRelativeDay, formatTimeRange } from '@/lib/format';
-import { listMySessions } from '@/services/attendance';
+import { getOverview } from '@/services/staff';
 
 /**
- * What whoever is teaching needs on the sand: the sessions they answer for, and
- * one tap to the checklist of each.
+ * The panel, for all three kinds of staff.
  *
- * Opens on today because that is the question being asked at the court; the
- * week is one tap away for planning.
+ * Whoever teaches sees the sessions they answer for. Whoever runs a CT sees the
+ * whole day there, including sessions another professor conducts — that
+ * difference is decided by the server, so the screen cannot show more than the
+ * person is allowed to act on.
  */
+const { can } = useCan();
+
 const RANGES = [
   { value: '1', label: 'Hoje' },
   { value: '7', label: 'Semana' },
 ];
 
 const range = ref('1');
+const venueId = ref<string | undefined>(undefined);
 
-const sessions = useResource(() => listMySessions(Number(range.value)));
+const overview = useResource(() => getOverview(Number(range.value), venueId.value));
 
-onMounted(() => void sessions.load());
-watch(range, () => void sessions.load());
+onMounted(() => void overview.load());
+watch([range, venueId], () => void overview.load());
 
-const list = computed<SessionSummaryDto[]>(() => sessions.data.value ?? []);
+const venues = computed(() => overview.data.value?.venues ?? []);
+const sessions = computed<SessionSummaryDto[]>(() => overview.data.value?.sessions ?? []);
 
-/** Counts for the header, so the day can be read without opening anything. */
+/** The CT whose management screens the shortcuts point at. */
+const currentVenue = computed(
+  () => venues.value.find((venue) => venue.id === venueId.value) ?? venues.value[0] ?? null,
+);
+
+const venueOptions = computed(() => [
+  { value: '', label: 'Todos' },
+  ...venues.value.map((venue) => ({ value: venue.id, label: venue.name })),
+]);
+
+const venuePicker = computed({
+  get: () => venueId.value ?? '',
+  set: (value: string) => {
+    venueId.value = value === '' ? undefined : value;
+  },
+});
+
 const totals = computed(() => ({
-  sessions: list.value.length,
-  people: list.value.reduce((sum, session) => sum + session.confirmedCount, 0),
+  sessions: sessions.value.length,
+  people: sessions.value.reduce((sum, session) => sum + session.confirmedCount, 0),
 }));
+
+/** Management shortcuts, each hidden unless the person can actually use it. */
+const shortcuts = computed(() => {
+  const venue = currentVenue.value;
+  const items: Array<{
+    to: object;
+    icon: 'pin' | 'calendar' | 'users' | 'list' | 'lock';
+    label: string;
+  }> = [];
+
+  if (venue && can(PERMISSIONS.VENUE_MANAGE)) {
+    items.push({
+      to: { name: 'staff-venue', params: { venueId: venue.id } },
+      icon: 'pin',
+      label: 'Meu CT',
+    });
+  }
+
+  if (venue && can(PERMISSIONS.SCHEDULE_MANAGE)) {
+    items.push({
+      to: { name: 'staff-schedule', params: { venueId: venue.id } },
+      icon: 'calendar',
+      label: 'Grade',
+    });
+  }
+
+  if (venue && can(PERMISSIONS.VENUE_STAFF_MANAGE)) {
+    items.push({
+      to: { name: 'staff-team', params: { venueId: venue.id } },
+      icon: 'users',
+      label: 'Equipe',
+    });
+  }
+
+  if (can(PERMISSIONS.ADMIN_MANAGE)) {
+    items.push({ to: { name: 'staff-network' }, icon: 'list', label: 'Rede' });
+  }
+
+  if (can(PERMISSIONS.AUDIT_VIEW)) {
+    items.push({ to: { name: 'staff-audit' }, icon: 'lock', label: 'Auditoria' });
+  }
+
+  return items;
+});
 
 function isCancelled(session: SessionSummaryDto): boolean {
   return session.status === SESSION_STATUSES.CANCELADA;
@@ -48,29 +114,47 @@ function isCancelled(session: SessionSummaryDto): boolean {
 </script>
 
 <template>
-  <PullToRefresh :refresh="sessions.load">
+  <PullToRefresh :refresh="overview.load">
     <div class="flex flex-col gap-4">
+      <!-- Only worth showing to someone who runs more than one CT. -->
+      <SegmentedControl
+        v-if="venues.length > 1"
+        v-model="venuePicker"
+        :options="venueOptions"
+        label="CT"
+      />
+
+      <nav v-if="shortcuts.length > 0" class="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+        <RouterLink
+          v-for="shortcut in shortcuts"
+          :key="shortcut.label"
+          :to="shortcut.to"
+          class="press bg-brand-100 text-brand-800 flex min-h-11 shrink-0 items-center gap-2 rounded-xl px-4 text-sm font-semibold"
+        >
+          <AppIcon :name="shortcut.icon" class="size-4" />
+          {{ shortcut.label }}
+        </RouterLink>
+      </nav>
+
       <SegmentedControl v-model="range" :options="RANGES" label="Período" />
 
-      <div v-if="sessions.isInitialLoading.value" class="flex flex-col gap-3">
+      <div v-if="overview.isInitialLoading.value" class="flex flex-col gap-3">
         <SessionCardSkeleton v-for="index in 3" :key="index" />
       </div>
 
       <ErrorState
-        v-else-if="sessions.error.value && list.length === 0"
-        :message="sessions.error.value"
-        :retrying="sessions.isFetching.value"
-        @retry="sessions.load"
+        v-else-if="overview.error.value && sessions.length === 0"
+        :message="overview.error.value"
+        :retrying="overview.isFetching.value"
+        @retry="overview.load"
       />
 
       <EmptyState
-        v-else-if="list.length === 0"
+        v-else-if="sessions.length === 0"
         icon="calendar"
-        title="Nenhuma sessão sua"
+        title="Nada por aqui"
         :description="
-          range === '1'
-            ? 'Você não é o responsável por nenhuma sessão hoje.'
-            : 'Você não é o responsável por nenhuma sessão nesta semana.'
+          range === '1' ? 'Nenhuma sessão hoje.' : 'Nenhuma sessão nos próximos sete dias.'
         "
       />
 
@@ -81,7 +165,7 @@ function isCancelled(session: SessionSummaryDto): boolean {
         </p>
 
         <ul class="flex flex-col gap-3">
-          <li v-for="session in list" :key="session.id">
+          <li v-for="session in sessions" :key="session.id">
             <RouterLink
               :to="{ name: 'attendance-sheet', params: { id: session.id } }"
               class="press focus-visible:outline-aula-600 block rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 focus-visible:outline-2"
@@ -103,6 +187,9 @@ function isCancelled(session: SessionSummaryDto): boolean {
                   </p>
                   <p class="text-brand-600 truncate text-sm">
                     {{ formatRelativeDay(session.startsAt) }} · {{ session.venue.name }}
+                  </p>
+                  <p v-if="session.responsible" class="text-brand-500 truncate text-xs">
+                    com {{ session.responsible.name }}
                   </p>
                 </div>
 

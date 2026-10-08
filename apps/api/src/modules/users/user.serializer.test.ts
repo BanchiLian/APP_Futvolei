@@ -1,10 +1,17 @@
 import { describe, expect, it } from 'vitest';
 
-import { PERMISSIONS, ROLES, permissionsForRole, type Role } from '@futcheck/shared';
+import {
+  PERMISSIONS,
+  ROLES,
+  VENUE_ROLES,
+  permissionsForRole,
+  type Role,
+  type VenueRole,
+} from '@futcheck/shared';
 
 import { USER_SAFE_SELECT, toMeResponse, toPublicUserSummary } from './user.serializer.js';
 
-function userWith(role: Role) {
+function userWith(role: Role, venueRole?: VenueRole) {
   return {
     id: 'user-1',
     name: 'Ana Souza',
@@ -20,6 +27,7 @@ function userWith(role: Role) {
     termsAcceptedAt: new Date('2026-09-01T12:00:00.000Z'),
     lastLoginAt: null,
     createdAt: new Date('2026-09-01T12:00:00.000Z'),
+    venueMemberships: venueRole ? [{ venueId: 'venue-1', role: venueRole }] : [],
   };
 }
 
@@ -130,5 +138,41 @@ describe('toPublicUserSummary', () => {
     });
 
     expect(summary.avatarUrl).toBe('full.webp');
+  });
+});
+
+describe('toMeResponse — authority that comes from a CT', () => {
+  it('gives a plain player nothing extra', () => {
+    const response = toMeResponse(userWith(ROLES.ALUNO));
+
+    expect(response.permissions).not.toContain(PERMISSIONS.VENUE_MANAGE);
+    expect(response.permissions).not.toContain(PERMISSIONS.SCHEDULE_MANAGE);
+  });
+
+  it('includes what owning a CT grants, which the account role alone does not', () => {
+    // Without this the app would hide the owner's own screens while the API
+    // served them happily — the two sides must agree on what exists.
+    const response = toMeResponse(userWith(ROLES.ALUNO, VENUE_ROLES.OWNER));
+
+    expect(response.permissions).toContain(PERMISSIONS.VENUE_MANAGE);
+    expect(response.permissions).toContain(PERMISSIONS.SCHEDULE_MANAGE);
+    expect(response.permissions).toContain(PERMISSIONS.VENUE_STAFF_MANAGE);
+    expect(response.permissions).toContain(PERMISSIONS.ATTENDANCE_MANAGE_ANY);
+  });
+
+  it('still withholds what belongs to the network', () => {
+    const response = toMeResponse(userWith(ROLES.ALUNO, VENUE_ROLES.OWNER));
+
+    expect(response.permissions).not.toContain(PERMISSIONS.ADMIN_MANAGE);
+    expect(response.permissions).not.toContain(PERMISSIONS.AUDIT_VIEW);
+    expect(response.permissions).not.toContain(PERMISSIONS.SETTINGS_MANAGE);
+  });
+
+  it('gives a professor at a CT the checklist and nothing more', () => {
+    const response = toMeResponse(userWith(ROLES.ALUNO, VENUE_ROLES.PROFESSOR));
+
+    expect(response.permissions).toContain(PERMISSIONS.ATTENDANCE_MANAGE_OWN);
+    expect(response.permissions).not.toContain(PERMISSIONS.SCHEDULE_MANAGE);
+    expect(response.permissions).not.toContain(PERMISSIONS.VENUE_STAFF_MANAGE);
   });
 });

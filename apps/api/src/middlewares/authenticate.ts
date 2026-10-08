@@ -1,11 +1,6 @@
 import type { RequestHandler } from 'express';
 
-import {
-  ERROR_CODES,
-  VENUE_ROLE_PERMISSIONS,
-  permissionsForRole,
-  type Permission,
-} from '@futcheck/shared';
+import { ERROR_CODES, reachablePermissions } from '@futcheck/shared';
 
 import { auditContextFrom, recordAudit } from '../lib/audit.js';
 import { forbidden, unauthorized } from '../lib/errors.js';
@@ -73,19 +68,13 @@ export const authenticate: RequestHandler = async (req, _res, next) => {
       return;
     }
 
-    // The union answers "could this account ever do this, anywhere?", which is
-    // what the route gate needs. Narrowing it to one CT is the service's job.
-    const reachable = new Set<Permission>(permissionsForRole(user.role));
-    for (const membership of user.venueMemberships) {
-      for (const permission of VENUE_ROLE_PERMISSIONS[membership.role]) {
-        reachable.add(permission);
-      }
-    }
-
     req.auth = {
       userId: user.id,
       role: user.role,
-      permissions: [...reachable],
+      // "Could this account ever do this, anywhere?" — what the route gate needs.
+      // Narrowing it to one CT is the service's job. Shared with the serializer
+      // so the app receives exactly the same answer.
+      permissions: reachablePermissions(user.role, user.venueMemberships),
       memberships: user.venueMemberships,
     };
 

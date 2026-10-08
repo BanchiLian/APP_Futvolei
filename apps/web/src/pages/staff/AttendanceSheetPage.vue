@@ -4,6 +4,8 @@ import { useRoute } from 'vue-router';
 
 import {
   BOOKING_STATUSES,
+  PERMISSIONS,
+  SESSION_STATUSES,
   errorMessageFor,
   type AttendanceMark,
   type AttendanceSheetDto,
@@ -22,6 +24,9 @@ import { formatRelativeDay, formatRelativeMoment, formatTimeRange } from '@/lib/
 import { tapFeedback } from '@/lib/haptics';
 import { normalizeApiError } from '@/services/http';
 import { getAttendanceSheet, markAttendance } from '@/services/attendance';
+import { cancelSession } from '@/services/staff';
+import { useCan } from '@/composables/useCan';
+import BottomSheet from '@/components/BottomSheet.vue';
 
 /**
  * The checklist, as it is actually used: standing on the sand, one hand, sun on
@@ -125,6 +130,45 @@ async function save(): Promise<void> {
   }
 }
 
+/**
+ * Calling the session off.
+ *
+ * Lives here because this is the screen open when the rain starts. Everyone's
+ * answer is preserved, so nobody is later recorded as having missed something
+ * the arena cancelled.
+ */
+const { can } = useCan();
+
+const cancelOpen = ref(false);
+const cancelReason = ref('');
+const isCancelling = ref(false);
+
+const canCancel = computed(
+  () => can(PERMISSIONS.SESSION_MANAGE) && data.value?.session.status === SESSION_STATUSES.ABERTA,
+);
+
+async function confirmCancel(): Promise<void> {
+  if (cancelReason.value.trim().length < 3) return;
+
+  isCancelling.value = true;
+
+  try {
+    const { cancelled } = await cancelSession(sessionId.value, cancelReason.value.trim());
+    cancelOpen.value = false;
+    cancelReason.value = '';
+    await sheet.load();
+    toast.success(
+      cancelled > 0
+        ? `Sessão cancelada. ${String(cancelled)} ${cancelled === 1 ? 'pessoa avisada' : 'pessoas avisadas'}.`
+        : 'Sessão cancelada.',
+    );
+  } catch (error) {
+    toast.error(normalizeApiError(error).message);
+  } finally {
+    isCancelling.value = false;
+  }
+}
+
 const MARKS: Array<{ value: AttendanceMark; label: string; active: string }> = [
   { value: BOOKING_STATUSES.PRESENTE, label: 'Veio', active: 'bg-aula-600 text-white' },
   { value: BOOKING_STATUSES.FALTOU, label: 'Faltou', active: 'bg-danger-600 text-white' },
@@ -174,6 +218,15 @@ const MARKS: Array<{ value: AttendanceMark; label: string; active: string }> = [
             <dd class="text-brand-800 text-lg font-bold">{{ totals.pending }}</dd>
           </div>
         </dl>
+
+        <button
+          v-if="canCancel"
+          type="button"
+          class="press text-danger-700 mt-3 min-h-11 w-full rounded-xl text-sm font-semibold"
+          @click="cancelOpen = true"
+        >
+          Cancelar esta sessão
+        </button>
       </header>
 
       <!-- Why the list is locked, in the user's words, never a bare disabled state. -->
@@ -259,5 +312,34 @@ const MARKS: Array<{ value: AttendanceMark; label: string; active: string }> = [
         Salvar {{ pendingCount }} {{ pendingCount === 1 ? 'marcação' : 'marcações' }}
       </AppButton>
     </div>
+
+    <BottomSheet
+      v-model:open="cancelOpen"
+      title="Cancelar a sessão"
+      description="Quem confirmou vai ver o motivo. Ninguém fica marcado como faltante."
+    >
+      <div class="flex flex-col gap-4">
+        <label class="flex flex-col gap-1">
+          <span class="text-brand-700 text-sm font-medium">Motivo</span>
+          <input
+            v-model="cancelReason"
+            type="text"
+            maxlength="255"
+            placeholder="Ex.: chuva forte, quadra alagada"
+            class="border-brand-200 text-brand-900 placeholder:text-brand-400 min-h-11 rounded-xl border bg-white px-3 text-base"
+          />
+        </label>
+
+        <AppButton
+          block
+          variant="danger"
+          :disabled="cancelReason.trim().length < 3"
+          :loading="isCancelling"
+          @click="confirmCancel"
+        >
+          Cancelar a sessão
+        </AppButton>
+      </div>
+    </BottomSheet>
   </div>
 </template>
