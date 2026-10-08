@@ -22,8 +22,15 @@ declare module 'vue-router' {
   interface RouteMeta {
     /** Reachable without a session. */
     public?: boolean;
-    /** Permissions the user must hold to open the route. */
+    /** Permissions the user must hold to open the route — all of them. */
     permissions?: Permission[];
+    /**
+     * Permissions of which the user needs at least one. For screens several
+     * kinds of staff reach by different routes, such as the checklist: a
+     * professor through ATTENDANCE_MANAGE_OWN, whoever runs the CT through
+     * ATTENDANCE_MANAGE_ANY.
+     */
+    anyPermissions?: Permission[];
     title?: string;
     /** The bottom-bar tab this screen lives under. */
     tab?: TabName;
@@ -97,6 +104,30 @@ const routes: RouteRecordRaw[] = [
         name: 'agenda',
         component: () => import('@/pages/app/AgendaPage.vue'),
         meta: { title: 'Agenda', tab: 'agenda', depth: 0 },
+      },
+      {
+        // The staff panel. Hidden from players entirely: the tab, the route and
+        // every endpoint behind it check the same two permissions.
+        path: 'painel',
+        name: 'staff',
+        component: () => import('@/pages/staff/StaffHomePage.vue'),
+        meta: {
+          title: 'Painel',
+          tab: 'staff',
+          depth: 0,
+          anyPermissions: [PERMISSIONS.ATTENDANCE_MANAGE_OWN, PERMISSIONS.ATTENDANCE_MANAGE_ANY],
+        },
+      },
+      {
+        path: 'painel/sessoes/:id',
+        name: 'attendance-sheet',
+        component: () => import('@/pages/staff/AttendanceSheetPage.vue'),
+        meta: {
+          title: 'Lista de presença',
+          tab: 'staff',
+          depth: 1,
+          anyPermissions: [PERMISSIONS.ATTENDANCE_MANAGE_OWN, PERMISSIONS.ATTENDANCE_MANAGE_ANY],
+        },
       },
       {
         path: 'cts',
@@ -203,6 +234,11 @@ router.beforeEach(async (to) => {
 
   const required = to.meta.permissions ?? [];
   if (required.length > 0 && !auth.canAll(required)) {
+    return { name: 'home' };
+  }
+
+  const anyOf = to.meta.anyPermissions ?? [];
+  if (anyOf.length > 0 && !auth.canAny(anyOf)) {
     return { name: 'home' };
   }
 
