@@ -48,7 +48,19 @@ export interface MeResponse {
   /** Whether the member appears in the community directory (they control it). */
   showInCommunity: boolean;
   permissions: Permission[];
+  /**
+   * The CTs this person runs or teaches at, so the app can offer their
+   * management screens without a second request. Empty for a plain player.
+   */
+  staffVenues: StaffVenueRefDto[];
   role?: Role;
+}
+
+/** A CT this person is staff at, and in what capacity. */
+export interface StaffVenueRefDto {
+  id: string;
+  name: string;
+  role: VenueRole;
 }
 
 /** The admin-facing view of a user — the only place the role label appears. */

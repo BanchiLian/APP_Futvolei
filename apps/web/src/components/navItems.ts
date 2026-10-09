@@ -2,8 +2,11 @@ import { computed } from 'vue';
 
 import { PERMISSIONS, type Permission } from '@futcheck/shared';
 
+import type { RouteLocationRaw } from 'vue-router';
+
 import type { IconName } from '@/components/icons';
 import { useCan } from '@/composables/useCan';
+import { useAuthStore } from '@/stores/auth';
 import type { TabName } from '@/router/navigation';
 
 export interface NavItem {
@@ -46,4 +49,81 @@ export function useNavItems() {
       return true;
     }),
   );
+}
+
+/**
+ * The management screens, for the sidebar.
+ *
+ * Separate from the tabs above because they are not tabs: they are the screens
+ * behind the Painel tab, and on a wide screen there is room to reach them
+ * directly instead of going through the panel first.
+ *
+ * Every entry is hidden unless the person holds the permission that the route
+ * and the API also check — three places, one matrix.
+ */
+export interface StaffNavItem {
+  key: string;
+  label: string;
+  icon: IconName;
+  to: RouteLocationRaw;
+}
+
+export function useStaffNavItems() {
+  const { can } = useCan();
+  const store = useAuthStore();
+
+  return computed<StaffNavItem[]>(() => {
+    const items: StaffNavItem[] = [];
+
+    // The CT whose screens the sidebar points at. Someone staff at several sees
+    // the first; the panel's picker is where they switch.
+    const venue = store.user?.staffVenues[0] ?? null;
+
+    if (venue && can(PERMISSIONS.VENUE_PEOPLE_VIEW)) {
+      items.push({
+        key: 'people',
+        label: 'Alunos',
+        icon: 'users',
+        to: { name: 'staff-people', params: { venueId: venue.id } },
+      });
+    }
+
+    if (venue && can(PERMISSIONS.VENUE_MANAGE)) {
+      items.push({
+        key: 'venue',
+        label: 'Meu CT',
+        icon: 'pin',
+        to: { name: 'staff-venue', params: { venueId: venue.id } },
+      });
+    }
+
+    if (venue && can(PERMISSIONS.SCHEDULE_MANAGE)) {
+      items.push({
+        key: 'schedule',
+        label: 'Grade',
+        icon: 'calendar',
+        to: { name: 'staff-schedule', params: { venueId: venue.id } },
+      });
+    }
+
+    if (venue && can(PERMISSIONS.VENUE_STAFF_MANAGE)) {
+      items.push({
+        key: 'team',
+        label: 'Equipe',
+        icon: 'aula',
+        to: { name: 'staff-team', params: { venueId: venue.id } },
+      });
+    }
+
+    // Network-wide, so they need no CT and appear for the super admin alone.
+    if (can(PERMISSIONS.ADMIN_MANAGE)) {
+      items.push({ key: 'network', label: 'Rede', icon: 'list', to: { name: 'staff-network' } });
+    }
+
+    if (can(PERMISSIONS.AUDIT_VIEW)) {
+      items.push({ key: 'audit', label: 'Auditoria', icon: 'lock', to: { name: 'staff-audit' } });
+    }
+
+    return items;
+  });
 }

@@ -27,7 +27,9 @@ function userWith(role: Role, venueRole?: VenueRole) {
     termsAcceptedAt: new Date('2026-09-01T12:00:00.000Z'),
     lastLoginAt: null,
     createdAt: new Date('2026-09-01T12:00:00.000Z'),
-    venueMemberships: venueRole ? [{ venueId: 'venue-1', role: venueRole }] : [],
+    venueMemberships: venueRole
+      ? [{ venueId: 'venue-1', role: venueRole, venue: { id: 'venue-1', name: 'Arena Teste' } }]
+      : [],
   };
 }
 

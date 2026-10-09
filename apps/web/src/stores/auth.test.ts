@@ -21,6 +21,7 @@ function profileFor(role: Parameters<typeof permissionsForRole>[0]): MeResponse 
     lastLoginAt: null,
     createdAt: '2026-09-21T12:00:00.000Z',
     permissions: [...permissionsForRole(role)],
+    staffVenues: [],
   };
 }
 

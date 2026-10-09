@@ -33,7 +33,9 @@ export const USER_SAFE_SELECT = {
   // The CTs this person runs decide part of what they may do, so they have to
   // travel with the user: without them the app would hide screens the server
   // would happily serve.
-  venueMemberships: { select: { venueId: true, role: true } },
+  venueMemberships: {
+    select: { venueId: true, role: true, venue: { select: { id: true, name: true } } },
+  },
 } as const;
 
 export interface SafeUser {
@@ -51,7 +53,11 @@ export interface SafeUser {
   termsAcceptedAt: Date | null;
   lastLoginAt: Date | null;
   createdAt: Date;
-  venueMemberships: readonly { venueId: string; role: VenueRole }[];
+  venueMemberships: readonly {
+    venueId: string;
+    role: VenueRole;
+    venue?: { id: string; name: string };
+  }[];
 }
 
 /**
@@ -83,6 +89,15 @@ export function toMeResponse(user: SafeUser): MeResponse {
     lastLoginAt: user.lastLoginAt?.toISOString() ?? null,
     createdAt: user.createdAt.toISOString(),
     permissions,
+    // Carried with the user so the sidebar can offer the CT screens without a
+    // second request on every page load.
+    staffVenues: user.venueMemberships
+      .filter((membership) => membership.venue)
+      .map((membership) => ({
+        id: membership.venueId,
+        name: membership.venue?.name ?? '',
+        role: membership.role,
+      })),
     ...(canSeeRoleLabel ? { role: user.role } : {}),
   };
 }

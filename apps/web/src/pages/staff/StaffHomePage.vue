@@ -163,7 +163,9 @@ function isCancelled(session: SessionSummaryDto): boolean {
 
       <p v-if="standing" class="text-brand-500 px-1 text-sm">{{ standing }}</p>
 
-      <nav v-if="shortcuts.length > 0" class="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+      <!-- Only on a phone: from `lg` up the same links live in the sidebar, and
+           showing them twice would be clutter. -->
+      <nav v-if="shortcuts.length > 0" class="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 lg:hidden">
         <RouterLink
           v-for="shortcut in shortcuts"
           :key="shortcut.label"
