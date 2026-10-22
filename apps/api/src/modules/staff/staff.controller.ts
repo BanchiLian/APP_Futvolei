@@ -8,6 +8,7 @@ import {
   scheduleTemplateSchema,
   staffUserQuerySchema,
   startOfBusinessDay,
+  userRoleSchema,
   uuidSchema,
   venueCreateSchema,
   venuePeopleQuerySchema,
@@ -150,6 +151,16 @@ export async function cancelSession(req: Request, res: Response): Promise<void> 
 
 export async function users(req: Request, res: Response): Promise<void> {
   res.json(await superAdmin.listUsers(requireAuth(req), staffUserQuerySchema.parse(req.query)));
+}
+
+export async function setUserRole(req: Request, res: Response): Promise<void> {
+  res.json(
+    await superAdmin.setUserRole(
+      requireAuth(req),
+      uuidSchema.parse(req.params['userId']),
+      userRoleSchema.parse(req.body),
+    ),
+  );
 }
 
 export async function audit(req: Request, res: Response): Promise<void> {

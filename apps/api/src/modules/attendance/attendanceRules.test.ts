@@ -152,7 +152,8 @@ describe('venue scoping', () => {
   it('gives the CT owner the grid and the sessions of their CT', () => {
     expect(ownerAtVenue).toContain(PERMISSIONS.SCHEDULE_MANAGE);
     expect(ownerAtVenue).toContain(PERMISSIONS.SESSION_MANAGE);
-    expect(ownerAtVenue).toContain(PERMISSIONS.VENUE_STAFF_MANAGE);
+    // Who runs the CT is the super admin's call, not the owner's.
+    expect(ownerAtVenue).not.toContain(PERMISSIONS.VENUE_STAFF_MANAGE);
   });
 
   it('keeps a professor away from the grid and the staff', () => {

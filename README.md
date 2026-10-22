@@ -7,8 +7,10 @@ quadra; quem é dono do CT cuida da grade, da equipe e das sessões. Tudo num ap
 instalável como PWA.
 
 **[Ver o app funcionando →](https://banchilian.github.io/APP_Futvolei/)**
-Entre com qualquer usuário e senha. É uma demonstração com dados de exemplo, servida pelo GitHub
-Pages — não há servidor por trás, então nada é salvo.
+É uma demonstração com dados de exemplo, servida pelo GitHub Pages — não há servidor por trás,
+então nada é salvo. Qualquer login entra como aluno; o perfil é da conta, nunca escolhido por quem
+entra. Para ver os painéis, entre com uma das contas de exemplo (`carlos.professor@futcheck.local`
+é dono do CT, `dono@futcheck.local` é o super admin), com qualquer senha.
 
 ---
 
@@ -38,13 +40,13 @@ na lista mesmo com a sessão lotada.
 | ------------------- | ------------------------------------------------------------------------------ |
 | **Meu CT**          | Nome, endereço, coordenadas, telefone, Instagram.                              |
 | **Grade**           | Os horários que se repetem toda semana. As sessões são geradas a partir daqui. |
-| **Equipe**          | Quem manda neste CT: donos e professores.                                      |
 | **Cancelar sessão** | Com motivo. Quem ia é avisado e ninguém fica marcado como faltante.            |
 
 ### Para o super administrador
 
-A **rede** inteira (buscar e criar CT, entregando-o a um dono), o **log de auditoria** e as
-**configurações do sistema** — prazos de confirmação, janela da lista de presença, geração de
+A **hierarquia** inteira é dele, e só dele: o **perfil de cada conta** (tela Usuários) e a
+**equipe de cada CT** — quem é dono e quem é professor. Além disso, a **rede** (buscar e criar CT,
+entregando-o a um dono), o **log de auditoria** e as **configurações do sistema** — prazos de confirmação, janela da lista de presença, geração de
 sessões.
 
 ---
@@ -56,11 +58,11 @@ Esta é a parte que define o produto, então vale explicar.
 O FutCheck é uma **rede** de CTs, não uma arena. Por isso a autoridade sobre um CT **não vem do
 papel da conta**, e sim de um vínculo com aquele CT:
 
-|                 | Manda em                                         | Não alcança                                         |
-| --------------- | ------------------------------------------------ | --------------------------------------------------- |
-| **Dono do CT**  | grade, sessões, presença e equipe **do CT dele** | contas, configurações, auditoria, qualquer outro CT |
-| **Professor**   | presença das sessões pelas quais responde        | grade, equipe, sessões de outros                    |
-| **Super admin** | tudo, em todos os CTs, sem precisar de vínculo   | —                                                   |
+|                 | Manda em                                      | Não alcança                                        |
+| --------------- | --------------------------------------------- | -------------------------------------------------- |
+| **Dono do CT**  | grade, sessões e presença **do CT dele**      | contas, equipe, configurações, auditoria, outro CT |
+| **Professor**   | presença das sessões pelas quais responde     | grade, equipe, sessões de outros                   |
+| **Super admin** | tudo, em todos os CTs, e a hierarquia inteira | —                                                  |
 
 A checagem acontece em **duas camadas**, e as duas são necessárias:
 

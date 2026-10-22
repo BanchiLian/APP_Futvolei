@@ -4,7 +4,7 @@
  */
 
 import { z } from 'zod';
-import { SKILL_LEVEL_VALUES } from './enums.js';
+import { ASSIGNABLE_ROLES, SKILL_LEVEL_VALUES } from './enums.js';
 
 export const PASSWORD_MIN_LENGTH = 8;
 /** The super admin is held to a higher bar (section 4.1). */
@@ -376,6 +376,18 @@ export const staffUserQuerySchema = z.object({
 });
 
 export type StaffUserQuery = z.infer<typeof staffUserQuerySchema>;
+
+/**
+ * The super admin setting someone's account role.
+ *
+ * Built from `ASSIGNABLE_ROLES`, so `SUPER_ADMIN` is refused at validation —
+ * the role is never writable through the application.
+ */
+export const userRoleSchema = z.object({
+  role: z.enum(ASSIGNABLE_ROLES, { message: 'Perfil inválido' }),
+});
+
+export type UserRoleInput = z.infer<typeof userRoleSchema>;
 
 export const auditQuerySchema = z.object({
   action: z.string().trim().max(60).optional(),

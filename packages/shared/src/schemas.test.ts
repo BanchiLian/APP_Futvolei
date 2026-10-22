@@ -10,6 +10,7 @@ import {
   paginationSchema,
   registerSchema,
   superAdminPasswordSchema,
+  userRoleSchema,
   usernameSchema,
 } from './schemas.js';
 
@@ -162,5 +163,17 @@ describe('buildPaginationMeta', () => {
 
   it('always reports at least one page, even when empty', () => {
     expect(buildPaginationMeta({ page: 1, pageSize: 20 }, 0).totalPages).toBe(1);
+  });
+});
+
+describe('userRoleSchema', () => {
+  it('accepts every role the super admin may hand out', () => {
+    for (const role of ['DAYUSE', 'ALUNO', 'PROFESSOR', 'ADMIN']) {
+      expect(userRoleSchema.safeParse({ role }).success).toBe(true);
+    }
+  });
+
+  it('never accepts SUPER_ADMIN', () => {
+    expect(userRoleSchema.safeParse({ role: 'SUPER_ADMIN' }).success).toBe(false);
   });
 });

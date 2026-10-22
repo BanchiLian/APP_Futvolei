@@ -427,3 +427,28 @@ controla se aparece, pelo interruptor "Aparecer na comunidade" no próprio perfi
 fora da listagem para todos os outros (seção 4.1). A lista de quem vai numa sessão é coisa
 separada: quem confirma presença aparece para os demais participantes daquela sessão,
 independentemente do interruptor — é o propósito do produto.
+
+---
+
+## ADR-27 — A hierarquia é definida só pelo super admin
+
+**Contexto.** O dono do sistema pediu que a hierarquia de acesso seja definida apenas por ele.
+Até aqui, o dono de um CT podia montar a equipe do próprio CT (promover donos e professores), o
+ADMIN tinha `user:role:assign:basic`, e a demonstração deixava qualquer visitante escolher o papel
+numa faixa amarela no topo da tela.
+
+**Decisão.**
+
+- `user:role:assign:basic` e `venue:staff:manage` passam a ser **exclusivos do SUPER_ADMIN**.
+  Nenhum outro perfil de conta nem vínculo de CT os recebe, e há teste garantindo isso.
+- Novo endpoint `PATCH /staff/users/:userId/role`, com tela **Usuários** no painel. O schema é
+  construído sobre `ASSIGNABLE_ROLES`, então `SUPER_ADMIN` é recusado na validação; a linha do
+  próprio super admin é recusada no service (`SUPER_ADMIN_PROTECTED`), porque rebaixá-la deixaria
+  a rede sem ninguém capaz de promover. Toda troca vai para a auditoria (`user.role.changed`).
+- O dono do CT continua **vendo** a equipe na lista de pessoas do CT (`venue:manage`), mas não a
+  altera.
+- A demonstração perdeu a faixa e o seletor "Ver como". O papel vem da conta: as contas de exemplo
+  entram como o que são, e qualquer outro login entra como aluno.
+
+**Consequência.** Ninguém se promove nem promove outra pessoa, exceto o super admin. Na
+demonstração isso é só ilustrativo — sem servidor, nada ali pode ser de fato protegido.

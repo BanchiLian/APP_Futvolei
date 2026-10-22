@@ -57,6 +57,7 @@ const LABELS: Record<string, string> = {
   'venue.staff.set': 'mudou a equipe de um CT',
   'venue.staff.removed': 'tirou alguém da equipe',
   'settings.updated': 'mudou as configurações',
+  'user.role.changed': 'mudou o perfil de alguém',
   'super_admin.created': 'criou o super admin',
 };
 

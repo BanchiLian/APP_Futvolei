@@ -68,7 +68,7 @@ em `ROLE_PERMISSIONS`. Nada além disso muda.
 | `user:view:any`                 |     ✅      |  ✅   |    ❌     |  ❌   |   ❌   |
 | `user:view:own-sessions`        |     ❌³     |  ❌³  |    ✅     |  ❌   |   ❌   |
 | `user:manage`                   |     ✅      |  ✅   |    ❌     |  ❌   |   ❌   |
-| `user:role:assign:basic`        |     ✅      |  ✅   |    ❌     |  ❌   |   ❌   |
+| `user:role:assign:basic`        |     ✅      |  ❌   |    ❌     |  ❌   |   ❌   |
 | `user:role-label:view`          |     ✅      |  ✅   |    ❌     |  ❌   |   ❌   |
 | `admin:manage`                  |     ✅      |  ❌   |    ❌     |  ❌   |   ❌   |
 | `report:view:any`               |     ✅      |  ✅   |    ❌     |  ❌   |   ❌   |
@@ -106,11 +106,16 @@ O usuário **nunca vê** o rótulo do próprio perfil de acesso. Nem no app, nem
 
 ## Quem pode mudar o perfil de quem
 
-| Ator        | Pode atribuir                   |
-| ----------- | ------------------------------- |
-| ADMIN       | DAYUSE, ALUNO, PROFESSOR        |
-| SUPER_ADMIN | DAYUSE, ALUNO, PROFESSOR, ADMIN |
-| Qualquer um | **nunca** SUPER_ADMIN           |
+| Ator        | Pode atribuir                     |
+| ----------- | --------------------------------- |
+| SUPER_ADMIN | DAYUSE, ALUNO, PROFESSOR, ADMIN   |
+| ADMIN       | nada                              |
+| Dono do CT  | nada — nem a equipe do próprio CT |
+| Qualquer um | **nunca** SUPER_ADMIN             |
+
+A hierarquia inteira — perfil das contas e equipe de cada CT — é definida **só pelo super admin**
+([ADR-27](decisions.md#adr-27--a-hierarquia-é-definida-só-pelo-super-admin)). O endpoint é
+`PATCH /staff/users/:userId/role`, protegido por `user:role:assign:basic`.
 
 Em código: `ADMIN_ASSIGNABLE_ROLES`, `SUPER_ADMIN_ASSIGNABLE_ROLES` e `ASSIGNABLE_ROLES` — nenhuma
 delas contém `SUPER_ADMIN`, e há teste garantindo isso.

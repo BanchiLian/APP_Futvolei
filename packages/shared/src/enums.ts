@@ -187,3 +187,11 @@ export const WEEKDAY_SHORT_LABELS_PT: Record<Weekday, string> = {
 export function isWeekday(value: unknown): value is Weekday {
   return typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= 6;
 }
+
+/** How the super admin's user screen names each assignable role. */
+export const ASSIGNABLE_ROLE_LABELS: Record<AssignableRole, string> = {
+  [ROLES.DAYUSE]: 'Dayuse',
+  [ROLES.ALUNO]: 'Aluno',
+  [ROLES.PROFESSOR]: 'Professor',
+  [ROLES.ADMIN]: 'Admin',
+};

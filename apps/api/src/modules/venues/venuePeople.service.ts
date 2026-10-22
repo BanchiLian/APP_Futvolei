@@ -42,7 +42,8 @@ export async function listVenuePeople(
 ): Promise<VenuePeopleDto> {
   const scoped = requireVenuePermission(auth, venueId, PERMISSIONS.VENUE_PEOPLE_VIEW);
 
-  const seesStaff = hasPermission(scoped.permissions, PERMISSIONS.VENUE_STAFF_MANAGE);
+  // Whoever runs the CT sees its staff, even though only the super admin may change it.
+  const seesStaff = hasPermission(scoped.permissions, PERMISSIONS.VENUE_MANAGE);
   const seesLabels = hasPermission(scoped.permissions, PERMISSIONS.USER_ROLE_LABEL_VIEW);
 
   const search = query.q?.trim();

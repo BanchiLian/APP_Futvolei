@@ -188,6 +188,18 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
+        // The hierarchy is defined here, and only the super admin holds the permission.
+        path: 'painel/usuarios',
+        name: 'staff-users',
+        component: () => import('@/pages/staff/UsersPage.vue'),
+        meta: {
+          title: 'Usuários',
+          tab: 'staff',
+          depth: 1,
+          permissions: [PERMISSIONS.USER_ROLE_ASSIGN_BASIC],
+        },
+      },
+      {
         path: 'painel/auditoria',
         name: 'staff-audit',
         component: () => import('@/pages/staff/AuditPage.vue'),

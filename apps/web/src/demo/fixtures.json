@@ -4816,7 +4816,6 @@
           "user:role-label:view",
           "report:view:any",
           "venue:manage",
-          "venue:staff:manage",
           "feed:moderate"
         ],
         "staffVenues": [
@@ -5914,24 +5913,7 @@
           }
         ]
       },
-      "team": {
-        "data": [
-          {
-            "userId": "01a0c71b-9d10-717b-97e2-7d675a81f8ba",
-            "name": "Carlos Mendes",
-            "avatarUrl": null,
-            "role": "OWNER",
-            "since": "2026-10-08T01:42:46.334Z"
-          },
-          {
-            "userId": "01a0c71b-9d15-70c5-9315-be76ca7bc3ce",
-            "name": "Juliana Alves",
-            "avatarUrl": null,
-            "role": "PROFESSOR",
-            "since": "2026-10-08T01:42:46.340Z"
-          }
-        ]
-      },
+      "team": null,
       "venue": {
         "id": "01990000-0000-7000-8000-000000000001",
         "name": "Arena FutCheck Pinheiros",

@@ -1,4 +1,5 @@
 import type {
+  AssignableRole,
   AuditEntryDto,
   Paginated,
   ScheduleTemplateDto,
@@ -140,5 +141,11 @@ export async function getSettings(): Promise<Settings> {
 
 export async function saveSettings(input: Partial<Settings>): Promise<Settings> {
   const { data } = await api.put<Settings>('/staff/settings', input);
+  return data;
+}
+
+/** Super admin only: the one place the account hierarchy is defined. */
+export async function setUserRole(userId: string, role: AssignableRole): Promise<StaffUserDto> {
+  const { data } = await api.patch<StaffUserDto>(`/staff/users/${userId}/role`, { role });
   return data;
 }

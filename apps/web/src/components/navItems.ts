@@ -120,6 +120,10 @@ export function useStaffNavItems() {
       items.push({ key: 'network', label: 'Rede', icon: 'list', to: { name: 'staff-network' } });
     }
 
+    if (can(PERMISSIONS.USER_ROLE_ASSIGN_BASIC)) {
+      items.push({ key: 'users', label: 'Usuários', icon: 'users', to: { name: 'staff-users' } });
+    }
+
     if (can(PERMISSIONS.AUDIT_VIEW)) {
       items.push({ key: 'audit', label: 'Auditoria', icon: 'lock', to: { name: 'staff-audit' } });
     }

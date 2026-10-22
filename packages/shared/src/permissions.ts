@@ -48,7 +48,7 @@ export const PERMISSIONS = {
   USER_VIEW_OWN_SESSIONS: 'user:view:own-sessions',
   /** Create, edit, activate and deactivate users. */
   USER_MANAGE: 'user:manage',
-  /** Assign DAYUSE, ALUNO or PROFESSOR. */
+  /** Assign DAYUSE, ALUNO or PROFESSOR. Super admin only: the hierarchy is theirs to define. */
   USER_ROLE_ASSIGN_BASIC: 'user:role:assign:basic',
   /** See the access-role label of other users. Hidden from everyone else by design. */
   USER_ROLE_LABEL_VIEW: 'user:role-label:view',
@@ -71,7 +71,7 @@ export const PERMISSIONS = {
   VENUE_VIEW: 'venue:view',
   /** Create and edit training centres. */
   VENUE_MANAGE: 'venue:manage',
-  /** Add and remove the people who run a CT: its owners and its professors. */
+  /** Add and remove the people who run a CT: its owners and its professors. Super admin only. */
   VENUE_STAFF_MANAGE: 'venue:staff:manage',
   /**
    * See the people of one CT — those who play there and, for whoever runs it,
@@ -167,7 +167,6 @@ const ADMIN_PERMISSIONS: readonly Permission[] = [
   PERMISSIONS.ATTENDANCE_MANAGE_ANY,
   PERMISSIONS.USER_VIEW_ANY,
   PERMISSIONS.USER_MANAGE,
-  PERMISSIONS.USER_ROLE_ASSIGN_BASIC,
   PERMISSIONS.USER_ROLE_LABEL_VIEW,
   PERMISSIONS.REPORT_VIEW_ANY,
   PERMISSIONS.SETTINGS_MANAGE,
@@ -180,9 +179,14 @@ const ADMIN_PERMISSIONS: readonly Permission[] = [
  *
  * The only account with authority everywhere. Every other kind of staff is tied
  * to a CT through `VENUE_ROLE_PERMISSIONS` below.
+ *
+ * It is also the only account that shapes the hierarchy: assigning account
+ * roles and deciding who owns or teaches at a CT live here and nowhere else, so
+ * nobody below can promote themselves or anyone else.
  */
 const SUPER_ADMIN_PERMISSIONS: readonly Permission[] = [
   ...ADMIN_PERMISSIONS,
+  PERMISSIONS.USER_ROLE_ASSIGN_BASIC,
   PERMISSIONS.VENUE_STAFF_MANAGE,
   PERMISSIONS.VENUE_PEOPLE_VIEW,
   PERMISSIONS.ADMIN_MANAGE,
@@ -223,10 +227,11 @@ const VENUE_PROFESSOR_PERMISSIONS: readonly Permission[] = [
 /**
  * Owner of a CT: everything that happens there.
  *
- * Note what is absent: `USER_MANAGE`, `USER_ROLE_ASSIGN_BASIC`, `SETTINGS_MANAGE`,
- * `ADMIN_MANAGE` and `AUDIT_VIEW`. Accounts and system-wide settings belong to
- * the whole network, not to one CT, so they stay with the super admin. An owner
- * runs their CT; they do not get to edit the people who visit it.
+ * Note what is absent: `USER_MANAGE`, `USER_ROLE_ASSIGN_BASIC`, `VENUE_STAFF_MANAGE`,
+ * `SETTINGS_MANAGE`, `ADMIN_MANAGE` and `AUDIT_VIEW`. Accounts, the hierarchy and
+ * system-wide settings belong to the whole network, not to one CT, so they stay
+ * with the super admin. An owner runs their CT; they do not get to decide who
+ * else runs it, nor edit the people who visit it.
  */
 const VENUE_OWNER_PERMISSIONS: readonly Permission[] = [
   ...VENUE_PROFESSOR_PERMISSIONS,
@@ -238,7 +243,6 @@ const VENUE_OWNER_PERMISSIONS: readonly Permission[] = [
   PERMISSIONS.USER_ROLE_LABEL_VIEW,
   PERMISSIONS.REPORT_VIEW_ANY,
   PERMISSIONS.VENUE_MANAGE,
-  PERMISSIONS.VENUE_STAFF_MANAGE,
   PERMISSIONS.FEED_MODERATE,
 ];
 

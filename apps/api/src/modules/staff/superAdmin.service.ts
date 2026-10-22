@@ -5,15 +5,18 @@ import {
   toIso,
   type AuditEntryDto,
   type AuditQuery,
+  type Role,
   type Settings,
   type StaffUserDto,
   type StaffUserQuery,
+  type UserRoleInput,
 } from '@futcheck/shared';
 
-import { unprocessable } from '../../lib/errors.js';
+import { forbidden, notFound, unprocessable } from '../../lib/errors.js';
 import { ERROR_CODES } from '@futcheck/shared';
 import { prisma } from '../../lib/prisma.js';
 import { recordAudit } from '../../lib/audit.js';
+import { assertCanAssignRole, assertRoleIsAssignable, isSuperAdmin } from '../../lib/superAdmin.js';
 import type { AuthContext } from '../../types/express.js';
 import { getSettings } from '../settings/settings.repository.js';
 
@@ -34,6 +37,38 @@ const PAGE = <T>(data: T[], total: number, query: { page: number; pageSize: numb
     totalPages: Math.max(1, Math.ceil(total / query.pageSize)),
   },
 });
+
+const STAFF_USER_SELECT = {
+  id: true,
+  name: true,
+  email: true,
+  avatarUrl: true,
+  avatarThumbnailUrl: true,
+  role: true,
+  isActive: true,
+  createdAt: true,
+} as const;
+
+function toStaffUserDto(user: {
+  id: string;
+  name: string;
+  email: string;
+  avatarUrl: string | null;
+  avatarThumbnailUrl: string | null;
+  role: Role;
+  isActive: boolean;
+  createdAt: Date;
+}): StaffUserDto {
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    avatarUrl: user.avatarThumbnailUrl ?? user.avatarUrl,
+    role: user.role,
+    isActive: user.isActive,
+    createdAt: toIso(user.createdAt),
+  };
+}
 
 /**
  * People, for picking staff and for the super admin's directory.
@@ -59,16 +94,7 @@ export async function listUsers(auth: AuthContext, query: StaffUserQuery) {
   const [rows, total] = await Promise.all([
     prisma.user.findMany({
       where,
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        avatarUrl: true,
-        avatarThumbnailUrl: true,
-        role: true,
-        isActive: true,
-        createdAt: true,
-      },
+      select: STAFF_USER_SELECT,
       orderBy: { name: 'asc' },
       skip: (query.page - 1) * query.pageSize,
       take: query.pageSize,
@@ -76,21 +102,57 @@ export async function listUsers(auth: AuthContext, query: StaffUserQuery) {
     prisma.user.count({ where }),
   ]);
 
-  const data: StaffUserDto[] = rows.map((user) => ({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    avatarUrl: user.avatarThumbnailUrl ?? user.avatarUrl,
-    role: user.role,
-    isActive: user.isActive,
-    createdAt: toIso(user.createdAt),
-  }));
+  const data: StaffUserDto[] = rows.map(toStaffUserDto);
 
   // `auth` is unused beyond the route gate; kept so the signature stays honest
   // about needing an authenticated caller.
   void auth;
 
   return PAGE(data, total, query);
+}
+
+/**
+ * Sets someone's account role. The one door through which the hierarchy changes.
+ *
+ * The route gate already limits this to the super admin; the guards below repeat
+ * the rule here so a future route reusing the service cannot loosen it. The
+ * super admin's own row is refused outright: demoting it would leave the network
+ * with nobody able to promote anyone back.
+ */
+export async function setUserRole(
+  auth: AuthContext,
+  userId: string,
+  input: UserRoleInput,
+): Promise<StaffUserDto> {
+  assertRoleIsAssignable(input.role);
+  assertCanAssignRole({ actorRole: auth.role, desiredRole: input.role });
+
+  const target = await prisma.user.findFirst({
+    where: { id: userId, deletedAt: null },
+    select: { id: true, role: true },
+  });
+
+  if (!target) throw notFound(ERROR_CODES.NOT_FOUND);
+
+  if (isSuperAdmin(target.role)) {
+    throw forbidden(ERROR_CODES.SUPER_ADMIN_PROTECTED, 'Esta operação não é permitida.');
+  }
+
+  const user = await prisma.user.update({
+    where: { id: target.id },
+    data: { role: input.role },
+    select: STAFF_USER_SELECT,
+  });
+
+  await recordAudit({
+    actorId: auth.userId,
+    action: 'user.role.changed',
+    entity: 'user',
+    entityId: user.id,
+    metadata: { from: target.role, to: input.role },
+  });
+
+  return toStaffUserDto(user);
 }
 
 export async function listAudit(auth: AuthContext, query: AuditQuery) {

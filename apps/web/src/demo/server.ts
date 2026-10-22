@@ -9,6 +9,8 @@ import {
 import {
   BOOKING_STATUSES,
   ERROR_CODES,
+  PERMISSIONS,
+  isAssignableRole,
   type AttendanceSheetDto,
   type CommunityMemberDto,
   type MeResponse,
@@ -17,6 +19,7 @@ import {
   type SessionDetailDto,
   type SessionSummaryDto,
   type StaffOverviewDto,
+  type StaffUserDto,
   type VenueDetailDto,
   type VenuePeopleDto,
   type VenueStaffDto,
@@ -24,7 +27,7 @@ import {
 } from '@futcheck/shared';
 
 import rawFixtures from './fixtures.json';
-import { currentDemoRole, type DemoRole } from './roles.js';
+import { currentDemoRole, demoRoleForLogin, setDemoRole, type DemoRole } from './roles.js';
 
 /**
  * The whole backend, running in the browser.
@@ -293,6 +296,10 @@ export const demoAdapter: AxiosAdapter = async (config) => {
 
   // --- auth ---
   if (route === 'POST /auth/login' || route === 'POST /auth/register') {
+    // The account decides the view, never the visitor: a new sign-up is a plain
+    // player, and only the snapshot's accounts enter as staff.
+    const login = route === 'POST /auth/login' ? body<{ login?: string }>(config)?.login : null;
+    setDemoRole(demoRoleForLogin(login));
     sessionStorage.setItem(SESSION_KEY, '1');
     reloadDemoState();
     return ok(config, session());
@@ -459,6 +466,25 @@ export const demoAdapter: AxiosAdapter = async (config) => {
   if (route === 'GET /staff/audit') return orForbidden(config, snapshot().audit);
   if (route === 'GET /staff/settings') return orForbidden(config, snapshot().settings);
   if (route === 'GET /staff/users') return orForbidden(config, snapshot().users);
+
+  // Only the super admin's snapshot holds the permission, as in the real API.
+  const userRole = /^\/staff\/users\/([^/]+)\/role$/.exec(path);
+  if (method === 'PATCH' && userRole) {
+    if (!state.me.permissions.includes(PERMISSIONS.USER_ROLE_ASSIGN_BASIC)) {
+      throw fail(config, 403, ERROR_CODES.FORBIDDEN, 'Você não tem permissão para fazer isso.');
+    }
+
+    const users = (snapshot().users?.data ?? []) as StaffUserDto[];
+    const user = users.find((item) => item.id === userRole[1]);
+    const role = body<{ role?: string }>(config)?.role;
+
+    if (!user || !isAssignableRole(role)) {
+      throw fail(config, 422, ERROR_CODES.VALIDATION_ERROR, 'Perfil inválido.');
+    }
+
+    user.role = role;
+    return ok(config, user);
+  }
 
   const venuePeople = /^\/staff\/venues\/[^/]+\/people$/.exec(path);
   if (method === 'GET' && venuePeople) return orForbidden(config, snapshot().people);

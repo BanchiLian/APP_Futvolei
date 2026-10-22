@@ -138,6 +138,10 @@ const shortcuts = computed(() => {
     items.push({ to: { name: 'staff-network' }, icon: 'list', label: 'Rede' });
   }
 
+  if (can(PERMISSIONS.USER_ROLE_ASSIGN_BASIC)) {
+    items.push({ to: { name: 'staff-users' }, icon: 'users', label: 'Usuários' });
+  }
+
   if (can(PERMISSIONS.AUDIT_VIEW)) {
     items.push({ to: { name: 'staff-audit' }, icon: 'lock', label: 'Auditoria' });
   }

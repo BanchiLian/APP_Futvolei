@@ -6,12 +6,14 @@ import {
   PUBLIC_SIGNUP_ROLE,
   ROLES,
   ROLE_VALUES,
+  VENUE_ROLE_VALUES,
   isAssignableRole,
 } from './enums.js';
 import {
   PERMISSIONS,
   PERMISSION_VALUES,
   ROLE_PERMISSIONS,
+  VENUE_ROLE_PERMISSIONS,
   hasAllPermissions,
   hasAnyPermission,
   permissionsForRole,
@@ -159,6 +161,20 @@ describe('attendance and management boundaries', () => {
 
     for (const role of [ROLES.PROFESSOR, ROLES.ALUNO, ROLES.DAYUSE]) {
       expect(hasAnyPermission(permissionsForRole(role), adminOnly)).toBe(false);
+    }
+  });
+
+  it('leaves the hierarchy to the super admin alone', () => {
+    const hierarchy = [PERMISSIONS.USER_ROLE_ASSIGN_BASIC, PERMISSIONS.VENUE_STAFF_MANAGE];
+
+    expect(hasAllPermissions(permissionsForRole(ROLES.SUPER_ADMIN), hierarchy)).toBe(true);
+
+    for (const role of ROLE_VALUES.filter((role) => role !== ROLES.SUPER_ADMIN)) {
+      expect(hasAnyPermission(permissionsForRole(role), hierarchy)).toBe(false);
+    }
+
+    for (const venueRole of VENUE_ROLE_VALUES) {
+      expect(hasAnyPermission(VENUE_ROLE_PERMISSIONS[venueRole], hierarchy)).toBe(false);
     }
   });
 

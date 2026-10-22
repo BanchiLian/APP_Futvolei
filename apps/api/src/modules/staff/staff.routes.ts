@@ -4,6 +4,7 @@ import {
   PERMISSIONS,
   cancelSessionSchema,
   scheduleTemplateSchema,
+  userRoleSchema,
   venueCreateSchema,
   venueStaffSchema,
   venueWriteSchema,
@@ -123,6 +124,12 @@ staffRoutes.post(
 
 // --- network-wide, super admin only ---
 staffRoutes.get('/users', requirePermission(PERMISSIONS.USER_VIEW_ANY), controller.users);
+staffRoutes.patch(
+  '/users/:userId/role',
+  requirePermission(PERMISSIONS.USER_ROLE_ASSIGN_BASIC),
+  validateBody(userRoleSchema),
+  controller.setUserRole,
+);
 staffRoutes.get('/audit', requirePermission(PERMISSIONS.AUDIT_VIEW), controller.audit);
 staffRoutes.get('/settings', requirePermission(PERMISSIONS.SETTINGS_MANAGE), controller.settings);
 staffRoutes.put(

@@ -158,7 +158,6 @@ describe('toMeResponse — authority that comes from a CT', () => {
 
     expect(response.permissions).toContain(PERMISSIONS.VENUE_MANAGE);
     expect(response.permissions).toContain(PERMISSIONS.SCHEDULE_MANAGE);
-    expect(response.permissions).toContain(PERMISSIONS.VENUE_STAFF_MANAGE);
     expect(response.permissions).toContain(PERMISSIONS.ATTENDANCE_MANAGE_ANY);
   });
 
@@ -168,6 +167,8 @@ describe('toMeResponse — authority that comes from a CT', () => {
     expect(response.permissions).not.toContain(PERMISSIONS.ADMIN_MANAGE);
     expect(response.permissions).not.toContain(PERMISSIONS.AUDIT_VIEW);
     expect(response.permissions).not.toContain(PERMISSIONS.SETTINGS_MANAGE);
+    expect(response.permissions).not.toContain(PERMISSIONS.VENUE_STAFF_MANAGE);
+    expect(response.permissions).not.toContain(PERMISSIONS.USER_ROLE_ASSIGN_BASIC);
   });
 
   it('gives a professor at a CT the checklist and nothing more', () => {
